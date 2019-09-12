@@ -10,13 +10,8 @@ datagroup: thesis_cool_default_datagroup {
 
 persist_with: thesis_cool_default_datagroup
 
-explore: channel_annotations_a1_daily_first {}
 
 explore: channel_basic_a2_daily_first {}
-
-explore: channel_cards_a1_daily_first {}
-
-explore: channel_combined_a2_daily_first {}
 
 explore: channel_demographics_a1_daily_first {}
 
@@ -31,8 +26,6 @@ explore: channel_sharing_service_a1_daily_first {}
 explore: channel_subtitles_a2_daily_first {}
 
 explore: channel_traffic_source_a2_daily_first {}
-
-explore: p_channel_annotations_a1_daily_first {}
 
 explore: p_channel_basic_a2_daily_first {}
 

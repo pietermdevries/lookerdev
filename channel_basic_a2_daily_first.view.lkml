@@ -1,3 +1,7 @@
+# I have deleted annotation related data, because annotations are annoying and I don't use them!
+# I have deleted avg/perc type data that is aggregated in the YT database, because they come as dimensions, I recreate the needed ones as measures
+
+
 view: channel_basic_a2_daily_first {
   sql_table_name: YoutubeData.channel_basic_a2_daily_first ;;
 
@@ -31,89 +35,16 @@ view: channel_basic_a2_daily_first {
     sql: ${TABLE}._LATEST_DATE ;;
   }
 
-  dimension: annotation_click_through_rate {
-    type: number
-    sql: ${TABLE}.annotation_click_through_rate ;;
-  }
-
-  dimension: annotation_clickable_impressions {
-    type: number
-    sql: ${TABLE}.annotation_clickable_impressions ;;
-  }
-
-  dimension: annotation_clicks {
-    type: number
-    sql: ${TABLE}.annotation_clicks ;;
-  }
-
-  dimension: annotation_closable_impressions {
-    type: number
-    sql: ${TABLE}.annotation_closable_impressions ;;
-  }
-
-  dimension: annotation_close_rate {
-    type: number
-    sql: ${TABLE}.annotation_close_rate ;;
-  }
-
-  dimension: annotation_closes {
-    type: number
-    sql: ${TABLE}.annotation_closes ;;
-  }
-
-  dimension: annotation_impressions {
-    type: number
-    sql: ${TABLE}.annotation_impressions ;;
-  }
-
-  dimension: average_view_duration_percentage {
-    type: number
-    sql: ${TABLE}.average_view_duration_percentage ;;
-  }
-
-  dimension: average_view_duration_seconds {
-    type: number
-    sql: ${TABLE}.average_view_duration_seconds ;;
-  }
-
-  dimension: card_click_rate {
-    type: number
-    sql: ${TABLE}.card_click_rate ;;
-  }
-
-  dimension: card_clicks {
-    type: number
-    sql: ${TABLE}.card_clicks ;;
-  }
-
-  dimension: card_impressions {
-    type: number
-    sql: ${TABLE}.card_impressions ;;
-  }
-
-  dimension: card_teaser_click_rate {
-    type: number
-    sql: ${TABLE}.card_teaser_click_rate ;;
-  }
-
-  dimension: card_teaser_clicks {
-    type: number
-    sql: ${TABLE}.card_teaser_clicks ;;
-  }
-
-  dimension: card_teaser_impressions {
-    type: number
-    sql: ${TABLE}.card_teaser_impressions ;;
+  dimension: video_id {
+    primary_key: yes
+    type: string
+    sql: ${TABLE}.video_id ;;
   }
 
   dimension: channel_id {
+    hidden: yes
     type: string
     sql: ${TABLE}.channel_id ;;
-  }
-
-  dimension: comments {
-    type: number
-    sql: ${TABLE}.comments ;;
   }
 
   dimension: country_code {
@@ -121,79 +52,118 @@ view: channel_basic_a2_daily_first {
     sql: ${TABLE}.country_code ;;
   }
 
-  dimension: date {
-    type: string
-    sql: ${TABLE}.date ;;
-  }
-
-  dimension: dislikes {
-    type: number
-    sql: ${TABLE}.dislikes ;;
-  }
-
-  dimension: likes {
-    type: number
-    sql: ${TABLE}.likes ;;
-  }
-
   dimension: live_or_on_demand {
     type: string
     sql: ${TABLE}.live_or_on_demand ;;
   }
 
-  dimension: red_views {
-    type: number
-    sql: ${TABLE}.red_views ;;
-  }
-
-  dimension: red_watch_time_minutes {
-    type: number
-    sql: ${TABLE}.red_watch_time_minutes ;;
-  }
-
-  dimension: shares {
-    type: number
-    sql: ${TABLE}.shares ;;
-  }
-
   dimension: subscribed_status {
+    view_label: "Subscription"
     type: string
     sql: ${TABLE}.subscribed_status ;;
   }
 
-  dimension: subscribers_gained {
-    type: number
+# -------------------
+# Measures below!
+# -------------------
+
+
+  measure: card_clicks {
+    view_label: "Card"
+    type: sum
+    sql: ${TABLE}.card_clicks ;;
+  }
+
+  measure: card_impressions {
+    view_label: "Card"
+    type: sum
+    sql: ${TABLE}.card_impressions ;;
+  }
+
+  measure: card_teaser_clicks {
+    view_label: "Card"
+    type: sum
+    sql: ${TABLE}.card_teaser_clicks ;;
+  }
+
+  measure: card_teaser_impressions {
+    view_label: "Card"
+    type: sum
+    sql: ${TABLE}.card_teaser_impressions ;;
+  }
+
+  measure: comments {
+    type: sum
+    sql: ${TABLE}.comments ;;
+  }
+
+  measure: dislikes {
+    type: sum
+    sql: ${TABLE}.dislikes ;;
+  }
+
+  measure: likes {
+    type: sum
+    sql: ${TABLE}.likes ;;
+  }
+
+  measure: red_views {
+    view_label: "Red"
+    type: sum
+    sql: ${TABLE}.red_views ;;
+  }
+
+  measure: red_watch_time_minutes {
+    view_label: "Red"
+    type: sum
+    sql: ${TABLE}.red_watch_time_minutes,2 ;;
+    value_format: "#.00"
+  }
+
+  measure: shares {
+    type: sum
+    sql: ${TABLE}.shares ;;
+  }
+
+  measure: subscribers_gained {
+    view_label: "Subscription"
+    type: sum
     sql: ${TABLE}.subscribers_gained ;;
   }
 
-  dimension: subscribers_lost {
-    type: number
+  measure: subscribers_lost {
+    view_label: "Subscription"
+    type: sum
     sql: ${TABLE}.subscribers_lost ;;
   }
 
-  dimension: video_id {
-    type: string
-    sql: ${TABLE}.video_id ;;
+  measure: subscripter_change {
+    view_label: "Subscription"
+    type: number
+    sql: ${subscribers_gained}-${subscribers_lost} ;;
   }
 
-  dimension: videos_added_to_playlists {
-    type: number
+  measure: videos_added_to_playlists {
+    view_label: "Playlist"
+    type: sum
     sql: ${TABLE}.videos_added_to_playlists ;;
   }
 
-  dimension: videos_removed_from_playlists {
-    type: number
+  measure: videos_removed_from_playlists {
+    view_label: "Playlist"
+    type: sum
     sql: ${TABLE}.videos_removed_from_playlists ;;
   }
 
-  dimension: views {
-    type: number
+  measure: views {
+    type: sum
     sql: ${TABLE}.views ;;
   }
 
-  dimension: watch_time_minutes {
-    type: number
+  measure: watch_time_minutes {
+    type: sum
     sql: ${TABLE}.watch_time_minutes ;;
+    value_format: "#.00"
   }
 
   measure: count {
