@@ -67,6 +67,9 @@ view: channel_basic_a2_daily_first {
 # Measures below!
 # -------------------
 
+  measure: latest_date {
+    sql: MAX(${_data_raw});;
+  }
 
   measure: card_clicks {
     view_label: "Card"
@@ -163,6 +166,12 @@ view: channel_basic_a2_daily_first {
   measure: watch_time_minutes {
     type: sum
     sql: ${TABLE}.watch_time_minutes ;;
+    value_format: "#.00"
+  }
+
+  measure: avg_watch_time {
+    type: number
+    sql: (${watch_time_minutes}/${views}) ;;
     value_format: "#.00"
   }
 

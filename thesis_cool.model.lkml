@@ -11,7 +11,13 @@ datagroup: thesis_cool_default_datagroup {
 persist_with: thesis_cool_default_datagroup
 
 
-explore: channel_basic_a2_daily_first {}
+explore: channel_basic_a2_daily_first {
+  join: video_info {
+    type: left_outer
+    sql_on: ${video_info.video_id} = ${channel_basic_a2_daily_first.video_id} ;;
+    relationship: many_to_one
+  }
+}
 
 explore: channel_demographics_a1_daily_first {}
 
