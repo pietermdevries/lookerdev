@@ -38,7 +38,7 @@ view: video_info {
     dimension: full_thumbnail {
       type: string
       sql: ${TABLE}.thumbnail ;;
-      html: <img src="{{value}}" />  ;;
+      html: <img src="{{value}}" width=200 />  ;;
   }
   }
 

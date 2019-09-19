@@ -4,8 +4,8 @@ connection: "private_yt"
 include: "*.view"
 
 datagroup: thesis_cool_default_datagroup {
-  # sql_trigger: SELECT MAX(id) FROM etl_log;;
-  max_cache_age: "1 hour"
+  sql_trigger: SELECT MAX(video_id) FROM channel_basic_a2_daily_first;;
+  max_cache_age: "24 hour"
 }
 
 persist_with: thesis_cool_default_datagroup
@@ -17,7 +17,18 @@ explore: channel_basic_a2_daily_first {
     sql_on: ${video_info.video_id} = ${channel_basic_a2_daily_first.video_id} ;;
     relationship: many_to_one
   }
+  join: video_based_cohort_analysis {
+    type: left_outer
+    sql_on: ${channel_basic_a2_daily_first.video_id} =  ${video_based_cohort_analysis.video_id};;
+    relationship: many_to_one
+  }
 }
+
+
+
+
+
+
 
 explore: channel_demographics_a1_daily_first {}
 
