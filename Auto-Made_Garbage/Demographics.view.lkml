@@ -31,6 +31,11 @@ view: channel_demographics_a1_daily_first {
     sql: ${TABLE}._LATEST_DATE ;;
   }
 
+  dimension: primary_key {
+    type: string
+    sql: CONCAT(${TABLE}.video_id,${TABLE}.subscribed_status,${TABLE}.age_group,${TABLE}.date,${TABLE}.gender) ;;
+  }
+
   dimension: age_group {
     type: string
     sql: ${TABLE}.age_group ;;
@@ -78,6 +83,6 @@ view: channel_demographics_a1_daily_first {
 
   measure: count {
     type: count
-    drill_fields: []
+    drill_fields: [views_percentage]
   }
 }

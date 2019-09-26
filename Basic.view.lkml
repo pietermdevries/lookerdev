@@ -3,11 +3,24 @@
 
 
 view: channel_basic_a2_daily_first {
-  sql_table_name: YoutubeData.channel_basic_a2_daily_first ;;
+  derived_table: {
+      sql:
+          SELECT
+          row_number() OVER(ORDER BY _DATA_DATE) AS prim_key,
+          *
+          FROM channel_basic_a2_daily_first ;;
+    }
 
+dimension: prim_key {
+  type: number
+  primary_key: yes
+  sql: ${TABLE}.prim_key ;;
+}
 
-
-
+dimension: vid {
+  type: string
+  sql: ${TABLE}.vid ;;
+}
 # ------------
 #  DIMENSIONS
 # ------------
@@ -17,6 +30,7 @@ dimension_group: _data {
   timeframes: [
     raw,
     date,
+    day_of_month,
     week,
     month,
     quarter,
@@ -43,7 +57,6 @@ dimension_group: _latest {
 }
 
 dimension: video_id {
-  primary_key: yes
   type: string
   sql: ${TABLE}.video_id ;;
 }
@@ -108,14 +121,22 @@ measure: comments {
 }
 
 measure: dislikes {
+  view_label: "Likes"
   type: sum
   sql: ${TABLE}.dislikes ;;
 }
 
 measure: likes {
+  view_label: "Likes"
   type: sum
   sql: ${TABLE}.likes ;;
 }
+
+  measure: like_change {
+    view_label: "Likes"
+    type: number
+    sql: ${likes}-${dislikes};;
+  }
 
 measure: red_views {
   view_label: "Red"
@@ -178,7 +199,7 @@ measure: watch_time_minutes {
 
 measure: avg_watch_time {
   type: number
-  sql: (${watch_time_minutes}/${views}) ;;
+  sql: (${watch_time_minutes}/NULLIF(${views},0)) ;;
   value_format: "#.00"
 }
 
@@ -190,9 +211,21 @@ measure: count_videos {
 measure: view_per_video{
   type: number
   sql: ${views}/${count_videos} ;;
+  value_format: "#.00"
+}
+
+measure: sum_views {
+  type: number
+  sql: ${views} ;;
+  value_format_name: number_conditional
 }
 
 measure: count {
   type: count
   drill_fields: []
-}}
+}
+# ----------
+# Random
+# ----------
+
+}

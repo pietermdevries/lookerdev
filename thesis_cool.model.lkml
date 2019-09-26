@@ -4,11 +4,22 @@ connection: "private_yt"
 include: "*.view"
 
 datagroup: thesis_cool_default_datagroup {
-  sql_trigger: SELECT MAX(video_id) FROM channel_basic_a2_daily_first;;
+  sql_trigger: SELECT COUNT(*) FROM channel_basic_a2_daily_first;;
   max_cache_age: "24 hour"
 }
 
 persist_with: thesis_cool_default_datagroup
+
+named_value_format: usd_conditional {
+  value_format: "[>=1000000]$0.0,,\"M\";[>=1000]$0.0,\"K\";$0"
+  strict_value_format: yes
+}
+
+named_value_format: number_conditional {
+  value_format: "[>=1000000]0.0,,\"M\";[>=1000]0.0,\"K\";0"
+}
+
+
 
 
 explore: channel_basic_a2_daily_first {
@@ -17,20 +28,33 @@ explore: channel_basic_a2_daily_first {
     sql_on: ${video_info.video_id} = ${channel_basic_a2_daily_first.video_id} ;;
     relationship: many_to_one
   }
-  join: video_based_cohort_analysis {
-    type: left_outer
-    sql_on: ${channel_basic_a2_daily_first.video_id} =  ${video_based_cohort_analysis.video_id};;
+#   join: video_based_cohort_analysis {
+#     type: left_outer
+#     sql_on: ${channel_basic_a2_daily_first.video_id} =  ${video_based_cohort_analysis.video_id};;
+#     relationship: many_to_one
+#   }
+  join: video_days {
+    type: inner
+    sql_on: ${channel_basic_a2_daily_first.video_id} = ${video_days.video_id} ;;
     relationship: many_to_one
+  }
+  join: demographics_dt {
+    type: left_outer
+    sql_on: ${video_info.video_id} = ${demographics_dt.video_id}  ;;
+    relationship: one_to_many
   }
 }
 
 
 
 
+explore: demographics_dt {
+  join:  video_info {
+    type: left_outer
+    sql_on: ${demographics_dt.video_id} = ${video_info.video_id} ;;
+    relationship: many_to_one
+  }}
 
-
-
-explore: channel_demographics_a1_daily_first {}
 
 explore: channel_device_os_a2_daily_first {}
 
@@ -63,27 +87,3 @@ explore: p_channel_sharing_service_a1_daily_first {}
 explore: p_channel_subtitles_a2_daily_first {}
 
 explore: p_channel_traffic_source_a2_daily_first {}
-
-explore: p_playlist_basic_a1_daily_first {}
-
-explore: p_playlist_combined_a1_daily_first {}
-
-explore: p_playlist_device_os_a1_daily_first {}
-
-explore: p_playlist_playback_location_a1_daily_first {}
-
-explore: p_playlist_province_a1_daily_first {}
-
-explore: p_playlist_traffic_source_a1_daily_first {}
-
-explore: playlist_basic_a1_daily_first {}
-
-explore: playlist_combined_a1_daily_first {}
-
-explore: playlist_device_os_a1_daily_first {}
-
-explore: playlist_playback_location_a1_daily_first {}
-
-explore: playlist_province_a1_daily_first {}
-
-explore: playlist_traffic_source_a1_daily_first {}

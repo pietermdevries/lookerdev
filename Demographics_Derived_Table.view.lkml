@@ -1,66 +1,108 @@
-view: video_info {
-  sql_table_name: video_info ;;
 
+view: demographics_dt {
+  derived_table: {
+      sql:
+          SELECT
+          row_number() OVER(ORDER BY _DATA_DATE) AS prim_key,
+          *
+          FROM channel_demographics_a1_daily_first ;;
+    }
+
+    dimension: prim_key {
+      type: number
+      primary_key: yes
+      sql: ${TABLE}.prim_key ;;
+  }
+
+  dimension_group: _data {
+    type: time
+    timeframes: [
+      raw,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    convert_tz: no
+    datatype: date
+    sql: ${TABLE}._DATA_DATE ;;
+  }
+
+  dimension_group: _latest {
+    type: time
+    timeframes: [
+      raw,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    convert_tz: no
+    datatype: date
+    sql: ${TABLE}._LATEST_DATE ;;
+  }
+
+  dimension: age_group {
+    type: string
+    sql: ${TABLE}.age_group ;;
+  }
+
+  dimension: channel_id {
+    type: string
+    sql: ${TABLE}.channel_id ;;
+  }
+
+  dimension: country_code {
+    type: string
+    sql: ${TABLE}.country_code ;;
+  }
+
+  dimension: date {
+    type: string
+    sql: ${TABLE}.date ;;
+  }
+
+  dimension: gender {
+    type: string
+    sql: ${TABLE}.gender ;;
+  }
+
+  dimension: live_or_on_demand {
+    type: string
+    sql: ${TABLE}.live_or_on_demand ;;
+  }
+
+  dimension: subscribed_status {
+    type: string
+    sql: ${TABLE}.subscribed_status ;;
+  }
 
   dimension: video_id {
-    primary_key: yes
-    hidden: yes
     type: string
     sql: ${TABLE}.video_id ;;
   }
 
-  dimension: video_url {
-    type: string
-    sql: ${TABLE}.video_url ;;
+  dimension: views_percentage {
+    type: number
+    sql: ${TABLE}.views_percentage ;;
   }
 
-  dimension: video_name {
-    type: string
-    sql: ${TABLE}.video_name ;;
-    link: {
-      label: "Video URL"
-      url: "https://www.youtube.com/watch?v={{video_id | url_encode}}"
-    }
-    link: {
-      label: "Video Dashboard"
-      url: "/dashboards/6?Video_ID={{[video_id | url_encode}}"
-    }
+  measure: count {
+    type: count
+    drill_fields: [user_details*]
   }
-  dimension: thumbnail {
-    type: string
-    sql: ${TABLE}.thumbnail ;;
-    link: {
-      label: "Video Dashboard"
-      url: "/dashboards/6?Video_ID={{[video_id' | url_encode}}"
-      }
-    html: <img src="{{value}}" width=75 height=50 border=0 />  ;;
+
+set: user_details {
+  fields: [age_group,gender,subscribed_status,views_percentage]
 }
-    dimension: full_thumbnail {
-      type: string
-      sql: ${TABLE}.thumbnail ;;
-      html: <img src="{{value}}" width=200 />  ;;
-  }
-  }
 
 
-#Below is my failed attempt to embed youtube videos in looker
 
-#   dimension: video_play {
-#     type: string
-#     sql: ${video_name} ;;
-#     html:<iframe width=“320” height=“240"
-#     <src=“https://www.youtube.com/{{video_id | url_encode}}”></iframe> ;;
-#   }
-#
-# #
-# #   html:<video width=“320” height=“240" controls>
-# #   <source src=“https://www.w3schools.com/tags/movie.mp4” type=“video/mp4">
-# #   <source src=“movie.ogg” type=“video/ogg”>
-# #   </video>
-# #   <p><strong>Note:</strong> The video tag is not supported in Internet Explorer 8 and earlier versions.</p> ;;
-# # }
-#   # # You can specify the table name if it's different from the view name:
-#   # sql_table_name: my_schema_name.tester ;;
+
+  # # You can specify the table name if it's different from the view name:
+  # sql_table_name: my_schema_name.tester ;;
   #
   # # Define your dimensions and measures here, like this:
   # dimension: user_id {
@@ -87,9 +129,9 @@ view: video_info {
   #   type: sum
   #   sql: ${lifetime_orders} ;;
   # }
-#}
+}
 
-# view: video_info {
+# view: demographics_derived_tablew {
 #   # Or, you could make this view a derived table, like this:
 #   derived_table: {
 #     sql: SELECT
