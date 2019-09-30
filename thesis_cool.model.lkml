@@ -34,7 +34,7 @@ explore: channel_basic_a2_daily_first {
 #     relationship: many_to_one
 #   }
   join: video_days {
-    type: inner
+    type: left_outer
     sql_on: ${channel_basic_a2_daily_first.video_id} = ${video_days.video_id} ;;
     relationship: many_to_one
   }
@@ -43,8 +43,12 @@ explore: channel_basic_a2_daily_first {
     sql_on: ${video_info.video_id} = ${demographics_dt.video_id}  ;;
     relationship: one_to_many
   }
+  join: genre_total {
+    type: left_outer
+    sql_on: ${genre_total.video_id} = ${channel_basic_a2_daily_first.video_id} ;;
+    relationship: many_to_many
 }
-
+}
 
 
 
@@ -53,7 +57,16 @@ explore: demographics_dt {
     type: left_outer
     sql_on: ${demographics_dt.video_id} = ${video_info.video_id} ;;
     relationship: many_to_one
-  }}
+  }
+  join: genre_total {
+    type: left_outer
+    sql_on: ${genre_total.video_id} = ${demographics_dt.video_id} ;;
+    relationship: many_to_many
+  }
+  }
+
+
+explore: genre_total {}
 
 
 explore: channel_device_os_a2_daily_first {}

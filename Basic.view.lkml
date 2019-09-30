@@ -17,6 +17,11 @@ dimension: prim_key {
   sql: ${TABLE}.prim_key ;;
 }
 
+dimension: uuid {
+  type: string
+  sql: ${TABLE}.uuid ;;
+}
+
 dimension: vid {
   type: string
   sql: ${TABLE}.vid ;;

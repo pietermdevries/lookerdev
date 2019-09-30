@@ -1,106 +1,50 @@
+view: genre_total {
+  sql_table_name: YoutubeData.total_genre ;;
 
-view: demographics_dt {
-  derived_table: {
-      sql:
-          SELECT
-          row_number() OVER(ORDER BY _DATA_DATE) AS prim_key,
-          *
-          FROM channel_demographics_a1_daily_first ;;
-    }
-
-    dimension: prim_key {
-      type: number
-      primary_key: yes
-      sql: ${TABLE}.prim_key ;;
-  }
-
-  dimension_group: _data {
-    type: time
-    timeframes: [
-      raw,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    convert_tz: no
-    datatype: date
-    sql: ${TABLE}._DATA_DATE ;;
-  }
-
-  dimension_group: _latest {
-    type: time
-    timeframes: [
-      raw,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    convert_tz: no
-    datatype: date
-    sql: ${TABLE}._LATEST_DATE ;;
-  }
-
-  dimension: age_group {
+  dimension: primary_key {
+    primary_key: yes
+    hidden: yes
     type: string
-    sql: ${TABLE}.age_group ;;
+    sql: ${TABLE}.primary_key ;;
   }
 
-  dimension: channel_id {
+  dimension: genre {
     type: string
-    sql: ${TABLE}.channel_id ;;
+    sql: ${TABLE}.genre ;;
   }
 
-  dimension: country_code {
+  dimension: genre1 {
     type: string
-    sql: ${TABLE}.country_code ;;
-  }
-
-  dimension: date {
-    type: string
-    sql: ${TABLE}.date ;;
-  }
-
-  dimension: gender {
-    type: string
-    sql: ${TABLE}.gender ;;
-  }
-
-  dimension: live_or_on_demand {
-    type: string
-    sql: ${TABLE}.live_or_on_demand ;;
-  }
-
-  dimension: subscribed_status {
-    type: string
-    sql: ${TABLE}.subscribed_status ;;
+    sql: ${TABLE}.genre ;;
   }
 
   dimension: video_id {
     type: string
-    sql: ${TABLE}.video_id ;;
+    sql: ${TABLE}.video_id    ;;
   }
 
-  dimension: views_percentage {
-    type: number
-    sql: ${TABLE}.views_percentage ;;
+
+  dimension: over_100 {
+    type: yesno
+    sql: ${video_id} = "1" OR ${genre1} IN ("Horror, Supernatural");;
+    hidden:  yes
   }
+  measure: video_by_genre {
+    type: count
+    filters: {
+      field: genre
+      value: "Action, Adventure, Magic, Fantasy"
+    }
+    filters: {
+      field: over_100
+      value: "yes"
+    }
+  }
+
 
   measure: count {
     type: count
-    drill_fields: [user_details*]
   }
-
-set: user_details {
-  fields: [age_group,gender,subscribed_status]
-}
-
-
-
-
   # # You can specify the table name if it's different from the view name:
   # sql_table_name: my_schema_name.tester ;;
   #
@@ -131,7 +75,7 @@ set: user_details {
   # }
 }
 
-# view: demographics_derived_tablew {
+# view: genre_total {
 #   # Or, you could make this view a derived table, like this:
 #   derived_table: {
 #     sql: SELECT

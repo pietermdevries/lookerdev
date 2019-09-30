@@ -19,7 +19,7 @@ view: video_days {
         video_id IS NOT NULL
       GROUP BY
         1
-      HAVING Post_Date > "2019-08-25"
+      HAVING Post_Date > "2019-08-15"
        ;;
   }
 

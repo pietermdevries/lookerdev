@@ -40,6 +40,33 @@ view: video_info {
       sql: ${TABLE}.thumbnail ;;
       html: <img src="{{value}}" width=200 />  ;;
   }
+
+  dimension: title {
+    type: string
+    sql: ${TABLE}.anime_title ;;
+    link: {
+      label: "Video Series Dashboard"
+      url: "/dashboards/8?Title={{[title | url_encode}}"
+    }
+  }
+
+  dimension: genre1 {
+    type: string
+    sql: ${TABLE}.genre_1 ;;
+  }
+
+  dimension: genre2 {
+    type: string
+    sql: ${TABLE}.genre_2 ;;
+  }
+  dimension: genre3 {
+    type: string
+    sql: ${TABLE}.genre_3 ;;
+  }
+
+  measure: count {
+    type: count
+  }
   }
 
 
