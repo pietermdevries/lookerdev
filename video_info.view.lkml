@@ -34,11 +34,13 @@ view: video_info {
       url: "/dashboards/6?Video_ID={{[video_id' | url_encode}}"
       }
     html: <img src="{{value}}" width=75 height=50 border=0 />  ;;
+    drill_fields: [channel_basic_a2_daily_first.data_date,video_name,channel_basic_a2_daily_first.video_stats*]
 }
     dimension: full_thumbnail {
       type: string
       sql: ${TABLE}.thumbnail ;;
       html: <img src="{{value}}" width=200 />  ;;
+      drill_fields: [channel_basic_a2_daily_first.data_date,video_name,channel_basic_a2_daily_first.video_stats*]
   }
 
   dimension: title {
@@ -46,8 +48,26 @@ view: video_info {
     sql: ${TABLE}.anime_title ;;
     link: {
       label: "Video Series Dashboard"
-      url: "/dashboards/8?Title={{[title | url_encode}}"
+      url: "/dashboards/8?Title={{title | url_encode}}"
     }
+    drill_fields: [video_name,Basic.video_stats*]
+  }
+
+  dimension: name {
+    sql: ${title} ;;
+    html:
+    <a href="/dashboards/8?Title={{ value }}&">{{ value }}</a> ;;
+  }
+
+
+  dimension: title_pic {
+    sql: ${title};;
+    html: <img src="http://localhost:8080/image_search.php?q={{[value　| url_param_escape }}" width=200  border=0 /> ;;
+  }
+
+  dimension: episode_pic {
+    sql: ${video_name};;
+    html: <img src="http://localhost:8080/image_search.php?q={{[value　| url_param_escape }}" width=200  border=0 /> ;;
   }
 
   dimension: genre1 {
@@ -63,6 +83,24 @@ view: video_info {
     type: string
     sql: ${TABLE}.genre_3 ;;
   }
+
+  dimension: genre4 {
+    type: string
+    sql: ${TABLE}.genre_4 ;;
+}
+
+  dimension: play_button {
+    label: "Play Button"
+    sql: ${video_id} ;;
+    html: <img src="https://variable.media/wp-content/uploads/2015/12/YouTube-Play-Button.png" width=100% border=0 /> ;;
+  }
+
+  dimension: face {
+    label: "Face"
+    sql: ${video_id} ;;
+    html: <img src="https://yt3.ggpht.com/a-/AAuE7mBt0IhShlMtdkxricRAEgoJ9o-UphIfqutjLdeq=s88-c-k-c0xffffffff-no-rj-mo" height=100% border=0 /> ;;
+  }
+
 
   measure: count {
     type: count

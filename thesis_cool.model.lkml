@@ -3,6 +3,7 @@ connection: "private_yt"
 # include all the views
 include: "*.view"
 
+
 datagroup: thesis_cool_default_datagroup {
   sql_trigger: SELECT COUNT(*) FROM channel_basic_a2_daily_first;;
   max_cache_age: "24 hour"
@@ -68,35 +69,16 @@ explore: demographics_dt {
 
 explore: genre_total {}
 
-
-explore: channel_device_os_a2_daily_first {}
-
-explore: channel_playback_location_a2_daily_first {}
-
-explore: channel_province_a2_daily_first {}
-
-explore: channel_sharing_service_a1_daily_first {}
-
-explore: channel_subtitles_a2_daily_first {}
-
-explore: channel_traffic_source_a2_daily_first {}
-
-explore: p_channel_basic_a2_daily_first {}
-
-explore: p_channel_cards_a1_daily_first {}
-
-explore: p_channel_combined_a2_daily_first {}
-
-explore: p_channel_demographics_a1_daily_first {}
-
-explore: p_channel_device_os_a2_daily_first {}
-
-explore: p_channel_playback_location_a2_daily_first {}
-
-explore: p_channel_province_a2_daily_first {}
-
-explore: p_channel_sharing_service_a1_daily_first {}
-
-explore: p_channel_subtitles_a2_daily_first {}
-
-explore: p_channel_traffic_source_a2_daily_first {}
+explore: traffic_source {
+  join: channel_basic_a2_daily_first {
+    type: left_outer
+    sql_on: ${traffic_source.video_id} = ${channel_basic_a2_daily_first.video_id}
+    and ${traffic_source._data_date} = ${channel_basic_a2_daily_first._data_date};;
+    relationship: many_to_many
+  }
+  join: video_info {
+    type: left_outer
+    sql_on: ${channel_basic_a2_daily_first.video_id} = ${video_info.video_id} ;;
+    relationship: many_to_one
+  }
+}

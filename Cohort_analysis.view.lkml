@@ -1,7 +1,7 @@
 # ------------
 # COHORT ANALYSIS
 # ------------
-include: "*channel_basic_a2_daily_first.view"
+include: "*Basic.view"
 
 view: video_based_cohort_analysis {
   derived_table: {

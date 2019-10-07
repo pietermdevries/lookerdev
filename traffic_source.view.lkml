@@ -1,53 +1,77 @@
-view: genre_total {
-  sql_table_name: YoutubeData.total_genre ;;
+view: traffic_source {
+  sql_table_name: YoutubeData.Traffic_Source ;;
+
+  dimension_group: _data {
+    type: time
+    timeframes: [
+      raw,
+      date,
+      day_of_month,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    convert_tz: no
+    datatype: date
+    sql: ${TABLE}._DATA_DATE ;;
+  }
 
   dimension: primary_key {
+    hidden: yes
     primary_key: yes
-    hidden: yes
-    type: string
     sql: ${TABLE}.primary_key ;;
-  }
-
-  dimension: genre {
-    type: string
-    sql: ${TABLE}.genre ;;
-    drill_fields: [video_info.title,video_info.video_name,Basic.video_stats*]
-  }
-
-  dimension: genre1 {
-    hidden: yes
-    type: string
-    sql: ${TABLE}.genre ;;
   }
 
   dimension: video_id {
     type: string
-    sql: ${TABLE}.video_id    ;;
+    sql: ${TABLE}.video_id ;;
   }
 
-
-  dimension: over_100 {
-    type: yesno
-    sql: ${video_id} = "1" OR ${genre1} IN ("Horror, Supernatural");;
-    hidden:  yes
-  }
-  measure: video_by_genre {
-    hidden: yes
-    type: count
-    filters: {
-      field: genre
-      value: "Action, Adventure, Magic, Fantasy"
-    }
-    filters: {
-      field: over_100
-      value: "yes"
-    }
+  dimension: subscribed_status {
+    type: string
+    sql: ${TABLE}.subscribed_status ;;
   }
 
-
-  measure: count {
-    type: count
+  dimension: country_code {
+    type: string
+    sql: ${TABLE}.country_code ;;
   }
+
+  dimension: traffic_source {
+    type: string
+    sql: ${TABLE}.traffic_source ;;
+    drill_fields: [traffic_source_detail]
+  }
+
+  dimension: traffic_source_detail {
+    type: string
+    sql: ${TABLE}.traffic_source_detail ;;
+    drill_fields: [video_info.title,channel_basic_a2_daily_first.video_stats*]
+  }
+
+  measure: views {
+    type: sum
+    sql: ${TABLE}.views ;;
+  }
+
+  measure: watch_time_minutes {
+    type: sum
+    sql: ${TABLE}.watch_time_minutes ;;
+    value_format_name: "decimal_0"
+  }
+
+  dimension: average_view_duration_seconds {
+    type: number
+    sql: ${TABLE}.average_view_duration_seconds  ;;
+  }
+
+  dimension: average_view_duration_percentage {
+    type: number
+    sql: ${TABLE}.average_view_duration_percentage  ;;
+    value_format: "0.xx%"
+  }
+
   # # You can specify the table name if it's different from the view name:
   # sql_table_name: my_schema_name.tester ;;
   #
@@ -78,7 +102,7 @@ view: genre_total {
   # }
 }
 
-# view: genre_total {
+# view: traffic_source {
 #   # Or, you could make this view a derived table, like this:
 #   derived_table: {
 #     sql: SELECT

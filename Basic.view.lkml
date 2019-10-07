@@ -12,23 +12,46 @@ view: channel_basic_a2_daily_first {
     }
 
 dimension: prim_key {
+  hidden: yes
   type: number
   primary_key: yes
   sql: ${TABLE}.prim_key ;;
 }
 
-dimension: uuid {
-  type: string
-  sql: ${TABLE}.uuid ;;
-}
-
 dimension: vid {
+  hidden: yes
   type: string
   sql: ${TABLE}.vid ;;
 }
+
+
 # ------------
-#  DIMENSIONS
+#  Dates
 # ------------
+
+  filter: previous_period_filter {
+    type: date
+    description: "Use this filter for period analysis"
+    sql: ${previous_period} IS NOT NULL ;;
+  }
+
+  dimension: previous_period {
+    type: string
+    description: "The reporting period as selected by the Previous Period Filter"
+    sql:
+      CASE
+        WHEN {% date_start previous_period_filter %} is not null AND {% date_end previous_period_filter %} is not null /* date ranges or in the past x days */
+          THEN
+            CASE
+              WHEN TIMESTAMP(${_data_raw}) >= {% date_start previous_period_filter %}
+                AND TIMESTAMP(${_data_raw}) <= {% date_end previous_period_filter %}
+                THEN 'This Period'
+              WHEN TIMESTAMP(${_data_raw}) >= date_add(day,-1*date_diff(day,{% date_start previous_period_filter %}, {% date_end previous_period_filter %} ) + 1, date_add(day,-1,{% date_start previous_period_filter %} ) )
+                AND TIMESTAMP(${_data_raw}) <= date_add(day,-1,{% date_start previous_period_filter %} )
+                THEN 'Previous Period'
+            END
+        END ;;
+  }
 
 dimension_group: _data {
   type: time
@@ -36,6 +59,8 @@ dimension_group: _data {
     raw,
     date,
     day_of_month,
+    day_of_week,
+    day_of_week_index,
     week,
     month,
     quarter,
@@ -60,6 +85,10 @@ dimension_group: _latest {
   datatype: date
   sql: ${TABLE}._LATEST_DATE ;;
 }
+
+# ------------
+#  DIMENSIONS
+# ------------
 
 dimension: video_id {
   type: string
@@ -96,6 +125,11 @@ measure: latest_date {
   sql: MAX(${_data_raw});;
 }
 
+# -------------------
+# Card Related!
+# -------------------
+
+
 measure: card_clicks {
   view_label: "Card"
   type: sum
@@ -125,6 +159,10 @@ measure: comments {
   sql: ${TABLE}.comments ;;
 }
 
+# -------------------
+# Likes Related!
+# -------------------
+
 measure: dislikes {
   view_label: "Likes"
   type: sum
@@ -141,6 +179,13 @@ measure: likes {
     view_label: "Likes"
     type: number
     sql: ${likes}-${dislikes};;
+  }
+
+  measure: like_change_per_day {
+    view_label: "Likes"
+    type: number
+    sql: ${like_change}/${count_videos};;
+    value_format: "#.00"
   }
 
 measure: red_views {
@@ -173,7 +218,7 @@ measure: subscribers_lost {
   sql: ${TABLE}.subscribers_lost ;;
 }
 
-measure: subscripter_change {
+measure: subscriber_change {
   view_label: "Subscription"
   type: number
   sql: ${subscribers_gained}-${subscribers_lost} ;;
@@ -228,6 +273,10 @@ measure: sum_views {
 measure: count {
   type: count
   drill_fields: []
+}
+
+set: vid_stats {
+ fields: [views,subscriber_change,like_change,watch_time_minutes,comments,shares]
 }
 # ----------
 # Random
