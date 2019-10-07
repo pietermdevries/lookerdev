@@ -71,7 +71,7 @@ dimension_group: _data {
   sql: ${TABLE}._DATA_DATE ;;
 }
 
-dimension_group: _latest {
+dimension_group: latest_date {
   type: time
   timeframes: [
     raw,
@@ -83,7 +83,7 @@ dimension_group: _latest {
   ]
   convert_tz: no
   datatype: date
-  sql: ${TABLE}._LATEST_DATE ;;
+  sql: max(${_data_raw}) ;;
 }
 
 # ------------
@@ -188,6 +188,13 @@ measure: likes {
     value_format: "#.00"
   }
 
+  measure: view_per_like {
+    view_label: "Likes"
+    type: number
+    sql: ${sum_views}/nullif(${likes},0) ;;
+    value_format: "#.00"
+    }
+
 measure: red_views {
   view_label: "Red"
   type: sum
@@ -222,6 +229,14 @@ measure: subscriber_change {
   view_label: "Subscription"
   type: number
   sql: ${subscribers_gained}-${subscribers_lost} ;;
+}
+
+#I chose to calculate based on subscribers gained, to know speed of new subscriber acquisition
+measure: view_per_sub {
+  view_label: "Subscription"
+  type: number
+  sql: ${sum_views}/nullif(${subscribers_gained},0) ;;
+  value_format: "#.00"
 }
 
 measure: videos_added_to_playlists {
