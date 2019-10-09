@@ -21,8 +21,6 @@ named_value_format: number_conditional {
 }
 
 
-
-
 explore: channel_basic_a2_daily_first {
   join: video_info {
     type: left_outer
@@ -80,5 +78,13 @@ explore: traffic_source {
     type: left_outer
     sql_on: ${channel_basic_a2_daily_first.video_id} = ${video_info.video_id} ;;
     relationship: many_to_one
+  }
+}
+
+explore: sharing {
+  join: channel_basic_a2_daily_first {
+    type: left_outer
+    sql_on: ${sharing.video_id} = ${channel_basic_a2_daily_first.video_id};;
+    relationship: many_to_many
   }
 }

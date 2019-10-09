@@ -217,18 +217,21 @@ measure: subscribers_gained {
   view_label: "Subscription"
   type: sum
   sql: ${TABLE}.subscribers_gained ;;
+  drill_fields: [video_info.video_name,vid_stats*]
 }
 
 measure: subscribers_lost {
   view_label: "Subscription"
   type: sum
   sql: ${TABLE}.subscribers_lost ;;
+  drill_fields: [video_info.video_name,vid_stats*]
 }
 
 measure: subscriber_change {
   view_label: "Subscription"
   type: number
   sql: ${subscribers_gained}-${subscribers_lost} ;;
+  drill_fields: [video_info.video_name,vid_stats*]
 }
 
 #I chose to calculate based on subscribers gained, to know speed of new subscriber acquisition

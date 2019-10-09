@@ -23,7 +23,7 @@ view: video_info {
     }
     link: {
       label: "Video Dashboard"
-      url: "/dashboards/6?Video_ID={{[video_id | url_encode}}"
+      url: "/dashboards/6?Video_ID={{[video_name | url_encode}}"
       icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
     }
   }
@@ -32,7 +32,8 @@ view: video_info {
     sql: ${TABLE}.thumbnail ;;
     link: {
       label: "Video Dashboard"
-      url: "/dashboards/6?Video_ID={{[video_id' | url_encode}}"
+      url: "/dashboards/6?Video_ID={{[video_name | url_encode}}"
+      icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
       }
     html: <img src="{{value}}" width=75 height=50 border=0 />  ;;
     drill_fields: [channel_basic_a2_daily_first.data_date,video_name,channel_basic_a2_daily_first.video_stats*]
@@ -50,6 +51,7 @@ view: video_info {
     link: {
       label: "Video Series Dashboard"
       url: "/dashboards/8?Title={{title | url_encode}}"
+      icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
     }
     drill_fields: [video_name,Basic.video_stats*]
   }
