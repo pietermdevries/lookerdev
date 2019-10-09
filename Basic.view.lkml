@@ -254,6 +254,10 @@ measure: videos_removed_from_playlists {
 measure: views {
   type: sum
   sql: ${TABLE}.views ;;
+ # link: {
+ #    label: "View Indepth"
+ #    url: "/dashboards/7?VideoID={{[video_id | url_encode}}&Title={{title | url_encode}}"
+ # }
 }
 
 measure: watch_time_minutes {
@@ -296,5 +300,50 @@ set: vid_stats {
 # ----------
 # Random
 # ----------
+
+parameter: dynamic_measure {
+  description: "Choose Type with Chooser"
+  type: string
+  allowed_value: {
+    label: "Total Views"
+    value: "views"
+  }
+  allowed_value: {
+    label: "Average Watch Time"
+    value: "avg_watch_time"
+  }
+  allowed_value: {
+    label: "Subscriber Change"
+    value: "subscriber_change"
+  }
+  allowed_value: {
+    label: "Shares"
+    value: "shares"
+  }
+  allowed_value: {
+    label: "Like Change"
+    value: "like_change"
+  }
+}
+
+measure: metric_chooser {
+  description: "Use with Metric_Picker Filter Only"
+  type: number
+  label_from_parameter: dynamic_measure
+  sql:    CASE
+      WHEN {% parameter dynamic_measure %} = 'views'
+        THEN ${views}
+      WHEN {% parameter dynamic_measure %} = 'avg_watch_time'
+        THEN ${avg_watch_time}
+      WHEN {% parameter dynamic_measure %} = 'subscriber_change'
+        THEN ${subscriber_change}
+        WHEN {% parameter dynamic_measure %} = 'shares'
+        THEN ${shares}
+        WHEN {% parameter dynamic_measure %} = 'like_change'
+        THEN ${like_change}
+      ELSE NULL
+    END ;;
+}
+
 
 }

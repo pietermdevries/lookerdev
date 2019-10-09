@@ -24,6 +24,7 @@ view: video_info {
     link: {
       label: "Video Dashboard"
       url: "/dashboards/6?Video_ID={{[video_id | url_encode}}"
+      icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
     }
   }
   dimension: thumbnail {
