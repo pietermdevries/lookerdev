@@ -84,7 +84,13 @@ explore: traffic_source {
 explore: sharing {
   join: channel_basic_a2_daily_first {
     type: left_outer
-    sql_on: ${sharing.video_id} = ${channel_basic_a2_daily_first.video_id};;
+    sql_on: ${sharing.video_id} = ${channel_basic_a2_daily_first.video_id}
+    and ${channel_basic_a2_daily_first._data_date} = ${sharing._data_date};;
     relationship: many_to_many
+  }
+  join: video_info {
+    type: left_outer
+    sql_on: ${sharing.video_id} = ${video_info.video_id} ;;
+    relationship: many_to_one
   }
 }
