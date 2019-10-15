@@ -2,6 +2,29 @@ view: video_info {
   sql_table_name: video_info ;;
 
 
+
+  dimension_group: published_date {
+    type: time
+    timeframes: [
+      raw,
+      date,
+      year,
+      month,
+      day_of_month,
+      day_of_week,
+      hour_of_day
+    ]
+    sql: ${TABLE}.published_date ;;
+  }
+
+  dimension_group: published_time {
+    type: duration
+    sql_start: TIMESTAMP(${published_date_date}) ;;  # often this is a single database column
+    sql_end: TIMESTAMP(channel_basic_a2_daily_first._latest_date) ;;  # often this is a single database column
+    intervals: [year, week, day] # valid intervals described below
+  }
+
+
   dimension: video_id {
     primary_key: yes
     hidden: yes
@@ -23,7 +46,7 @@ view: video_info {
     }
     link: {
       label: "Video Dashboard"
-      url: "/dashboards/6?Video_ID={{[video_name | url_encode}}"
+      url: "/dashboards/6?Video_Name={{[video_name | url_encode}}"
       icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
     }
   }
@@ -32,7 +55,7 @@ view: video_info {
     sql: ${TABLE}.thumbnail ;;
     link: {
       label: "Video Dashboard"
-      url: "/dashboards/6?Video_ID={{[video_name | url_encode}}"
+      url: "/dashboards/6?Video_Name={{[video_name | url_encode}}"
       icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
       }
     html: <img src="{{value}}" width=75 height=50 border=0 />  ;;
@@ -108,9 +131,33 @@ view: video_info {
   measure: count {
     type: count
   }
+ dimension: duration {
+  type: string
+  sql: ${TABLE}.duration ;;
+}
+  measure: view_num {
+    type: sum
+    sql: ${TABLE}.view_num ;;
+  }
+  measure: like_num {
+    type: sum
+    sql: ${TABLE}.like_num ;;
+  }
+  measure: dislike_num  {
+    type: sum
+    sql: ${TABLE}.dislike_num ;;
   }
 
+  measure: like_change_num {
+    type: number
+    sql: ${like_num}-${dislike_num} ;;
+  }
 
+  measure: comment_num{
+    type: sum
+    sql: ${TABLE}.comment_num ;;
+  }
+}
 #Below is my failed attempt to embed youtube videos in looker
 
 #   dimension: video_play {

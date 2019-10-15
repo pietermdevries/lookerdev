@@ -71,20 +71,20 @@ dimension_group: _data {
   sql: ${TABLE}._DATA_DATE ;;
 }
 
-dimension_group: latest_date {
-  type: time
-  timeframes: [
-    raw,
-    date,
-    week,
-    month,
-    quarter,
-    year
-  ]
-  convert_tz: no
-  datatype: date
-  sql: max(${_data_raw}) ;;
-}
+  dimension_group: _latest {
+    type: time
+    timeframes: [
+      raw,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    convert_tz: no
+    datatype: date
+    sql: ${TABLE}._LATEST_DATE ;;
+  }
 
 # ------------
 #  DIMENSIONS
