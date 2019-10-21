@@ -2,7 +2,7 @@ connection: "private_yt"
 
 # include all the views
 include: "*.view"
-
+include: "views/*"
 
 datagroup: thesis_cool_default_datagroup {
   sql_trigger: SELECT COUNT(*) FROM channel_basic_a2_daily_first;;
@@ -47,6 +47,18 @@ explore: channel_basic_a2_daily_first {
     sql_on: ${genre_total.video_id} = ${channel_basic_a2_daily_first.video_id} ;;
     relationship: many_to_many
 }
+  join: playback {
+    type: left_outer
+    sql_on: ${channel_basic_a2_daily_first.video_id} = ${playback.video_id}
+    AND ${channel_basic_a2_daily_first._data_date} = ${playback._data_date} ;;
+    relationship: many_to_many
+  }
+  join: traffic_source {
+    type:  left_outer
+    sql_on: ${channel_basic_a2_daily_first.video_id} = ${traffic_source.video_id}
+    AND ${channel_basic_a2_daily_first._data_date} = ${traffic_source._data_date};;
+    relationship: many_to_one
+  }
 }
 
 
@@ -93,4 +105,12 @@ explore: sharing {
     sql_on: ${sharing.video_id} = ${video_info.video_id} ;;
     relationship: many_to_one
   }
+}
+
+explore: playback {
+
+}
+
+explore: LAG_TEST {
+
 }

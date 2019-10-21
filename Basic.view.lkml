@@ -4,25 +4,25 @@
 
 view: channel_basic_a2_daily_first {
   derived_table: {
-      sql:
+    sql:
           SELECT
           row_number() OVER(ORDER BY _DATA_DATE) AS prim_key,
           *
           FROM channel_basic_a2_daily_first ;;
-    }
+  }
 
-dimension: prim_key {
-  hidden: yes
-  type: number
-  primary_key: yes
-  sql: ${TABLE}.prim_key ;;
-}
+  dimension: prim_key {
+    hidden: yes
+    type: number
+    primary_key: yes
+    sql: ${TABLE}.prim_key ;;
+  }
 
-dimension: vid {
-  hidden: yes
-  type: string
-  sql: ${TABLE}.vid ;;
-}
+  dimension: vid {
+    hidden: yes
+    type: string
+    sql: ${TABLE}.vid ;;
+  }
 
 
 # ------------
@@ -53,23 +53,23 @@ dimension: vid {
         END ;;
   }
 
-dimension_group: _data {
-  type: time
-  timeframes: [
-    raw,
-    date,
-    day_of_month,
-    day_of_week,
-    day_of_week_index,
-    week,
-    month,
-    quarter,
-    year
-  ]
-  convert_tz: no
-  datatype: date
-  sql: ${TABLE}._DATA_DATE ;;
-}
+  dimension_group: _data {
+    type: time
+    timeframes: [
+      raw,
+      date,
+      day_of_month,
+      day_of_week,
+      day_of_week_index,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    convert_tz: no
+    datatype: date
+    sql: ${TABLE}._DATA_DATE ;;
+  }
 
   dimension_group: _latest {
     type: time
@@ -90,90 +90,90 @@ dimension_group: _data {
 #  DIMENSIONS
 # ------------
 
-dimension: video_id {
-  type: string
-  sql: ${TABLE}.video_id ;;
-}
+  dimension: video_id {
+    type: string
+    sql: ${TABLE}.video_id ;;
+  }
 
-dimension: channel_id {
-  hidden: yes
-  type: string
-  sql: ${TABLE}.channel_id ;;
-}
+  dimension: channel_id {
+    hidden: yes
+    type: string
+    sql: ${TABLE}.channel_id ;;
+  }
 
-dimension: country_code {
-  type: string
-  sql: ${TABLE}.country_code ;;
-}
+  dimension: country_code {
+    type: string
+    sql: ${TABLE}.country_code ;;
+  }
 
-dimension: live_or_on_demand {
-  type: string
-  sql: ${TABLE}.live_or_on_demand ;;
-}
+  dimension: live_or_on_demand {
+    type: string
+    sql: ${TABLE}.live_or_on_demand ;;
+  }
 
-dimension: subscribed_status {
-  view_label: "Subscription"
-  type: string
-  sql: ${TABLE}.subscribed_status ;;
-}
+  dimension: subscribed_status {
+    view_label: "Subscription"
+    type: string
+    sql: ${TABLE}.subscribed_status ;;
+  }
 
 # -------------------
 # Measures below!
 # -------------------
 
-measure: latest_date {
-  sql: MAX(${_data_raw});;
-}
+  measure: latest_date {
+    sql: MAX(${_data_raw});;
+  }
 
 # -------------------
 # Card Related!
 # -------------------
 
 
-measure: card_clicks {
-  view_label: "Card"
-  type: sum
-  sql: ${TABLE}.card_clicks ;;
-}
+  measure: card_clicks {
+    view_label: "Card"
+    type: sum
+    sql: ${TABLE}.card_clicks ;;
+  }
 
-measure: card_impressions {
-  view_label: "Card"
-  type: sum
-  sql: ${TABLE}.card_impressions ;;
-}
+  measure: card_impressions {
+    view_label: "Card"
+    type: sum
+    sql: ${TABLE}.card_impressions ;;
+  }
 
-measure: card_teaser_clicks {
-  view_label: "Card"
-  type: sum
-  sql: ${TABLE}.card_teaser_clicks ;;
-}
+  measure: card_teaser_clicks {
+    view_label: "Card"
+    type: sum
+    sql: ${TABLE}.card_teaser_clicks ;;
+  }
 
-measure: card_teaser_impressions {
-  view_label: "Card"
-  type: sum
-  sql: ${TABLE}.card_teaser_impressions ;;
-}
+  measure: card_teaser_impressions {
+    view_label: "Card"
+    type: sum
+    sql: ${TABLE}.card_teaser_impressions ;;
+  }
 
-measure: comments {
-  type: sum
-  sql: ${TABLE}.comments ;;
-}
+  measure: comments {
+    type: sum
+    sql: ${TABLE}.comments ;;
+  }
 
 # -------------------
 # Likes Related!
 # -------------------
 
-measure: dislikes {
-  view_label: "Likes"
-  type: sum
-  sql: ${TABLE}.dislikes ;;
-}
+  measure: dislikes {
+    view_label: "Likes"
+    type: sum
+    sql: ${TABLE}.dislikes ;;
+  }
 
-measure: likes {
-  view_label: "Likes"
-  type: sum
-  sql: ${TABLE}.likes ;;
-}
+  measure: likes {
+    view_label: "Likes"
+    type: sum
+    sql: ${TABLE}.likes ;;
+  }
 
   measure: like_change {
     view_label: "Likes"
@@ -193,147 +193,161 @@ measure: likes {
     type: number
     sql: ${sum_views}/nullif(${likes},0) ;;
     value_format: "#.00"
-    }
+  }
 
-measure: red_views {
-  view_label: "Red"
-  type: sum
-  sql: ${TABLE}.red_views ;;
-}
+  measure: red_views {
+    view_label: "Red"
+    type: sum
+    sql: ${TABLE}.red_views ;;
+  }
 
-measure: red_watch_time_minutes {
-  view_label: "Red"
-  type: sum
-  sql: ${TABLE}.red_watch_time_minutes,2 ;;
-  value_format: "#.00"
-}
+  measure: red_watch_time_minutes {
+    view_label: "Red"
+    type: sum
+    sql: ${TABLE}.red_watch_time_minutes,2 ;;
+    value_format: "#.00"
+  }
 
-measure: shares {
-  type: sum
-  sql: ${TABLE}.shares ;;
-}
+  measure: shares {
+    type: sum
+    sql: ${TABLE}.shares ;;
+  }
 
-measure: subscribers_gained {
-  view_label: "Subscription"
-  type: sum
-  sql: ${TABLE}.subscribers_gained ;;
-  drill_fields: [video_info.video_name,vid_stats*]
-}
+  measure: subscribers_gained {
+    view_label: "Subscription"
+    type: sum
+    sql: ${TABLE}.subscribers_gained ;;
+    drill_fields: [video_info.video_name,vid_stats*]
+  }
 
-measure: subscribers_lost {
-  view_label: "Subscription"
-  type: sum
-  sql: ${TABLE}.subscribers_lost ;;
-  drill_fields: [video_info.video_name,vid_stats*]
-}
+  measure: subscribers_lost {
+    view_label: "Subscription"
+    type: sum
+    sql: ${TABLE}.subscribers_lost ;;
+    drill_fields: [video_info.video_name,vid_stats*]
+  }
 
-measure: subscriber_change {
-  view_label: "Subscription"
-  type: number
-  sql: ${subscribers_gained}-${subscribers_lost} ;;
-  drill_fields: [video_info.video_name,vid_stats*]
-}
+  measure: subscriber_change {
+    view_label: "Subscription"
+    type: number
+    sql: ${subscribers_gained}-${subscribers_lost} ;;
+    drill_fields: [video_info.video_name,vid_stats*]
+  }
 
 #I chose to calculate based on subscribers gained, to know speed of new subscriber acquisition
-measure: view_per_sub {
-  view_label: "Subscription"
-  type: number
-  sql: ${sum_views}/nullif(${subscribers_gained},0) ;;
-  value_format: "#.00"
-}
+  measure: view_per_sub {
+    view_label: "Subscription"
+    type: number
+    sql: ${sum_views}/nullif(${subscribers_gained},0) ;;
+    value_format: "#.00"
+  }
 
-measure: videos_added_to_playlists {
-  view_label: "Playlist"
-  type: sum
-  sql: ${TABLE}.videos_added_to_playlists ;;
-}
+  measure: videos_added_to_playlists {
+    view_label: "Playlist"
+    type: sum
+    sql: ${TABLE}.videos_added_to_playlists ;;
+  }
 
-measure: videos_removed_from_playlists {
-  view_label: "Playlist"
-  type: sum
-  sql: ${TABLE}.videos_removed_from_playlists ;;
-}
+  measure: videos_removed_from_playlists {
+    view_label: "Playlist"
+    type: sum
+    sql: ${TABLE}.videos_removed_from_playlists ;;
+  }
 
-measure: views {
-  type: sum
-  sql: ${TABLE}.views ;;
- # link: {
- #    label: "View Indepth"
- #    url: "/dashboards/7?VideoID={{[video_id | url_encode}}&Title={{title | url_encode}}"
- # }
-}
+  measure: views {
+    type: sum
+    sql: ${TABLE}.views ;;
+    # link: {
+    #    label: "View Indepth"
+    #    url: "/dashboards/7?VideoID={{[video_id | url_encode}}&Title={{title | url_encode}}"
+    # }
+  }
 
-measure: watch_time_minutes {
-  type: sum
-  sql: ${TABLE}.watch_time_minutes ;;
-  value_format: "#.00"
-}
+  measure: watch_time_minutes {
+    type: sum
+    sql: ${TABLE}.watch_time_minutes ;;
+    value_format: "#.00"
+  }
 
-measure: avg_watch_time {
-  type: number
-  sql: (${watch_time_minutes}/NULLIF(${views},0)) ;;
-  value_format: "#.00"
-}
+  measure: avg_watch_time {
+    type: number
+    sql: (${watch_time_minutes}/NULLIF(${views},0)) ;;
+    value_format: "#.00"
+  }
 
-measure: count_videos {
-  type: count_distinct
-  sql: ${video_id} ;;
-}
+  measure: count_videos {
+    type: count_distinct
+    sql: ${video_id} ;;
+  }
 
-measure: view_per_video{
-  type: number
-  sql: ${views}/${count_videos} ;;
-  value_format: "#.00"
-}
+  measure: view_per_video{
+    type: number
+    sql: ${views}/${count_videos} ;;
+    value_format: "#.00"
+  }
 
-measure: sum_views {
-  type: number
-  sql: ${views} ;;
-  value_format_name: number_conditional
-}
+  measure: sum_views {
+    type: number
+    sql: ${views} ;;
+    value_format_name: number_conditional
+  }
 
-measure: count {
-  type: count
-  drill_fields: []
-}
+  measure: count {
+    type: count
+    drill_fields: []
+  }
 
-set: vid_stats {
- fields: [views,subscriber_change,like_change,watch_time_minutes,comments,shares]
-}
+  measure: key_points {
+    description: "Combined Views/Subs/Likes/Shares/Comments to give a score"
+    type: number
+    sql: ((${sum_views}*1)+(${likes}*10)+(${subscribers_gained}*100)+(${shares}*100))-((${dislikes}*20)+(${subscribers_lost}*200)) ;;
+    drill_fields: [vid_stats*]
+ }
+
+  set: vid_stats {
+    fields: [views,subscriber_change,like_change,watch_time_minutes,comments,shares]
+  }
+
+
+
 # ----------
 # Random
 # ----------
 
-parameter: dynamic_measure {
-  description: "Choose Type with Chooser"
-  type: string
-  allowed_value: {
-    label: "Total Views"
-    value: "views"
+  parameter: dynamic_measure {
+    description: "Choose Type with Chooser"
+    type: string
+    allowed_value: {
+      label: "Total Views"
+      value: "views"
+    }
+    allowed_value: {
+      label: "Average Watch Time"
+      value: "avg_watch_time"
+    }
+    allowed_value: {
+      label: "Subscriber Change"
+      value: "subscriber_change"
+    }
+    allowed_value: {
+      label: "Shares"
+      value: "shares"
+    }
+    allowed_value: {
+      label: "Like Change"
+      value: "like_change"
+    }
+    allowed_value: {
+      label: "Key_Points"
+      value: "key_points"
+    }
   }
-  allowed_value: {
-    label: "Average Watch Time"
-    value: "avg_watch_time"
-  }
-  allowed_value: {
-    label: "Subscriber Change"
-    value: "subscriber_change"
-  }
-  allowed_value: {
-    label: "Shares"
-    value: "shares"
-  }
-  allowed_value: {
-    label: "Like Change"
-    value: "like_change"
-  }
-}
 
-measure: metric_chooser {
-  description: "Use with Metric_Picker Filter Only"
-  type: number
-  label_from_parameter: dynamic_measure
-  sql:    CASE
+  measure: metric_chooser {
+    description: "Use with Metric_Picker Filter Only"
+    type: number
+    label_from_parameter: dynamic_measure
+    sql:    CASE
       WHEN {% parameter dynamic_measure %} = 'views'
         THEN ${views}
       WHEN {% parameter dynamic_measure %} = 'avg_watch_time'
@@ -344,9 +358,11 @@ measure: metric_chooser {
         THEN ${shares}
         WHEN {% parameter dynamic_measure %} = 'like_change'
         THEN ${like_change}
+        WHEN {% parameter dynamic_measure %} = 'key_points'
+        THEN ${key_points}
       ELSE NULL
     END ;;
-}
+  }
 
 
 }

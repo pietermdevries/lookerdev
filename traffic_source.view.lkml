@@ -41,6 +41,7 @@ view: traffic_source {
   dimension: traffic_source {
     type: string
     sql: ${TABLE}.traffic_source ;;
+    suggest_dimension: traffic_source
     drill_fields: [traffic_source_detail]
   }
 

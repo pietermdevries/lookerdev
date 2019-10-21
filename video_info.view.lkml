@@ -39,7 +39,9 @@ view: video_info {
 
   dimension: video_name {
     type: string
-    sql: ${TABLE}.video_name ;;
+      sql: ${TABLE}.video_name ;;
+#     sql: REPLACE(REPLACE(${TABLE}.video_name,"【海外の反応 アニメ】",""),"話*","話") ;;
+#     sql: REGEXP_REPLACE(${TABLE}.video_name, r"^【海外の反応 アニメ】 ([a-zA-Z0-9\s]+話$)", "\\1")　;;
     link: {
       label: "Video URL"
       url: "https://www.youtube.com/watch?v={{video_id | url_encode}}"
