@@ -90,12 +90,12 @@ view: video_info {
 
   dimension: title_pic {
     sql: ${title};;
-    html: <img src="http://localhost:8080/image_search.php?q={{[value　| url_param_escape }}" width=200  border=0 /> ;;
+    html: <img src="https://agile-peak-87852.herokuapp.com/image_search.php?q={{[value　| url_param_escape }}" width=200  border=0 /> ;;
   }
 
   dimension: episode_pic {
     sql: ${video_name};;
-    html: <img src="http://localhost:8080/image_search.php?q={{[value　| url_param_escape }}" width=200  border=0 /> ;;
+    html: <img src="https://agile-peak-87852.herokuapp.com/image_search.php?q={{[value　| url_param_escape }}" width=200  border=0 /> ;;
   }
 
   dimension: genre1 {

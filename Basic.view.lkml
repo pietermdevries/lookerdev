@@ -3,6 +3,7 @@
 
 
 view: channel_basic_a2_daily_first {
+  view_label: "Basic"
   derived_table: {
     sql:
           SELECT
@@ -220,6 +221,7 @@ view: channel_basic_a2_daily_first {
     drill_fields: [video_info.video_name,vid_stats*]
   }
 
+
   measure: subscribers_lost {
     view_label: "Subscription"
     type: sum
@@ -362,6 +364,10 @@ view: channel_basic_a2_daily_first {
         THEN ${key_points}
       ELSE NULL
     END ;;
+  }
+
+  set: test {
+    fields: [channel_basic_a2_daily_first.*]
   }
 
 

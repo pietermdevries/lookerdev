@@ -4,12 +4,12 @@ connection: "private_yt"
 include: "*.view"
 include: "views/*"
 
-datagroup: thesis_cool_default_datagroup {
+datagroup: youtube_transfer {
   sql_trigger: SELECT COUNT(*) FROM channel_basic_a2_daily_first;;
   max_cache_age: "24 hour"
 }
 
-persist_with: thesis_cool_default_datagroup
+persist_with: youtube_transfer
 
 named_value_format: usd_conditional {
   value_format: "[>=1000000]$0.0,,\"M\";[>=1000]$0.0,\"K\";$0"
@@ -17,7 +17,7 @@ named_value_format: usd_conditional {
 }
 
 named_value_format: number_conditional {
-  value_format: "[>=1000000]0.0,,\"M\";[>=1000]0.0,\"K\";0"
+  value_format: "[>=1000000]\"¥\"0.0,,\"M\";[>=1000]\"¥\"0.0,\"K\";\"¥\"0"
 }
 
 
