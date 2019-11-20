@@ -37,6 +37,18 @@ view: video_info {
     sql: ${TABLE}.video_url ;;
   }
 
+  dimension: left5 {
+    type: string
+#    sql:  cast(left(${video_name}, 5) as integer);;
+    sql:  cast(substr(${video_id}, -5) as int64);;
+
+  }
+
+  dimension: cleanedleft5 {
+    type: number
+    sql: CASE WHEN ${video_id} ~ '^([0-9]+[.]?[0-9]*|[.][0-9]+)$' THEN LEFT(${video_id},5);;
+  }
+
   dimension: video_name {
     type: string
       sql: ${TABLE}.video_name ;;
@@ -44,11 +56,11 @@ view: video_info {
 #     sql: REGEXP_REPLACE(${TABLE}.video_name, r"^【海外の反応 アニメ】 ([a-zA-Z0-9\s]+話$)", "\\1")　;;
     link: {
       label: "Video URL"
-      url: "https://www.youtube.com/watch?v={{video_id | url_encode}}"
+      url: "https://www.youtube.com/watch?v={{ _filters['video_info.video_id'] | url_encode}}"
     }
     link: {
       label: "Video Dashboard"
-      url: "/dashboards/6?Video_Name={{[video_name | url_encode}}"
+      url: "/dashboards/6?Video_Name={{[filterable_value | url_encode}}"
       icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
     }
   }
@@ -57,12 +69,13 @@ view: video_info {
     sql: ${TABLE}.thumbnail ;;
     link: {
       label: "Video Dashboard"
-      url: "/dashboards/6?Video_Name={{[video_name | url_encode}}"
+      url: "/dashboards/6?Video_Name={{[video_info.video_name._filterable_value | uri_encode}}"
       icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
       }
     html: <img src="{{value}}" width=75 height=50 border=0 />  ;;
     drill_fields: [channel_basic_a2_daily_first.data_date,video_name,channel_basic_a2_daily_first.video_stats*]
 }
+#html: <a href="{{ website.url._value }}" target="_new">{{ value }}</a> ;;
     dimension: full_thumbnail {
       type: string
       sql: ${TABLE}.thumbnail ;;
@@ -75,7 +88,7 @@ view: video_info {
     sql: ${TABLE}.anime_title ;;
     link: {
       label: "Video Series Dashboard"
-      url: "/dashboards/8?Title={{title | url_encode}}"
+      url: "/dashboards/8?Title={{filterable_value | url_encode}}"
       icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
     }
     drill_fields: [video_name,Basic.video_stats*]
@@ -84,7 +97,7 @@ view: video_info {
   dimension: name {
     sql: ${title} ;;
     html:
-    <a href="/dashboards/8?Title={{ value }}&">{{ value }}</a> ;;
+    <a href="/dashboards/8?Title={{ filterable_value }}&">{{ filterable_value }}</a> ;;
   }
 
 

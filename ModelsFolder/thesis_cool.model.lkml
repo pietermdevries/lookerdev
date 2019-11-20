@@ -1,8 +1,7 @@
 connection: "private_yt"
 
 # include all the views
-include: "*.view"
-include: "views/*"
+include: "/views/*"
 
 datagroup: youtube_transfer {
   sql_trigger: SELECT COUNT(*) FROM channel_basic_a2_daily_first;;
@@ -57,6 +56,11 @@ explore: channel_basic_a2_daily_first {
     type:  left_outer
     sql_on: ${channel_basic_a2_daily_first.video_id} = ${traffic_source.video_id}
     AND ${channel_basic_a2_daily_first._data_date} = ${traffic_source._data_date};;
+    relationship: many_to_one
+  }
+  join: top_10 {
+    type: left_outer
+    sql_on: ${channel_basic_a2_daily_first.video_id} = ${top_10.video_id};;
     relationship: many_to_one
   }
 }
@@ -114,3 +118,5 @@ explore: playback {
 explore: LAG_TEST {
 
 }
+
+explore: multi_date_test {}
