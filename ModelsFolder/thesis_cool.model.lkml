@@ -21,6 +21,7 @@ named_value_format: number_conditional {
 
 
 explore: channel_basic_a2_daily_first {
+  label: "Master Explore"
   join: video_info {
     type: left_outer
     sql_on: ${video_info.video_id} = ${channel_basic_a2_daily_first.video_id} ;;

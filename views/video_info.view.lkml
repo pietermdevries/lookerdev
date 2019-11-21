@@ -69,7 +69,7 @@ view: video_info {
     sql: ${TABLE}.thumbnail ;;
     link: {
       label: "Video Dashboard"
-      url: "/dashboards/6?Video_Name={{[video_info.video_name._filterable_value | uri_encode}}"
+      url: "/dashboards/6?Video_Name={{[video_info.video_name._filterable_value | encode_url}}"
       icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
       }
     html: <img src="{{value}}" width=75 height=50 border=0 />  ;;

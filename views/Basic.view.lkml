@@ -113,109 +113,116 @@ view: channel_basic_a2_daily_first {
   }
 
   dimension: subscribed_status {
-    view_label: "Subscription"
     type: string
     sql: ${TABLE}.subscribed_status ;;
   }
-
-# -------------------
-# Measures below!
-# -------------------
 
   measure: latest_date {
     sql: MAX(${_data_raw});;
   }
 
-# -------------------
-# Card Related!
-# -------------------
-
-
   measure: card_clicks {
-    view_label: "Card"
+    group_label: "Card"
     type: sum
     sql: ${TABLE}.card_clicks ;;
   }
 
   measure: card_impressions {
-    view_label: "Card"
+    group_label: "Card"
     type: sum
     sql: ${TABLE}.card_impressions ;;
   }
 
   measure: card_teaser_clicks {
-    view_label: "Card"
+    group_label: "Card"
     type: sum
     sql: ${TABLE}.card_teaser_clicks ;;
   }
 
   measure: card_teaser_impressions {
-    view_label: "Card"
+    group_label: "Card"
     type: sum
     sql: ${TABLE}.card_teaser_impressions ;;
   }
 
   measure: comments {
+    group_label: "Comments"
     type: sum
     sql: ${TABLE}.comments ;;
   }
 
-# -------------------
-# Likes Related!
-# -------------------
+  measure: view_per_comments {
+    group_label: "Views"
+    type: number
+    sql: ${views}/nullif(${comments},0) ;;
+    value_format: "#.00"
+  }
 
   measure: dislikes {
-    view_label: "Likes"
+    group_label: "Likes"
     type: sum
     sql: ${TABLE}.dislikes ;;
   }
 
   measure: likes {
-    view_label: "Likes"
+    group_label: "Likes"
     type: sum
     sql: ${TABLE}.likes ;;
   }
 
   measure: like_change {
-    view_label: "Likes"
+    group_label: "Likes"
     type: number
     sql: ${likes}-${dislikes};;
   }
 
-  measure: like_change_per_day {
-    view_label: "Likes"
+  measure: like_change_per_video {
+    group_label: "Video"
     type: number
     sql: ${like_change}/${count_videos};;
     value_format: "#.00"
   }
 
+  measure: sub_change_per_video {
+    group_label: "Video"
+    sql: ${subscriber_change}/${count_videos} ;;
+    value_format: "#.00"
+  }
+
+  measure: comment_per_video {
+    group_label: "Video"
+    sql: ${comments}/${count_videos} ;;
+    value_format: "#.00"
+  }
+
   measure: view_per_like {
-    view_label: "Likes"
+    group_label: "Views"
     type: number
-    sql: ${sum_views}/nullif(${likes},0) ;;
+    sql: ${views}/nullif(${likes},0) ;;
     value_format: "#.00"
   }
 
   measure: red_views {
-    view_label: "Red"
+    group_label: "Red"
     type: sum
     sql: ${TABLE}.red_views ;;
   }
 
   measure: red_watch_time_minutes {
-    view_label: "Red"
+    group_label: "Red"
     type: sum
     sql: ${TABLE}.red_watch_time_minutes,2 ;;
     value_format: "#.00"
   }
 
   measure: shares {
+    group_label: "Shares"
     type: sum
     sql: ${TABLE}.shares ;;
   }
 
   measure: subscribers_gained {
-    view_label: "Subscription"
+    group_label: "Subscription"
     type: sum
     sql: ${TABLE}.subscribers_gained ;;
     drill_fields: [video_info.video_name,vid_stats*]
@@ -223,14 +230,14 @@ view: channel_basic_a2_daily_first {
 
 
   measure: subscribers_lost {
-    view_label: "Subscription"
+    group_label: "Subscription"
     type: sum
     sql: ${TABLE}.subscribers_lost ;;
     drill_fields: [video_info.video_name,vid_stats*]
   }
 
   measure: subscriber_change {
-    view_label: "Subscription"
+    group_label: "Subscription"
     type: number
     sql: ${subscribers_gained}-${subscribers_lost} ;;
     drill_fields: [video_info.video_name,vid_stats*]
@@ -238,60 +245,90 @@ view: channel_basic_a2_daily_first {
 
 #I chose to calculate based on subscribers gained, to know speed of new subscriber acquisition
   measure: view_per_sub {
-    view_label: "Subscription"
+    group_label: "Views"
     type: number
-    sql: ${sum_views}/nullif(${subscribers_gained},0) ;;
+    sql: ${views}/nullif(${subscribers_gained},0) ;;
     value_format: "#.00"
   }
 
   measure: videos_added_to_playlists {
-    view_label: "Playlist"
+    group_label: "Playlist"
     type: sum
     sql: ${TABLE}.videos_added_to_playlists ;;
   }
 
   measure: videos_removed_from_playlists {
-    view_label: "Playlist"
+    group_label: "Playlist"
     type: sum
     sql: ${TABLE}.videos_removed_from_playlists ;;
   }
 
-  measure: views {
-    type: sum
+  dimension: view_num {
+    hidden: yes
+    type: number
     sql: ${TABLE}.views ;;
+    }
+
+  measure: views {
+    group_label: "Views"
+    type: sum
+    sql: ${view_num} ;;
     # link: {
     #    label: "View Indepth"
     #    url: "/dashboards/7?VideoID={{[video_id | url_encode}}&Title={{title | url_encode}}"
     # }
   }
 
-  measure: watch_time_minutes {
-    type: sum
+  dimension: watch_time_min {
+    hidden: yes
+    type: number
     sql: ${TABLE}.watch_time_minutes ;;
+  }
+  measure: watch_time_minutes {
+    group_label: "Watch Time"
+    type: sum
+    sql: ${watch_time_min} ;;
     value_format: "#.00"
   }
 
   measure: avg_watch_time {
+    group_label: "Watch Time"
     type: number
-    sql: (${watch_time_minutes}/NULLIF(${views},0)) ;;
+    sql: (${watch_time_min}/NULLIF(${view_num},0)) ;;
     value_format: "#.00"
   }
 
+  dimension: watch_tiers {
+    group_label: "Watch Time"
+    case: {
+      when: {
+        sql: ${watch_time_min} < 5  ;;
+        label: "Short"
+      }
+      when: {
+        sql: ${watch_time_min} < 10 ;;
+        label: "Medium"
+      }
+      when: {
+        sql: ${watch_time_min} < 15 ;;
+        label: "Long"
+      }
+      else: "Jumbo-Long"
+      }
+    }
+
+
   measure: count_videos {
+    group_label: "Video"
     type: count_distinct
     sql: ${video_id} ;;
   }
 
   measure: view_per_video{
+    group_label: "Video"
     type: number
     sql: ${views}/${count_videos} ;;
     value_format: "#.00"
-  }
-
-  measure: sum_views {
-    type: number
-    sql: ${views} ;;
-    value_format_name: number_conditional
   }
 
   measure: count {
@@ -302,7 +339,7 @@ view: channel_basic_a2_daily_first {
   measure: key_points {
     description: "Combined Views/Subs/Likes/Shares/Comments to give a score"
     type: number
-    sql: ((${sum_views}*1)+(${likes}*10)+(${subscribers_gained}*100)+(${shares}*100))-((${dislikes}*20)+(${subscribers_lost}*200)) ;;
+    sql: ((${views}*1)+(${likes}*10)+(${subscribers_gained}*100)+(${shares}*100))-((${dislikes}*20)+(${subscribers_lost}*200)) ;;
     drill_fields: [vid_stats*]
  }
 
