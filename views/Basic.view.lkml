@@ -103,6 +103,7 @@ view: channel_basic_a2_daily_first {
   }
 
   dimension: country_code {
+    description: "double digits"
     type: string
     sql: ${TABLE}.country_code ;;
   }
@@ -294,7 +295,7 @@ view: channel_basic_a2_daily_first {
   measure: avg_watch_time {
     group_label: "Watch Time"
     type: number
-    sql: (${watch_time_min}/NULLIF(${view_num},0)) ;;
+    sql: (${watch_time_minutes}/NULLIF(${views},0)) ;;
     value_format: "#.00"
   }
 

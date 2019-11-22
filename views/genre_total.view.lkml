@@ -25,6 +25,12 @@ view: genre_total {
     sql: ${TABLE}.video_id    ;;
   }
 
+  dimension: action_adventure {
+    type: string
+    sql: ${genre} ;;
+    suggestions: ["Action","Adventure"]
+  }
+
 
   dimension: over_100 {
     type: yesno
