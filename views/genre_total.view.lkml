@@ -31,6 +31,17 @@ view: genre_total {
     suggestions: ["Action","Adventure"]
   }
 
+  dimension: genre_colors {
+    type: string
+    sql: ${genre};;
+    html: {% if value == 'Adventure' %}
+    <p style="color: black; background-color: indianred; font-size:100%; text-align:center">{{ rendered_value }}</p>
+    {% elsif value == 'Action' %}
+    <p style="color: black; background-color: lightyellow; font-size:100%; text-align:center">{{ rendered_value }}</p>
+    {% else %}
+    <p style="color: white; background-color: lightgreen; font-size:100%; text-align:center">{{ rendered_value }}</p>
+    {% endif %} ;;
+  }
 
   dimension: over_100 {
     type: yesno
