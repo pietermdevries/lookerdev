@@ -30,30 +30,6 @@ view: channel_basic_a2_daily_first {
 #  Dates
 # ------------
 
-  filter: previous_period_filter {
-    type: date
-    description: "Use this filter for period analysis"
-    sql: ${previous_period} IS NOT NULL ;;
-  }
-
-  dimension: previous_period {
-    type: string
-    description: "The reporting period as selected by the Previous Period Filter"
-    sql:
-      CASE
-        WHEN {% date_start previous_period_filter %} is not null AND {% date_end previous_period_filter %} is not null /* date ranges or in the past x days */
-          THEN
-            CASE
-              WHEN TIMESTAMP(${_data_raw}) >= {% date_start previous_period_filter %}
-                AND TIMESTAMP(${_data_raw}) <= {% date_end previous_period_filter %}
-                THEN 'This Period'
-              WHEN TIMESTAMP(${_data_raw}) >= date_add(day,-1*date_diff(day,{% date_start previous_period_filter %}, {% date_end previous_period_filter %} ) + 1, date_add(day,-1,{% date_start previous_period_filter %} ) )
-                AND TIMESTAMP(${_data_raw}) <= date_add(day,-1,{% date_start previous_period_filter %} )
-                THEN 'Previous Period'
-            END
-        END ;;
-  }
-
   dimension_group: _data {
     type: time
     timeframes: [
@@ -73,6 +49,7 @@ view: channel_basic_a2_daily_first {
   }
 
   dimension_group: _latest {
+    hidden: yes
     type: time
     timeframes: [
       raw,
@@ -347,6 +324,7 @@ view: channel_basic_a2_daily_first {
   set: vid_stats {
     fields: [views,subscriber_change,like_change,watch_time_minutes,comments,shares]
   }
+
 
 
 

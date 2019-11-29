@@ -1,8 +1,6 @@
 view: video_info {
   sql_table_name: video_info ;;
 
-
-
   dimension_group: published_date {
     type: time
     timeframes: [
@@ -33,27 +31,21 @@ view: video_info {
   }
 
   dimension: video_url {
+    hidden: yes
     type: string
     sql: ${TABLE}.video_url ;;
   }
 
-  dimension: left5 {
-    type: string
-#    sql:  cast(left(${video_name}, 5) as integer);;
-    sql:  cast(substr(${video_id}, -5) as int64);;
-
-  }
-
   dimension: cleanedleft5 {
+    hidden: yes
     type: number
     sql: CASE WHEN ${video_id} ~ '^([0-9]+[.]?[0-9]*|[.][0-9]+)$' THEN LEFT(${video_id},5);;
   }
 
   dimension: video_name {
     type: string
-      sql: ${TABLE}.video_name ;;
-#     sql: REPLACE(REPLACE(${TABLE}.video_name,"【海外の反応 アニメ】",""),"話*","話") ;;
-#     sql: REGEXP_REPLACE(${TABLE}.video_name, r"^【海外の反応 アニメ】 ([a-zA-Z0-9\s]+話$)", "\\1")　;;
+#      sql: ${TABLE}.video_name ;;
+       sql: TRIM(SUBSTR(replace(${TABLE}.video_name,"【海外の反応 アニメ】",""),0,STRPOS(replace(${TABLE}.video_name,"【海外の反応 アニメ】",""),"話"))) ;;
     link: {
       label: "Video URL"
       url: "https://www.youtube.com/watch?v={{ _filters['video_info.video_id'] | url_encode}}"
@@ -95,6 +87,7 @@ view: video_info {
   }
 
   dimension: name {
+    hidden: yes
     sql: ${title} ;;
     html:
     <a href="/dashboards/8?Title={{ filterable_value }}&">{{ filterable_value }}</a> ;;
@@ -102,41 +95,49 @@ view: video_info {
 
 
   dimension: title_pic {
+    hidden: yes
     sql: ${title};;
     html: <img src="https://agile-peak-87852.herokuapp.com/image_search.php?q={{[value　| url_param_escape }}" width=200  border=0 /> ;;
   }
 
   dimension: episode_pic {
+    hidden: yes
     sql: ${video_name};;
     html: <img src="https://agile-peak-87852.herokuapp.com/image_search.php?q={{[value　| url_param_escape }}" width=200  border=0 /> ;;
   }
 
   dimension: genre1 {
+    hidden: yes
     type: string
     sql: ${TABLE}.genre_1 ;;
   }
 
   dimension: genre2 {
+    hidden: yes
     type: string
     sql: ${TABLE}.genre_2 ;;
   }
   dimension: genre3 {
+    hidden: yes
     type: string
     sql: ${TABLE}.genre_3 ;;
   }
 
   dimension: genre4 {
+    hidden: yes
     type: string
     sql: ${TABLE}.genre_4 ;;
 }
 
   dimension: play_button {
+    hidden: yes
     label: "Play Button"
     sql: ${video_id} ;;
     html: <img src="https://variable.media/wp-content/uploads/2015/12/YouTube-Play-Button.png" width=100% border=0 /> ;;
   }
 
   dimension: face {
+    hidden: yes
     label: "Face"
     sql: ${video_id} ;;
     html: <img src="https://yt3.ggpht.com/a-/AAuE7mBt0IhShlMtdkxricRAEgoJ9o-UphIfqutjLdeq=s88-c-k-c0xffffffff-no-rj-mo" height=100% border=0 /> ;;

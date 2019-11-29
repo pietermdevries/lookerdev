@@ -8,9 +8,9 @@ view: video_days {
         SUM(views)/NULLIF(DATE_DIFF(MAX(_DATA_DATE),(MIN(_DATA_DATE)), day),
           0) AS views_per_day,
         CASE
-          WHEN DATE_DIFF(MAX(_DATA_DATE),MIN(_DATA_DATE), day) <= 7 THEN "First_7"
+          WHEN DATE_DIFF(MAX(_DATA_DATE),MIN(_DATA_DATE), day) <= 14 THEN "First_14"
         ELSE
-        "After_7"
+        "After_14"
       END AS Posted
 
       FROM
@@ -55,7 +55,7 @@ view: video_days {
   }
   dimension: days_after_post {
     type: number
-    sql: CASE WHEN ${days_since_post} > 6 THEN null
+    sql: CASE WHEN ${days_since_post} > 14 THEN null
     ELSE ${days_since_post} END;;
   }
 
