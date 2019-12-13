@@ -42,6 +42,16 @@ view: video_info {
     sql: CASE WHEN ${video_id} ~ '^([0-9]+[.]?[0-9]*|[.][0-9]+)$' THEN LEFT(${video_id},5);;
   }
 
+  dimension: filter_jump {
+    type: string
+    sql: ${video_id} ;;
+    link: {
+      label: "For Testing to Video Dashboard"
+      url: "/dashboards/6?Video_Name={{ _filters['video_info.video_name'] | url_encode}}"
+      icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
+    }
+  }
+
   dimension: video_name {
     type: string
 #      sql: ${TABLE}.video_name ;;
@@ -64,6 +74,10 @@ view: video_info {
       url: "/dashboards/6?Video_Name={{[video_info.video_name._filterable_value | encode_url}}"
       icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
       }
+    link: {
+      label: "Video URL"
+      url: "https://www.youtube.com/watch?v={{ _filters['video_info.video_id'] | url_encode}}"
+    }
     html: <img src="{{value}}" width=75 height=50 border=0 />  ;;
     drill_fields: [channel_basic_a2_daily_first.data_date,video_name,channel_basic_a2_daily_first.video_stats*]
 }
@@ -128,6 +142,15 @@ view: video_info {
     type: string
     sql: ${TABLE}.genre_4 ;;
 }
+
+  dimension: genre_colors {
+    type: string
+    sql: CASE WHEN ${genre1} = 'Adventure' THEN 'Adventure'
+              WHEN ${genre2} = 'Action' THEN  'Action'
+              WHEN ${genre3} = 'Mystery' THEN 'Mystery'
+              ELSE 'Bob' END;;
+  }
+
 
   dimension: play_button {
     hidden: yes

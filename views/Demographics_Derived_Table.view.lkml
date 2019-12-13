@@ -49,6 +49,17 @@ view: demographics_dt {
     sql: ${TABLE}.age_group ;;
   }
 
+  dimension: age2 {
+    type: string
+    sql: ${age_group} ;;
+  }
+
+  filter: age_filter {
+    type: string
+    suggest_dimension: age2
+    sql: {% condition age_filter %} ${age2} {% endcondition %} ;;
+    }
+
   dimension: channel_id {
     type: string
     sql: ${TABLE}.channel_id ;;

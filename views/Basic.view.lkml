@@ -382,9 +382,36 @@ view: channel_basic_a2_daily_first {
     END ;;
   }
 
+  measure: test_views {
+    type: average
+    sql: ${TABLE}.views ;;
+    value_format_name: decimal_0
+    link: {
+      label: "dashboard"
+      url:"/dashboards/5?"
+  }}
+
   set: test {
     fields: [channel_basic_a2_daily_first.*]
   }
+
+    parameter: date_granularity {
+      type: unquoted
+      allowed_value: { label: "Break down by Day" value: "day" }
+      allowed_value: { label: "Break down by Month" value: "month" }
+    }
+
+#    dimension: date {
+#      sql:
+#      {% if date_granularity._parameter_value == 'day' %}
+#      ${_data_raw}
+##      {% elsif date_granularity._parameter_value == 'month' %}
+#      ${data_raw}
+#      {% else %}
+#      ${_data_raw}
+#      {% endif %};;
+#    }
+
 
 
 }
