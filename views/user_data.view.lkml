@@ -28,4 +28,10 @@ view: user_data {
     type: count
     drill_fields: [id, users.last_name, users.id, users.first_name]
   }
+
+  measure: running_count {
+    type: running_total
+    sql: ${count} ;;
+    direction: "column"
+  }
 }
