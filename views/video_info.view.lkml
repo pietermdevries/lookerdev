@@ -151,6 +151,12 @@ view: video_info {
               ELSE 'Bob' END;;
   }
 
+  dimension: all_genres {
+    type: string
+    sql: ${genre1} ;;
+    html: <p>{{ video_info.genre1._value }} {{ video_info.genre2._value }} {{ video_info.genre3._value }}</p> ;;
+  }
+
 
   dimension: play_button {
     hidden: yes

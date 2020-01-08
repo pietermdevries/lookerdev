@@ -1,4 +1,5 @@
 connection: "private_yt"
+label: "Youtube"
 
 # include all the views
 include: "/views/*"

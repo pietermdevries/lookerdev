@@ -269,6 +269,14 @@ view: channel_basic_a2_daily_first {
     value_format: "#.00"
   }
 
+  dimension_group: watch_time {
+    type: time
+    timeframes: [second, minute, hour] # valid timeframes described below
+    sql: ${watch_time_min} ;;  # often this is a single database column
+    datatype: epoch # defaults to datetime
+    convert_tz: yes   # defaults to yes
+  }
+
   measure: avg_watch_time {
     group_label: "Watch Time"
     type: number
@@ -312,6 +320,22 @@ view: channel_basic_a2_daily_first {
   measure: count {
     type: count
     drill_fields: []
+  }
+
+  measure: running_count {
+    type: running_total
+    sql: ${count} ;;
+    direction: "column"
+    drill_fields: [vid_stats*]
+  }
+
+  measure: case_when_test {
+    type: number
+    sql: CASE WHEN ${count_videos} < 5 THEN ${views} * 10
+              WHEN ${count_videos} < 10 THEN ${views} * 5
+              ELSE null END;;
+    label: "Test"
+#    value_format: "# ##0"
   }
 
   measure: key_points {
@@ -397,20 +421,26 @@ view: channel_basic_a2_daily_first {
 
     parameter: date_granularity {
       type: unquoted
-      allowed_value: { label: "Break down by Day" value: "day" }
-      allowed_value: { label: "Break down by Month" value: "month" }
+      allowed_value: { label: "Day" value: "day" }
+      allowed_value: { label: "Month" value: "month" }
+      allowed_value: { label: "Year" value: "year" }
     }
 
-#    dimension: date {
-#      sql:
-#      {% if date_granularity._parameter_value == 'day' %}
-#      ${_data_raw}
-##      {% elsif date_granularity._parameter_value == 'month' %}
-#      ${data_raw}
-#      {% else %}
-#      ${_data_raw}
-#      {% endif %};;
-#    }
+    dimension: date {
+      sql:
+      {% if date_granularity._parameter_value == 'day' %}
+      ${_data_date}
+      {% elsif date_granularity._parameter_value == 'month' %}
+      ${_data_month}
+      {% elsif date_granularity._parameter_value == 'year' %}
+      ${_data_year}
+      {% else %}
+      ${_data_date}
+      {% endif %};;
+    }
+
+
+
 
 
 
