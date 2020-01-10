@@ -25,8 +25,8 @@ view: orders {
   dimension: status {
     type: string
     sql: ${TABLE}.status ;;
-    html: <ahref= "/explore/testpieter/orders?fields=orders.user_id,orders.status,orders.count&f[orders.status]={{value}}&f[orders.created_date]={{_filters['orders.created_date']}}"
-    </a>;;
+    html: <a href= "/explore/testpieter/orders?fields=orders.user_id,orders.status,orders.count&f[orders.status]={{value}}&f[orders.created_date]={{_filters['orders.created_date']}}"
+    </a> {{value}};;
     }
 
   dimension: user_id {
