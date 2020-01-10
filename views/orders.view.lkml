@@ -25,12 +25,9 @@ view: orders {
   dimension: status {
     type: string
     sql: ${TABLE}.status ;;
-    link: {
-      label: "Jump to explore"
-      url: "/explore/testpieter/orders?fields=orders.user_id,orders.status,orders.count&f[orders.status]={{value}}&f[orders.created_date]={{_filters['orders.created_date']}}"
-      icon_url: "http://www.looker.com/favicon.ico"
+    html: <ahref= "/explore/testpieter/orders?fields=orders.user_id,orders.status,orders.count&f[orders.status]={{value}}&f[orders.created_date]={{_filters['orders.created_date']}}"
+    </a>;;
     }
-  }
 
   dimension: user_id {
     type: number

@@ -18,6 +18,8 @@ explore: company {
   }
 }
 
+explore: smedt {}
+
 explore: calendar_table {}
 
 explore: connection_reg_r3 {}
