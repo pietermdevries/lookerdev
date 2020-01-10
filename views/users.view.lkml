@@ -6,6 +6,9 @@ view: users {
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
+    link: {
+      label: "Jump to User ID number {{ value }}"
+    }
   }
 
   dimension: age {

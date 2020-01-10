@@ -25,12 +25,22 @@ view: orders {
   dimension: status {
     type: string
     sql: ${TABLE}.status ;;
+    link: {
+      label: "Jump to explore"
+      url: "/explore/testpieter/orders?fields=orders.user_id,orders.status,orders.count&f[orders.status]={{value}}&f[orders.created_date]={{_filters['orders.created_date']}}"
+      icon_url: "http://www.looker.com/favicon.ico"
+    }
   }
 
   dimension: user_id {
     type: number
     # hidden: yes
     sql: ${TABLE}.user_id ;;
+    link: {
+      label: "Jump to User ID number {{ value }}"
+      url: "/dashboards-next/248?User+ID={{value}}&Status={{orders.status._value}}&Created+Date={{_filters['orders.created_date']}}"
+      icon_url: "http://www.looker.com/favicon.ico"
+      }
   }
 
   measure: count {
