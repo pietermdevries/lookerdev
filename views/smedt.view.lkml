@@ -2,9 +2,12 @@ view: smedt {
   derived_table: {
     sql: SELECT
         created_at,
-        status
+        status,
+        region
       FROM orders
       WHERE {% condition date_filter %} created_at {% endcondition %}
+      AND {% condition region_filter %} region {% endcondition %}
+
       ;;
   }
 
@@ -33,9 +36,15 @@ view: smedt {
     type: date
   }
 
-  filter: region {
+  dimension: region {
+    type: string
+    sql: ${TABLE}.region ;;
+  }
+
+  filter: region_filter {
     type: string
     suggestions: ["US","EU"]
+    sql: ${region} ;;
   }
 
   dimension: status {
