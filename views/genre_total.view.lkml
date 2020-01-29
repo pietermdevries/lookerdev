@@ -25,13 +25,48 @@ view: genre_total {
     sql: ${TABLE}.video_id    ;;
   }
 
+  parameter: genre_chooser {
+    hidden: yes
+    type: unquoted
+  }
+
   dimension: action_adventure {
+    hidden: yes
     type: string
     sql: ${genre} ;;
     suggestions: ["Action","Adventure"]
   }
 
+  dimension: htmladventure {
+    type: string
+    sql: ${genre} ;;
+    suggestions: ["Action","Adventure"]
+    html:
+
+    <button class="button" style=" background-color: #0079a1 ; border-color: white" >
+    <a href="www.google.co.in">
+    <b><font color="white">Maps</font></b>
+    </a>
+    </button>
+   ;;
+  }
+
+  measure: test_line {
+    hidden: yes
+    type: number
+    sql:
+      (case when ${genre} = 'Action' then 30
+      when ${genre} = 'Adventure' then 30
+      when ${genre} = 'Mystery' then 50
+      when ${genre} = 'Supernatural' then 50
+      when ${genre} = 'Magic' then 80
+      when ${genre} = 'Fantasy' then 80
+      else 100
+      end) ;;
+  }
+
   dimension: genre_colors {
+    hidden: yes
     type: string
     sql: ${genre};;
     html: {% if value == 'Adventure' %}

@@ -427,6 +427,15 @@ view: channel_basic_a2_daily_first {
     }
 
     dimension: date {
+      label: "      {% if date_granularity._parameter_value == 'day' %}
+      ${_data_date}
+      {% elsif date_granularity._parameter_value == 'month' %}
+      ${_data_month}
+      {% elsif date_granularity._parameter_value == 'year' %}
+      ${_data_year}
+      {% else %}
+      Other
+      {% endif %}"
       sql:
       {% if date_granularity._parameter_value == 'day' %}
       ${_data_date}
