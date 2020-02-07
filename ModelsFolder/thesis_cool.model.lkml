@@ -1,9 +1,10 @@
 connection: "private_yt"
 label: "Youtube"
 
+
 # include all the views
 include: "/views/*"
-
+include: "/*.dashboard*"
 datagroup: youtube_transfer {
   sql_trigger: SELECT COUNT(*) FROM channel_basic_a2_daily_first;;
   max_cache_age: "24 hour"
