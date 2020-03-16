@@ -16,6 +16,21 @@ view: users {
     sql: ${TABLE}.age ;;
   }
 
+  dimension: genderhmtl {
+    type: string
+    sql: CASE WHEN ${age} > 20 THEN 21
+          ELSE 1
+          END;;
+    html: <a href="#drillmenu" target="_self">
+{% if value > 20 %}
+男性
+{% else %}
+女性
+{% endif %}
+</a> ;;
+
+  }
+
   dimension: city {
     type: string
     sql: ${TABLE}.city ;;

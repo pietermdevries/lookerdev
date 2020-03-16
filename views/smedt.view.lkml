@@ -1,12 +1,13 @@
 view: smedt {
   derived_table: {
     sql: SELECT
-        created_at,
+        orders.created_at,
         status,
-        region
+        country
       FROM orders
-      WHERE {% condition date_filter %} created_at {% endcondition %}
-      AND {% condition region_filter %} region {% endcondition %}
+      JOIN users on orders.user_id = users.id
+      WHERE {% condition date_filter %} orders.created_at {% endcondition %}
+      AND {% condition region_filter %} users.country {% endcondition %}
 
       ;;
   }
@@ -23,12 +24,12 @@ view: smedt {
     label: "Date_formatted"
     sql: ${created_date} ;;
     html:
-    {% if _filters[region._value] == 'EU' %}
+    {% if _filters[smedt.region._value] == 'EU' %}
     {{ rendered_value | date: "%m/%d/%y" }}
-    {% elsif _filters[region._value] == 'US' %}
+    {% elsif _filters[smedt.region._value] == 'USA' %}
     {{ rendered_value | date: "%d/%m/%y" }}
     {% else %}
-    Who are you?
+    {{value}}
     {% endif %};;
     }
 
@@ -38,12 +39,12 @@ view: smedt {
 
   dimension: region {
     type: string
-    sql: ${TABLE}.region ;;
+    sql: ${TABLE}.country ;;
   }
 
   filter: region_filter {
     type: string
-    suggestions: ["US","EU"]
+    suggestions: ["USA","EU"]
     sql: ${region} ;;
   }
 
