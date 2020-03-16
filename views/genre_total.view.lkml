@@ -80,8 +80,8 @@ view: genre_total {
 
   dimension: over_100 {
     type: yesno
-    sql: ${video_id} = "1" OR ${genre1} IN ("Horror, Supernatural");;
-    hidden:  yes
+    sql: ${video_id} = "1" OR ${genre1} = "Horror";;
+#    hidden:  yes
   }
   measure: video_by_genre {
     hidden: yes

@@ -25,6 +25,23 @@ view: channel_basic_a2_daily_first {
     sql: ${TABLE}.vid ;;
   }
 
+  dimension: more_details {
+    type: string
+    sql: "For more details.." ;;
+    html: <div style= "width:100%; text-alignlast_modifiedcentre;"> <details>
+          <summary style="outline:none">{{ more_details.linked_value}}</summary>
+           <ul>
+          <li>Total views: {{channel_basic_a2_daily_first.views._linked_value}} </li>
+          <li>Subscribers Gained: {{channel_basic_a2_daily_first.subscriber_change._linked_value}} </li>
+          <li>Time Watched: {{channel_basic_a2_daily_first.watch_time_hours._linked_value}} </li>
+
+           </ul>
+
+          </details>
+          </div>
+          ;;
+  }
+
 
 # ------------
 #  Dates
@@ -245,7 +262,7 @@ view: channel_basic_a2_daily_first {
     hidden: yes
     type: number
     sql: ${TABLE}.views ;;
-    }
+  }
 
   measure: views {
     group_label: "Views"
@@ -266,7 +283,14 @@ view: channel_basic_a2_daily_first {
     group_label: "Watch Time"
     type: sum
     sql: ${watch_time_min} ;;
-    value_format: "#.00"
+    value_format: "#,###"
+  }
+
+  measure: watch_time_hours {
+    group_label: "Watch Time"
+    type: sum
+    sql: ${watch_time_min}/60 ;;
+    value_format: "#,###"
   }
 
   dimension_group: watch_time {
@@ -300,8 +324,8 @@ view: channel_basic_a2_daily_first {
         label: "Long"
       }
       else: "Jumbo-Long"
-      }
     }
+  }
 
 
   measure: count_videos {
@@ -319,7 +343,7 @@ view: channel_basic_a2_daily_first {
 
   measure: count {
     type: count
-    drill_fields: []
+    drill_fields: [video_id]
   }
 
   measure: running_count {
@@ -343,7 +367,7 @@ view: channel_basic_a2_daily_first {
     type: number
     sql: ((${views}*1)+(${likes}*10)+(${subscribers_gained}*100)+(${shares}*100))-((${dislikes}*20)+(${subscribers_lost}*200)) ;;
     drill_fields: [vid_stats*]
- }
+  }
 
   set: vid_stats {
     fields: [views,subscriber_change,like_change,watch_time_minutes,comments,shares]
@@ -413,30 +437,30 @@ view: channel_basic_a2_daily_first {
     link: {
       label: "dashboard"
       url:"/dashboards/5?"
-  }}
+    }}
 
   set: test {
     fields: [channel_basic_a2_daily_first.*]
   }
 
-    parameter: date_granularity {
-      type: unquoted
-      allowed_value: { label: "Day" value: "day" }
-      allowed_value: { label: "Month" value: "month" }
-      allowed_value: { label: "Year" value: "year" }
-    }
+  parameter: date_granularity {
+    type: unquoted
+    allowed_value: { label: "Day" value: "day" }
+    allowed_value: { label: "Month" value: "month" }
+    allowed_value: { label: "Year" value: "year" }
+  }
 
-    dimension: date {
-      label: "      {% if date_granularity._parameter_value == 'day' %}
-      ${_data_date}
-      {% elsif date_granularity._parameter_value == 'month' %}
-      ${_data_month}
-      {% elsif date_granularity._parameter_value == 'year' %}
-      ${_data_year}
-      {% else %}
-      Other
-      {% endif %}"
-      sql:
+  dimension: date {
+    label: "      {% if date_granularity._parameter_value == 'day' %}
+    ${_data_date}
+    {% elsif date_granularity._parameter_value == 'month' %}
+    ${_data_month}
+    {% elsif date_granularity._parameter_value == 'year' %}
+    ${_data_year}
+    {% else %}
+    Other
+    {% endif %}"
+    sql:
       {% if date_granularity._parameter_value == 'day' %}
       ${_data_date}
       {% elsif date_granularity._parameter_value == 'month' %}
@@ -446,8 +470,32 @@ view: channel_basic_a2_daily_first {
       {% else %}
       ${_data_date}
       {% endif %};;
-    }
+  }
+  # For Amazon Redshift
+  filter: this_period_filter {
+    type: date
+    description: "Use this filter to define the current and previous period for analysis"
+    sql: ${period} IS NOT NULL ;;
+  }
+# ${_data_raw} is the timestamp dimension we are building our reporting period off of
 
+  dimension: period {
+    type: string
+    description: "The reporting period as selected by the This Period Filter"
+    sql:
+        CASE
+          WHEN {% date_start this_period_filter %} is not null AND {% date_end this_period_filter %} is not null /* date ranges or in the past x days */
+            THEN
+              CASE
+                WHEN CAST(${_data_raw} as timestamp) >= {% date_start this_period_filter %}
+                  AND CAST(${_data_raw} as timestamp) <= {% date_end this_period_filter %}
+                  THEN 'This Period'
+                WHEN CAST(${_data_raw} as timestamp) >= DATE_ADD(day,-1*DATE_DIFF(day,{% date_start this_period_filter %}, {% date_end this_period_filter %} ) + 1, DATE_ADD(day,-1,{% date_start this_period_filter %} ) )
+                  AND CAST(${_data_raw} as timestamp) <= DATE_ADD(day,-1,{% date_start this_period_filter %} )
+                  THEN 'Previous Period'
+              END
+          END ;;
+  }
 
 
 
