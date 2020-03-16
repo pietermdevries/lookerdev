@@ -1,3 +1,5 @@
+explore: liquidsqltable {}
+
 view: liquidsqltable {
   sql_table_name: demo_db.{% parameter tablename %} ;;
 
