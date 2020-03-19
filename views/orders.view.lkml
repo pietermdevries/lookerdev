@@ -40,8 +40,26 @@ view: orders {
       }
   }
 
+  dimension: user_sort {
+    type: number
+    sql: ${user_id} ;;
+    drill_fields: [detail*]
+    link: {label: "Explore Top 20 Results by Sale Price" url: "{{ link }}&sorts=order_items.sale_price+desc&limit=20" }
+  }
+
+  measure: bucks_sort {
+    type: number
+    sql: ${count}*${order_items.sale_price} ;;
+    drill_fields: [detail*]
+    link: {label: "Explore Top 20 Results by count" url: "{{ link }}&sorts=count+desc&limit=20" }
+  }
+
   measure: count {
     type: count
     drill_fields: [id, users.last_name, users.id, users.first_name, order_items.count]
   }
+
+  set: detail {
+    fields: [order_items.sale_price,count]
+    }
 }
