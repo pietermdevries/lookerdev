@@ -65,6 +65,11 @@ view: channel_basic_a2_daily_first {
     sql: ${TABLE}._DATA_DATE ;;
   }
 
+  measure: the_latest_date {
+    type: date
+    sql: max(CAST(${_data_date} as timestamp)) ;;
+  }
+
   dimension_group: _latest {
     hidden: yes
     type: time
@@ -81,6 +86,27 @@ view: channel_basic_a2_daily_first {
     sql: ${TABLE}._LATEST_DATE ;;
   }
 
+  dimension: test_vid {
+    type: string
+    sql: ${video_id} ;;
+    drill_fields: [detail*]
+    link: {
+      url:"{{link}}&sorts=genre_total.genre+desc"
+      }
+  }
+
+  measure: testing_views {
+    type: sum
+    sql: ${view_num} ;;
+    drill_fields: [detail*]
+    link: {
+      url:"{{link}}&sorts=genre_total.genre+desc"
+    }
+  }
+
+  set: detail {
+    fields: [genre_total.genre,views,comments]
+}
 # ------------
 #  DIMENSIONS
 # ------------
@@ -497,7 +523,19 @@ view: channel_basic_a2_daily_first {
           END ;;
   }
 
-
+#     #置き換え後のキャンペーン名
+#     dimension: relate_campaign_name {
+#       label: "Campaign"
+#       type: string
+#       sql:IFNULL(
+#           ${m_change_name_manage_by_campaign.relate_media_campaign_disply_name},
+#           ${campaign});;
+#       drill_fields: [detail*]
+#       link: {
+#         label: "デバイス毎の指標"
+#         url:"{{link}}&sorts=ad_common.device+desc&limit=20"
+#       }
+#     }
 
 
 
