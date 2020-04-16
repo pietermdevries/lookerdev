@@ -70,6 +70,24 @@ view: channel_basic_a2_daily_first {
     sql: max(CAST(${_data_date} as timestamp)) ;;
   }
 
+  measure: the_earliest_date {
+    type: date
+    sql: min(CAST(${_data_date} as timestamp)) ;;
+  }
+
+  measure:  diff_days{
+    type: number
+    sql: date_diff(${the_latest_date},${the_earliest_date},day) ;;
+  }
+
+#   dimension_group: up_time {
+#     type: duration
+#     intervals: [day,week, year]
+#     sql_start: ${the_earliest_date} ;;
+#     sql_end: ${the_latest_date} ;;
+#   }
+
+
   dimension_group: _latest {
     hidden: yes
     type: time
@@ -406,6 +424,16 @@ view: channel_basic_a2_daily_first {
 # Random
 # ----------
 
+
+measure: combo_metric {
+  label: "Testing Combo Metric"
+  description: "Views and Key Points"
+  type: number
+  sql: ${views}  ;;
+  value_format: "[>=1000000]0.00,,\"M\";[>=1000]0.00,\"K\";0"
+  html: {{rendered_value}} {{key_points._value}} ;;
+}
+
   parameter: dynamic_measure {
     description: "Choose Type with Chooser"
     type: string
@@ -477,15 +505,16 @@ view: channel_basic_a2_daily_first {
   }
 
   dimension: date {
-    label: "      {% if date_granularity._parameter_value == 'day' %}
-    ${_data_date}
-    {% elsif date_granularity._parameter_value == 'month' %}
-    ${_data_month}
-    {% elsif date_granularity._parameter_value == 'year' %}
-    ${_data_year}
-    {% else %}
-    Other
-    {% endif %}"
+    label_from_parameter: date_granularity
+#     "      {% if date_granularity._parameter_value == 'day' %}
+#     ${_data_date}
+#     {% elsif date_granularity._parameter_value == 'month' %}
+#     ${_data_month}
+#     {% elsif date_granularity._parameter_value == 'year' %}
+#     ${_data_year}
+#     {% else %}
+#     Other
+#     {% endif %}"
     sql:
       {% if date_granularity._parameter_value == 'day' %}
       ${_data_date}
