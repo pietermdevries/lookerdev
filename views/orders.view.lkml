@@ -40,6 +40,42 @@ view: orders {
       }
   }
 
+  dimension: testno {
+    description: "Flags whether Placement has already been extended"
+    type: yesno
+    sql: ${user_id} < 10 ;;
+    link: {
+      label:
+      "{% if orders.testno._value %}
+      Here we go baby {{ orders.testno._value }}
+      {% else %}
+      NULL
+      {% endif %}"
+      url:
+      "{% if orders.testno._value %}
+      https://nationalpostcom.files.wordpress.com/2020/01/tim-hortons-1.jpg
+      {% else %}
+      NULL
+      {% endif %}
+      "
+      icon_url: "https://jobadder.com/wp-content/uploads/cropped-JA-FAVICON-32x32.png"
+    }
+  }
+
+  dimension: testnohtml {
+    description: "Flags whether Placement has already been extended"
+    type: yesno
+    sql: ${user_id} < 10 ;;
+    html:
+    {% if orders.user_id< 10  %}
+    <a href="https://nationalpostcom.files.wordpress.com/2020/01/tim-hortons-1.jpg">{{ value }}</a>
+    {% else %}
+    {{value}}
+    {% endif %}
+    ;;
+
+  }
+
   dimension: user_sort {
     type: number
     sql: ${user_id} ;;
