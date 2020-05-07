@@ -552,6 +552,32 @@ measure: combo_metric {
           END ;;
   }
 
+    parameter: yesno_param {
+      view_label: "test"
+      type: string
+      allowed_value: {
+        label: "Yes"
+        value: "Yes"
+      }
+      allowed_value: {
+        label: "No"
+        value: "No"
+      }
+    }
+
+    measure: yesno_measure {
+      view_label: "test"
+      type: sum
+      value_format: "$#,##0"
+      sql: ${view_num} ;;
+      link: {
+        label: "Facilty"
+        url: "/explore/thesis_cool/channel_basic_a2_daily_first?fields=channel_basic_a2_daily_first.yesno_measure&f[channel_basic_a2_daily_first.yesno_param]=channel_basic_a2_daily_first.yesno_param._parameter_value"
+      }
+    }
+    #https://localhost:9999/explore/thesis_cool/channel_basic_a2_daily_first?fields=channel_basic_a2_daily_first.yesno_measure&f[channel_basic_a2_daily_first.yesno_param]=Yes&vis=%7B%7D&filter_config=%7B%22channel_basic_a2_daily_first.yesno_param%22%3A%5B%7B%22type%22%3A%22is%22%2C%22values%22%3A%5B%7B%22constant%22%3A%22Yes%22%7D%2C%7B%7D%5D%2C%22id%22%3A0%2C%22error%22%3Afalse%7D%5D%7D&origin=share-expanded
+
+
 #     #置き換え後のキャンペーン名
 #     dimension: relate_campaign_name {
 #       label: "Campaign"

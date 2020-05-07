@@ -66,6 +66,24 @@ view: video_info {
       icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
     }
   }
+
+  ###test_stuff
+  measure: test_count {
+    type: count
+    link: {
+      label: "Video URL"
+      url: "https://www.youtube.com/watch?v={{ _filters['video_info.video_id'] | url_encode}}"
+    }
+    html:
+    {% if value > 10 %}
+    <div style="color: black; font-size:100%; text-align:right;">{{rendered_value}}</div>
+    {% else %}
+    <div style="color: black; font-size:100%; text-align:right; font-weight:bold"><a href={{ link }} target="_top">{{ rendered_value }}</a></div>
+    {% endif %}
+    ;;
+  }
+  ###test_stuff
+
   dimension: thumbnail {
     type: string
     sql: ${TABLE}.thumbnail ;;
