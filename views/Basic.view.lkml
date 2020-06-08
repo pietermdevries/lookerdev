@@ -8,9 +8,15 @@ view: channel_basic_a2_daily_first {
     sql:
           SELECT
           row_number() OVER(ORDER BY _DATA_DATE) AS prim_key,
-          *
-          FROM channel_basic_a2_daily_first ;;
+          *,
+--          max(date) as max_date,
+--          min(date) as min_date
+          FROM channel_basic_a2_daily_first
+  --        GROUP BY 2
+  ;;
   }
+
+  drill_fields: [_data_date,country_code,views]
 
   dimension: prim_key {
     hidden: yes
@@ -48,6 +54,7 @@ view: channel_basic_a2_daily_first {
 # ------------
 
   dimension_group: _data {
+    group_label: "Date"
     type: time
     timeframes: [
       raw,
@@ -57,12 +64,33 @@ view: channel_basic_a2_daily_first {
       day_of_week_index,
       week,
       month,
+      month_name,
+      month_num,
       quarter,
+      day_of_year,
+      week_of_year,
       year
     ]
     convert_tz: no
     datatype: date
     sql: ${TABLE}._DATA_DATE ;;
+  }
+ 　
+  dimension: weeknum2 {
+    type: date
+    sql: date(extract(year from ${TABLE}._DATA_DATE),extract(month from ${TABLE}._DATA_DATE),1) ;;
+}
+ #(月初のweek_of_year) - (その日のweek_of_year) + 1
+  dimension: weeknum {
+    type: number
+    sql: CASE
+          WHEN ${_data_week_of_year} > 25 THEN ${_data_week_of_year} - 25
+          WHEN ${_data_week_of_year} > 20 THEN ${_data_week_of_year} - 20
+          WHEN ${_data_week_of_year} > 15 THEN ${_data_week_of_year} - 15
+          WHEN ${_data_week_of_year} > 9 THEN ${_data_week_of_year} - 9
+          WHEN ${_data_week_of_year} > 5 THEN ${_data_week_of_year} - 5
+          ELSE ${_data_week_of_year}
+         END;;
   }
 
   measure: the_latest_date {
@@ -184,10 +212,14 @@ view: channel_basic_a2_daily_first {
     sql: ${TABLE}.card_teaser_impressions ;;
   }
 
+ dimension: comm {
+   sql: ${TABLE}.comments ;;
+ }
+
   measure: comments {
     group_label: "Comments"
     type: sum
-    sql: ${TABLE}.comments ;;
+    sql: ${comm} ;;
   }
 
   measure: view_per_comments {

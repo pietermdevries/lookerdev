@@ -1,4 +1,5 @@
 connection: "private_yt"
+#include: "manifest.lkml"
 label: "Youtube"
 
 
@@ -22,8 +23,48 @@ named_value_format: number_conditional {
 }
 
 
+explore: series_analysis {
+  from: channel_basic_a2_daily_first
+  always_filter: {
+    filters: [
+      video_info.title: "鬼滅の刃"
+    ]
+  }
+  join: video_info {
+    type: left_outer
+    sql_on: ${video_info.video_id} = ${series_analysis.video_id} ;;
+    relationship: many_to_one
+  }
+  join: genre_total {
+    type: left_outer
+    sql_on: ${genre_total.video_id} = ${series_analysis.video_id} ;;
+    relationship: many_to_many
+  }
+  join: series_ndt {
+    type: left_outer
+    sql_on: ${video_info.video_name} = ${series_ndt.video_name} ;;
+    relationship: one_to_one
+  }
+}
+
+explore: +series_analysis {
+  group_label: "test"
+}
+
 explore: channel_basic_a2_daily_first {
   label: "Master Explore"
+#   conditionally_filter: {
+#     filters: [_data_date: "last 7 days"]
+#     unless: [video_info.title]
+#   }
+  aggregate_table: views_last_7_days {
+    query:  {
+      dimensions: [channel_basic_a2_daily_first.date]
+      measures: [channel_basic_a2_daily_first.views]
+#      filters: [channel_basic_a2_daily_first.date: "7 days"]  # <-- time filter
+      }
+      materialization: {datagroup_trigger:youtube_transfer}
+      }
   join: video_info {
     type: left_outer
     sql_on: ${video_info.video_id} = ${channel_basic_a2_daily_first.video_id} ;;
@@ -115,6 +156,10 @@ explore: sharing {
 }
 
 explore: playback {
+  join: parameter{
+    sql:  ;;
+  relationship: one_to_one
+  }
 
 }
 

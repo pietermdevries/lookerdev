@@ -55,7 +55,9 @@ view: video_info {
   dimension: video_name {
     type: string
 #      sql: ${TABLE}.video_name ;;
-       sql: TRIM(SUBSTR(replace(${TABLE}.video_name,"【海外の反応 アニメ】",""),0,STRPOS(replace(${TABLE}.video_name,"【海外の反応 アニメ】",""),"話"))) ;;
+       sql: TRIM(SUBSTR(replace(${TABLE}.video_name,"【海外の反応 アニメ】",""),0,STRPOS(replace(${TABLE}.video_name,"【海外の反応 アニメ】",""),"話")))
+  --    OR TRIM(SUBSTR(replace(${TABLE}.video_name,"ピーターの反応",""),0,STRPOS(replace(${TABLE}.video_name,"ピーターの反応",""),"話")))
+      ;;
     link: {
       label: "Video URL"
       url: "https://www.youtube.com/watch?v={{ _filters['video_info.video_id'] | url_encode}}"
@@ -219,6 +221,11 @@ view: video_info {
   measure: comment_num{
     type: sum
     sql: ${TABLE}.comment_num ;;
+  }
+
+  dimension: test_html {
+    sql: 1 ;;
+    html: this is my text {{ _filters['video_info.title'] }} its from the filter ;;
   }
 }
 #Below is my failed attempt to embed youtube videos in looker
