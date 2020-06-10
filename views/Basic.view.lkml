@@ -6,7 +6,6 @@ view: channel_basic_a2_daily_first {
   view_label: "Basic"
   derived_table: {
     datagroup_trigger: youtube_transfer
-    publish_as_db_view: yes
     sql:
           SELECT
           row_number() OVER(ORDER BY _DATA_DATE) AS prim_key,
