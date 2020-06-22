@@ -53,6 +53,11 @@ explore: +series_analysis {
 
 explore: channel_basic_a2_daily_first {
   label: "Master Explore"
+#   always_filter: {
+#     filters: [
+#       channel_basic_a2_daily_first.country_code: "JP, NULL"
+#     ]
+#  }
 #   conditionally_filter: {
 #     filters: [_data_date: "last 7 days"]
 #     unless: [video_info.title]

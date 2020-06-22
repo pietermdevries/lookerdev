@@ -152,8 +152,8 @@ view: channel_basic_a2_daily_first {
   }
 
   set: detail {
-    fields: [genre_total.genre,views,comments]
-}
+    fields: [video_info.title,genre_total.genre,views,comments]
+    }
 # ------------
 #  DIMENSIONS
 # ------------
@@ -173,6 +173,12 @@ view: channel_basic_a2_daily_first {
     description: "double digits"
     type: string
     sql: ${TABLE}.country_code ;;
+  }
+
+  dimension: html_test {
+    hidden:  yes
+    sql: ${country_code} ;;
+    html: {"country": "{{value}}","video_id": "{{video_id._value}}"} ;;
   }
 
   dimension: live_or_on_demand {
@@ -236,10 +242,35 @@ view: channel_basic_a2_daily_first {
     sql: ${TABLE}.dislikes ;;
   }
 
+  dimension: like_dim {
+    group_label: "Likes"
+    sql: ${TABLE}.likes ;;
+    type: number
+    html:
+    {% assign param = target_id._parameter_value | integer %}
+    {% if param == value %}
+     {{'*'| append: value }}
+    {% else %}
+    {{ value }}
+    {% endif %}
+    ;;
+  }
+
   measure: likes {
     group_label: "Likes"
     type: sum
     sql: ${TABLE}.likes ;;
+#     html:
+#     {% if value > target_id._parameter_value %}
+#     {{ '*' | append: value }}
+#     {% else %}
+#     {{ value }}
+#     {% endif %}
+#     ;;
+  }
+
+  parameter: target_id {
+    type: number
   }
 
   measure: like_change {
@@ -404,7 +435,6 @@ view: channel_basic_a2_daily_first {
     }
   }
 
-
   measure: count_videos {
     group_label: "Video"
     type: count_distinct
@@ -416,11 +446,19 @@ view: channel_basic_a2_daily_first {
     type: number
     sql: ${views}/${count_videos} ;;
     value_format: "#.00"
+    html: {% if genre_total.genre._value == 'Action' %}
+      <p style="color: black; background-color: lightblue; font-size:100%; text-align:center">{{ rendered_value }}</p>
+    {% elsif genre_total.genre._value == 'Adventure' %}
+      <p style="color: black; background-color: lightgreen; font-size:100%; text-align:center">{{ rendered_value }}</p>
+    {% else %}
+      <p style="color: black; background-color: orange; font-size:100%; text-align:center">{{ rendered_value }}</p>
+    {% endif %}
+;;
   }
 
   measure: count {
     type: count
-    drill_fields: [video_id]
+    drill_fields: [vid_stats*]
   }
 
   measure: running_count {
@@ -447,7 +485,7 @@ view: channel_basic_a2_daily_first {
   }
 
   set: vid_stats {
-    fields: [views,subscriber_change,like_change,watch_time_minutes,comments,shares]
+    fields: [video_info.title,views,subscriber_change,like_change,watch_time_minutes,comments,shares]
   }
 
 
@@ -624,6 +662,68 @@ measure: combo_metric {
 #         url:"{{link}}&sorts=ad_common.device+desc&limit=20"
 #       }
 #     }
+
+
+### param stuff
+    dimension: comment_num {
+      sql: ${TABLE}.comments ;;
+    }
+    parameter: bucket_1 { view_label: "Bucket" type: number}
+    parameter: bucket_2 { view_label: "Bucket" type: number}
+    parameter: bucket_3 { view_label: "Bucket" type: number}
+    parameter: bucket_4 { view_label: "Bucket" type: number}
+    dimension: comment_bucket{
+      view_label: "Bucket"
+      sql:
+          {% assign bucket_string_1 = bucket_1._parameter_value | append: "," %}
+          {% assign bucket_string_2 = bucket_2._parameter_value | append: "," %}
+          {% assign bucket_string_3 = bucket_3._parameter_value | append: "," %}
+          {% assign bucket_string_4 = bucket_4._parameter_value %}
+          {% assign bucket_string = '0,' | append: bucket_string_1 | append: bucket_string_2 | append: bucket_string_3 | append: bucket_string_4 %}
+          {% assign bucket_array = bucket_string | remove: ",NULL" | split: "," %}
+          {% assign bucket_array_length = bucket_array.size | minus: 1 %}
+          CASE
+          {% for i in (1..bucket_array_length) %}
+          {% assign j = i | minus: 1 %}
+            WHEN ${comment_num} < {{ bucket_array[i] }} THEN '{{i}}: {{ bucket_array[j] }} < N < {{ bucket_array[i] }}'
+          {% endfor %}
+          ELSE
+            '5: Unknown'
+          END ;;
+      html: {{ rendered_value | slice: 3, rendered_value.size }} ;;
+    }
+
+    parameter: date_format {
+      view_label: "test"
+      type: string
+      allowed_value: { value: "%d %m %Y" label: "dd/mm/yyyy" }
+      allowed_value: { value: "%m %d %Y" label: "mm/dd/yyyy" }
+      allowed_value: { value: "%Y %m %d" label: "yyyy/mm/dd" }
+    }
+
+    dimension: date_formatted {
+      view_label: "test"
+      type: date
+      sql: cast(${_data_date} as timestamp) ;;
+      html: {{ rendered_value | date: date_format._parameter_value }} ;;
+    }
+
+
+    dimension: formatted_date {
+      view_label: "test"
+      type: date
+#      sql:       FORMAT_DATE({% date_format._parameter_value %},CAST(${_data_date} as timestamp)) ;;
+     sql: {% if date_format._parameter_value == "%d %m %Y" %}
+     FORMAT_TIMESTAMP("%d %m %Y",CAST(${_data_date} as timestamp))
+    {% elsif date_format._parameter_value == "%m %d %Y" %}
+     FORMAT_TIMESTAMP("%m %d %Y",CAST(${_data_date} as timestamp))
+    {% else %}
+     FORMAT_TIMESTAMP("%Y %m %d",CAST(${TABLE}._DATA_DATE as timestamp))
+    {% endif %} ;;
+
+    }
+
+
 
 
 
