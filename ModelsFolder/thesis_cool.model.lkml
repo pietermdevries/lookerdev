@@ -130,7 +130,9 @@ explore: demographics_dt {
   }
 
 
-explore: genre_total {}
+explore: genre_total {
+  label: "Genre Info"
+}
 
 explore: traffic_source {
   join: channel_basic_a2_daily_first {
@@ -161,6 +163,7 @@ explore: sharing {
 }
 
 explore: playback {
+  hidden: yes
   join: parameter{
     sql:  ;;
   relationship: one_to_one
@@ -169,7 +172,9 @@ explore: playback {
 }
 
 explore: LAG_TEST {
-
+hidden: yes
 }
 
-explore: multi_date_test {}
+explore: multi_date_test {
+  hidden: yes
+}
