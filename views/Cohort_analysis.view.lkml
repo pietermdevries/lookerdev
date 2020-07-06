@@ -18,7 +18,7 @@ view: video_based_cohort_analysis {
       HAVING
       {% condition video_dated %} posted_date {% endcondition %}
        ;;
-    datagroup_trigger: thesis_cool_default_datagroup
+  #  datagroup_trigger: thesis_cool_default_datagroup
   }
 
   filter: video_dated {

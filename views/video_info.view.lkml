@@ -127,6 +127,10 @@ view: video_info {
     <a href="/dashboards/8?Title={{ filterable_value }}&">{{ filterable_value }}</a> ;;
   }
 
+  parameter:  test_faceted {
+    suggest_dimension: video_info.video_name
+  }
+
 
   dimension: title_pic {
     hidden: yes

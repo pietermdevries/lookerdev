@@ -5,13 +5,18 @@ view: demographics_dt {
           SELECT
           row_number() OVER(ORDER BY _DATA_DATE) AS prim_key,
           *
-          FROM channel_demographics_a1_daily_first ;;
+          FROM channel_demographics_a1_daily_first
+          WHERE {% condition date_filter %} CAST(_DATA_DATE as timestamp) {% endcondition %}　;;
     }
 
     dimension: prim_key {
       type: number
       primary_key: yes
       sql: ${TABLE}.prim_key ;;
+  }
+
+  filter: date_filter {
+    type: date
   }
 
   dimension_group: _data {

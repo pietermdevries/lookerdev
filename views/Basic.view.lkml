@@ -19,6 +19,16 @@ view: channel_basic_a2_daily_first {
 
   drill_fields: [_data_date,country_code,views]
 
+  filter: number_filter {
+    type: number
+    default_value: ">="
+  }
+  filter: date_filter {
+    type: date
+    default_value: ""
+  }
+
+
   dimension: prim_key {
     hidden: yes
     type: number
@@ -53,6 +63,7 @@ view: channel_basic_a2_daily_first {
 # ------------
 #  Dates
 # ------------
+
 
   dimension_group: _data {
     group_label: "Date"
@@ -159,6 +170,12 @@ view: channel_basic_a2_daily_first {
 # ------------
 
   dimension: video_id {
+    label: "
+    {% if channel_basic_a2_daily_first.video_id._in_query %}
+    Selected Video_id
+    {% else %}
+    Video Id
+    {% endif %}"
     type: string
     sql: ${TABLE}.video_id ;;
   }
@@ -170,6 +187,12 @@ view: channel_basic_a2_daily_first {
   }
 
   dimension: country_code {
+    view_label: "
+    {% if channel_basic_a2_daily_first.country_code._in_query %}
+    Selected
+    {% else %}
+    Non-selected
+    {% endif %}"
     description: "double digits"
     type: string
     sql: ${TABLE}.country_code ;;
