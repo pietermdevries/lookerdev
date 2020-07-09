@@ -1,3 +1,4 @@
+explore: ndt_persisted {}
 view: ndt_persisted {
     derived_table: {
       explore_source: channel_basic_a2_daily_first {

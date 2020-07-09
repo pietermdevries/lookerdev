@@ -64,7 +64,7 @@ view: video_info {
     }
     link: {
       label: "Video Dashboard"
-      url: "/dashboards/6?Video_Name={{[filterable_value | url_encode}}"
+      url: "/dashboards/6?Video_Name={{filterable_value | url_encode}}"
       icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
     }
   }
@@ -91,7 +91,7 @@ view: video_info {
     sql: ${TABLE}.thumbnail ;;
     link: {
       label: "Video Dashboard"
-      url: "/dashboards/6?Video_Name={{[video_info.video_name._filterable_value | encode_url}}"
+      url: "/dashboards/6?Video_Name={{video_info.video_name._filterable_value | url_encode}}"
       icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
       }
     link: {
@@ -135,13 +135,13 @@ view: video_info {
   dimension: title_pic {
     hidden: yes
     sql: ${title};;
-    html: <img src="https://agile-peak-87852.herokuapp.com/image_search.php?q={{[value　| url_param_escape }}" width=200  border=0 /> ;;
+    html: <img src="https://agile-peak-87852.herokuapp.com/image_search.php?q={{value | url_param_escape }}" width=200  border=0 /> ;;
   }
 
   dimension: episode_pic {
     hidden: yes
     sql: ${video_name};;
-    html: <img src="https://agile-peak-87852.herokuapp.com/image_search.php?q={{[value　| url_param_escape }}" width=200  border=0 /> ;;
+    html: <img src="https://agile-peak-87852.herokuapp.com/image_search.php?q={{value | url_param_escape }}" width=200  border=0 /> ;;
   }
 
   dimension: genre1 {

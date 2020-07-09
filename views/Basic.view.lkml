@@ -170,12 +170,6 @@ view: channel_basic_a2_daily_first {
 # ------------
 
   dimension: video_id {
-    label: "
-    {% if channel_basic_a2_daily_first.video_id._in_query %}
-    Selected Video_id
-    {% else %}
-    Video Id
-    {% endif %}"
     type: string
     sql: ${TABLE}.video_id ;;
   }
@@ -187,12 +181,6 @@ view: channel_basic_a2_daily_first {
   }
 
   dimension: country_code {
-    view_label: "
-    {% if channel_basic_a2_daily_first.country_code._in_query %}
-    Selected
-    {% else %}
-    Non-selected
-    {% endif %}"
     description: "double digits"
     type: string
     sql: ${TABLE}.country_code ;;
@@ -270,7 +258,7 @@ view: channel_basic_a2_daily_first {
     sql: ${TABLE}.likes ;;
     type: number
     html:
-    {% assign param = target_id._parameter_value | integer %}
+    {% assign param = target_id._parameter_value %}
     {% if param == value %}
      {{'*'| append: value }}
     {% else %}
