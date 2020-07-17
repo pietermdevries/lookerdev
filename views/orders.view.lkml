@@ -76,6 +76,23 @@ view: orders {
 
   }
 
+  measure: sum_of_id_with_drill {
+    type: sum
+    sql: ${id} ;;
+    link: {
+      url: "{{dummy._link}}&sorts=orders.id+desc"
+      label: "Click Me"
+    }
+  }
+
+  measure: dummy {
+    label: "{% if _model._name == 'thelook' %} I am a liquid Label I don't Know How to WORDWRAP {% else %} I am a liquid Label I don't Know How to WORDWRAP {% endif %}"
+    type: sum
+    hidden: yes
+    sql: 0 ;;
+    drill_fields: [id,created_date,status,count]
+  }
+
   dimension: user_sort {
     type: number
     sql: ${user_id} ;;

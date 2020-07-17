@@ -4,6 +4,7 @@ view: order_items {
 
   dimension: id {
     primary_key: yes
+    hidden: yes
     type: number
     sql: ${TABLE}.id ;;
   }
@@ -29,7 +30,8 @@ view: order_items {
       week,
       month,
       quarter,
-      year
+      year,
+      fiscal_month_num
     ]
     sql: ${TABLE}.returned_at ;;
   }
@@ -37,6 +39,13 @@ view: order_items {
   dimension: sale_price {
     type: number
     sql: ${TABLE}.sale_price ;;
+  }
+
+  dimension: is_null_dimension {
+    type: string
+    sql: CASE WHEN ${sale_price} > 10 THEN "is_null"
+         ELSE "not_null"
+         END;;
   }
 
   measure: count {

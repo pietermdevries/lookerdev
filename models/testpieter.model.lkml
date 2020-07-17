@@ -8,6 +8,8 @@ datagroup: testpieter_default_datagroup {
   max_cache_age: "1 hour"
 }
 
+fiscal_month_offset: 2
+
 persist_with: testpieter_default_datagroup
 
 explore: company {
