@@ -28,7 +28,6 @@ view: channel_basic_a2_daily_first {
     default_value: ""
   }
 
-
   dimension: prim_key {
     hidden: yes
     type: number
@@ -145,6 +144,7 @@ view: channel_basic_a2_daily_first {
   }
 
   dimension: test_vid {
+    label: "{% if _model._name == 'thelook' %} dontworry {% else %} superlongteststuff {% endif %}"
     type: string
     sql: ${video_id} ;;
     drill_fields: [detail*]
@@ -154,6 +154,7 @@ view: channel_basic_a2_daily_first {
   }
 
   measure: testing_views {
+    label: "{% if _model._name == 'thelook' %} dontworry {% else %} superlongteststuff {% endif %}"
     type: sum
     sql: ${view_num} ;;
     drill_fields: [detail*]
@@ -516,7 +517,7 @@ measure: combo_metric {
   html: {{rendered_value}} {{key_points._value}} ;;
 }
 
-  parameter: dynamic_measure {
+  parameter: metric_chooser {
     description: "Choose Type with Chooser"
     type: string
     allowed_value: {
@@ -545,22 +546,22 @@ measure: combo_metric {
     }
   }
 
-  measure: metric_chooser {
+  measure: dynamic_measure {
     description: "Use with Metric_Picker Filter Only"
     type: number
-    label_from_parameter: dynamic_measure
+    label_from_parameter: metric_chooser
     sql:    CASE
-      WHEN {% parameter dynamic_measure %} = 'views'
+      WHEN {% parameter metric_chooser %} = 'views'
         THEN ${views}
-      WHEN {% parameter dynamic_measure %} = 'avg_watch_time'
+      WHEN {% parameter metric_chooser %} = 'avg_watch_time'
         THEN ${avg_watch_time}
-      WHEN {% parameter dynamic_measure %} = 'subscriber_change'
+      WHEN {% parameter metric_chooser %} = 'subscriber_change'
         THEN ${subscriber_change}
-        WHEN {% parameter dynamic_measure %} = 'shares'
+        WHEN {% parameter metric_chooser %} = 'shares'
         THEN ${shares}
-        WHEN {% parameter dynamic_measure %} = 'like_change'
+        WHEN {% parameter metric_chooser %} = 'like_change'
         THEN ${like_change}
-        WHEN {% parameter dynamic_measure %} = 'key_points'
+        WHEN {% parameter metric_chooser %} = 'key_points'
         THEN ${key_points}
       ELSE NULL
     END ;;

@@ -22,6 +22,14 @@ view: video_info {
     intervals: [year, week, day] # valid intervals described below
   }
 
+  dimension: union_test {
+    sql: (
+    SELECT DISTINCT video_id
+    FROM video_info
+    UNION DISTINCT
+    SELECT  video_url
+    FROM video_info) ;;
+  }
 
   dimension: video_id {
     primary_key: yes
@@ -60,11 +68,25 @@ view: video_info {
       ;;
     link: {
       label: "Video URL"
-      url: "https://www.youtube.com/watch?v={{ _filters['video_info.video_id'] | url_encode}}"
+      url: "https://www.youtube.com/watch?v={{ video_info.video_id._value | url_encode}}"
     }
     link: {
       label: "Video Dashboard"
       url: "/dashboards/6?Video_Name={{filterable_value | url_encode}}"
+      icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
+    }
+  }
+
+  dimension: episode {
+    type: string
+    sql: trim(SUBSTR(${TABLE}.video_name, STRPOS(${TABLE}.video_name,"話")-2,3));;
+    link: {
+      label: "Video URL"
+      url: "https://www.youtube.com/watch?v={{ video_info.video_id._value | url_encode}}"
+    }
+    link: {
+      label: "Video Dashboard"
+      url: "/dashboards/6?Video_Name={{ video_info.video_name._value | url_encode}}"
       icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
     }
   }
@@ -85,6 +107,15 @@ view: video_info {
     ;;
   }
   ###test_stuff
+
+  measure: test_thumb {
+    type: count
+    html:   html: <img src="{{video_info.thumbnail}}" width=75 height=50 border=0 />  ;;
+  }
+
+  dimension: thumb_url {
+    sql: ${thumbnail} ;;
+  }
 
   dimension: thumbnail {
     type: string
@@ -118,7 +149,13 @@ view: video_info {
       icon_url: "https://image.flaticon.com/icons/png/512/87/87578.png"
     }
     drill_fields: [video_name,Basic.video_stats*]
+    suggest_persist_for: "30 seconds"
   }
+
+  parameter: anime_series_name {
+    suggest_dimension: title
+  }
+
 
   dimension: name {
     hidden: yes
@@ -126,6 +163,7 @@ view: video_info {
     html:
     <a href="/dashboards/8?Title={{ filterable_value }}&">{{ filterable_value }}</a> ;;
   }
+
 
   parameter:  test_faceted {
     suggest_dimension: video_info.video_name
