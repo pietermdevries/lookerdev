@@ -19,6 +19,13 @@ view: events {
     sql: ${TABLE}."CITY" ;;
   }
 
+  parameter: test {
+    allowed_value: {
+      label: "bob"
+      value: "bob"
+    }
+  }
+
   dimension: country {
     type: string
     map_layer_name: countries
@@ -34,7 +41,8 @@ view: events {
       week,
       month,
       quarter,
-      year
+      year,
+      day_of_month
     ]
     sql: ${TABLE}."CREATED_AT" ;;
   }
