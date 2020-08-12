@@ -104,4 +104,9 @@ view: events {
     type: count
     drill_fields: [id, users.first_name, users.last_name, users.id]
   }
+
+  measure: pic_count {
+    type: count
+    html: <img src="https://logo-core.clearbit.com/looker.com"{{value}} /> ;;
+  }
 }

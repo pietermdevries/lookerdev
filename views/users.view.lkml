@@ -32,6 +32,8 @@ view: users {
   }
 
   dimension: city {
+    view_label: "Events"
+    group_label: "test"
     type: string
     sql: ${TABLE}.city ;;
   }

@@ -34,6 +34,7 @@ view: events {
   }
 
   dimension: value {
+    group_label: "test"
     type: string
     sql: ${TABLE}.value ;;
   }
@@ -42,4 +43,10 @@ view: events {
     type: count
     drill_fields: [id, users.last_name, users.id, users.first_name]
   }
+
+  measure: pic_count {
+    type: count
+    html: <img src="https://logo-core.clearbit.com/looker.com {{value}}" /> ;;
+  }
+
 }
