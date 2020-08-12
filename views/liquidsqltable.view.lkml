@@ -30,13 +30,13 @@ parameter: tablename {
     sql: ${TABLE}.created_at ;;
   }
 
-#   dimension: status {
-#     type: string
-#     sql: ${TABLE}.status ;;
+  dimension: status {
+    type: string
+    sql: ${TABLE}.status ;;
 #     html: <a href= "/explore/testpieter/orders?fields=orders.user_id,orders.status,orders.count&f[orders.status]={{value}}&f[orders.created_date]={{_filters['orders.created_date']}}"
 #       </a> {{value}};;
-#   }
-#
+  }
+
 #   dimension: user_id {
 #     type: number
 #     # hidden: yes

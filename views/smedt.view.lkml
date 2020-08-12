@@ -20,18 +20,19 @@ view: smedt {
 
   }
 
-#   dimension: date_formatted {
-#     label: "Date_formatted"
-#     sql: ${created_date} ;;
+
+  dimension: date_formatted {
+    label: "Date_formatted"
+    sql: ${created_date} ;;
 #     html:
-#     {% if _filters[smedt.region._value] == 'EU' %}
+#     {% if _filters['smedt.region._value'] == 'EU' %}
 #     {{ rendered_value | date: "%m/%d/%y" }}
-#     {% elsif _filters[smedt.region._value] == 'USA' %}
+#     {% elsif _filters['smedt.region._value'] == 'USA' %}
 #     {{ rendered_value | date: "%d/%m/%y" }}
 #     {% else %}
 #     {{value}}
 #     {% endif %};;
-#     }
+    }
 
   filter: date_filter {
     type: date
