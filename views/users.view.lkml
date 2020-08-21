@@ -79,6 +79,15 @@ view: users {
     sql: ${TABLE}.created_at ;;
   }
 
+  dimension: date_value {
+    sql: 1  ;;
+    html: {{ users.created_month._value}} ;;
+  }
+
+  dimension: sql_date_value {
+    sql: {{ users.created_month._value}} ;;
+  }
+
   dimension: email {
     type: string
     sql: ${TABLE}.email ;;
