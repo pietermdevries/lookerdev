@@ -32,6 +32,12 @@ view: events {
     sql: ${TABLE}."COUNTRY" ;;
   }
 
+  filter: US {
+    type: yesno
+    sql: ${country} = 'USA' ;;
+    default_value: "No"
+  }
+
   dimension_group: created {
     type: time
     timeframes: [
@@ -42,7 +48,8 @@ view: events {
       month,
       quarter,
       year,
-      day_of_month
+      day_of_month,
+      month_name
     ]
     sql: ${TABLE}."CREATED_AT" ;;
   }
@@ -112,6 +119,18 @@ view: events {
     type: count
     drill_fields: [id, users.first_name, users.last_name, users.id]
   }
+
+  dimension: test_number {
+    type: number
+    sql: 0.00000080001 ;;
+    value_format_name: "decimal_2"
+
+  }
+
+　measure: html_count {
+　  type: count
+    html: {{events.zip._value}} {{value}} ;;
+　}
 
   measure: pic_count {
     type: count

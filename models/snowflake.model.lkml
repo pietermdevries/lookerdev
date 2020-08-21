@@ -5,3 +5,5 @@ include: "/snowviews/*.view.lkml"                # include all views in the view
 explore: events {}
 
 explore: lookml_novice_dt {}
+
+explore: snow_pdt_users {}

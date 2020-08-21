@@ -4,7 +4,7 @@
 view: lookml_novice_dt {
   derived_table: {
     sql: SELECT
-          "CITY" AS city,
+          "CITY" AS "街",
           "CREATED_AT" AS created_date
           FROM "PUBLIC"."USERS"
 
@@ -32,7 +32,7 @@ view: lookml_novice_dt {
   }
 
   dimension: city {
-    sql: ${TABLE}."CITY" ;;
+    sql: ${TABLE}."街" ;;
   }
 
 

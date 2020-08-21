@@ -2,7 +2,7 @@ view: snow_pdt_users {
   derived_table: {
     sql:
     SELECT *
-    FROM "PUBLIC"."USERS";;
+    FROM "PUBLIC"."USERS"
     sql_trigger_value: SELECT current_date() ;;
   }
 
