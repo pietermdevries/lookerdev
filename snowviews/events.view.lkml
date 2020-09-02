@@ -54,6 +54,24 @@ view: events {
     sql: ${TABLE}."CREATED_AT" ;;
   }
 
+  dimension: date{
+    label_from_parameter: date_granularity
+    type: date
+    sql:
+    CASE
+    WHEN {% parameter date_granularity %} = 'Week' THEN ${created_week}
+    WHEN {% parameter date_granularity %} = 'Month' THEN ${created_month}
+    ELSE ${created_week}
+    END ;;
+  }
+
+
+  parameter: date_granularity {
+    type: string
+    allowed_value: { value: "Week" }
+    allowed_value: { value: "Month" }
+  }
+
   dimension: event_type {
     type: string
     sql: ${TABLE}."EVENT_TYPE" ;;
