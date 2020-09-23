@@ -19,10 +19,23 @@ view: events {
     sql: ${TABLE}."CITY" ;;
   }
 
+  parameter: test {
+    allowed_value: {
+      label: "bob"
+      value: "bob"
+    }
+  }
+
   dimension: country {
     type: string
     map_layer_name: countries
     sql: ${TABLE}."COUNTRY" ;;
+  }
+
+  filter: US {
+    type: yesno
+    sql: ${country} = 'USA' ;;
+    default_value: "No"
   }
 
   dimension_group: created {
@@ -34,9 +47,29 @@ view: events {
       week,
       month,
       quarter,
-      year
+      year,
+      day_of_month,
+      month_name
     ]
     sql: ${TABLE}."CREATED_AT" ;;
+  }
+
+  dimension: date{
+    label_from_parameter: date_granularity
+    type: date
+    sql:
+    CASE
+    WHEN {% parameter date_granularity %} = 'Week' THEN ${created_week}
+    WHEN {% parameter date_granularity %} = 'Month' THEN ${created_month}
+    ELSE ${created_week}
+    END ;;
+  }
+
+
+  parameter: date_granularity {
+    type: string
+    allowed_value: { value: "Week" }
+    allowed_value: { value: "Month" }
   }
 
   dimension: event_type {
@@ -144,5 +177,17 @@ view: events {
       end ;;
   }
 
+
+  dimension: test_number {
+    type: number
+    sql: 0.00000080001 ;;
+    value_format_name: "decimal_2"
+
+  }
+
+　measure: html_count {
+　  type: count
+    html: {{events.zip._value}} {{value}} ;;
+　}
 
 }

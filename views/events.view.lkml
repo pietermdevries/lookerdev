@@ -34,6 +34,7 @@ view: events {
   }
 
   dimension: value {
+    group_label: "test"
     type: string
     sql: ${TABLE}.value ;;
   }

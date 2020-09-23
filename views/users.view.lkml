@@ -30,8 +30,31 @@ view: users {
 </a> ;;
 
   }
+# CONNECTION METHODS
+  dimension: connection_database {
+    type: string
+    group_label: "Connection Methods"
+    sql: '{{ _connection._database }}' ;;
+  }
+  dimension: connection_schema {
+    type: string
+    group_label: "Connection Methods"
+    sql: '{{ _connection._schema }}' ;;
+  }
+  dimension: connection_temp {
+    type: string
+    group_label: "Connection Methods"
+    sql: '{{ _connection._temp }}' ;;
+  }
+#   dimension: connection_pdt_connection_registration {
+#     type: string
+#     group_label: "Connection Methods"
+#     sql: '{{ _connection._pdt_connection_registration }}' ;;
+#   }
 
   dimension: city {
+    view_label: "Events"
+    group_label: "test"
     type: string
     sql: ${TABLE}.city ;;
   }
@@ -54,6 +77,15 @@ view: users {
       year
     ]
     sql: ${TABLE}.created_at ;;
+  }
+
+  dimension: date_value {
+    sql: 1  ;;
+    html: {{ users.created_month._value}} ;;
+  }
+
+  dimension: sql_date_value {
+    sql: {{ users.created_month._value}} ;;
   }
 
   dimension: email {

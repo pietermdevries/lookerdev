@@ -33,9 +33,7 @@ parameter: tablename {
   dimension: status {
     type: string
     sql: ${TABLE}.status ;;
-
-  }
-
+}
   dimension: user_id {
     type: number
     # hidden: yes
