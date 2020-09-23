@@ -29,6 +29,7 @@ view: order_items {
       date,
       week,
       month,
+      month_name,
       quarter,
       year,
       fiscal_month_num
@@ -47,6 +48,15 @@ view: order_items {
          ELSE "not_null"
          END;;
   }
+
+  dimension: is_last_day {
+    type: yesno
+    sql: last_day(${returned_date});;
+  }
+
+  measure: max_date {
+    type: max
+    sql: EXTRACT( DAY FROM ${returned_date});;  }
 
   measure: count {
     type: count

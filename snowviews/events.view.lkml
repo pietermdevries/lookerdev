@@ -104,4 +104,45 @@ view: events {
     type: count
     drill_fields: [id, users.first_name, users.last_name, users.id]
   }
+
+  measure: pic_count {
+    type: count
+    html: <img src="https://logo-core.clearbit.com/looker.com"{{value}} /> ;;
+  }
+
+  parameter: number_list {
+    type: string
+  }
+
+  dimension: secondary_dimension {
+    type: string
+    sql: array_construct(
+    TO_NUMBER(SPLIT_PART({% parameter number_list %}, ',', 1)),
+    TO_NUMBER(
+    IFF(SPLIT_PART({% parameter number_list %}, ',', 2) = '', 0, SPLIT_PART({% parameter number_list %}, ',', 2)))
+    )
+    ;;
+  }
+
+  dimension: foo {
+    type: string
+    sql: case
+      when ${user_id} in
+        (
+        TO_NUMBER(SPLIT_PART({% parameter number_list %}, ',', 0),
+        TO_NUMBER(IF(SPLIT_PART({% parameter number_list %}, ',', 1) = '', 0))
+        ) then 'bob'
+      else 'jack'
+      end ;;
+  }
+
+  dimension: foo2 {
+    type: string
+    sql: case
+      when ARRAY_CONTAINS(${user_id},${secondary_dimension}) then 'bob'
+      else 'jack'
+      end ;;
+  }
+
+
 }
