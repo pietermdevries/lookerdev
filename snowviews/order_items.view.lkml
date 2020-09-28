@@ -109,3 +109,77 @@ view: order_items {
     ]
   }
 }
+explore: order_sales {
+  join: order_status {
+    sql_on: ${order_sales.date_date} = ${order_status.date_date} ;;
+    relationship: many_to_many
+  }
+}
+view: order_sales {
+  derived_table: {
+    sql:
+    SELECT
+    "SHIPPED_AT",
+    "SALE_PRICE"
+    FROM "PUBLIC"."ORDER_ITEMS"
+    WHERE {% condition status_filter %} "STATUS" {% endcondition%} ;;
+  }
+
+  filter: status_filter {
+    type: string
+    suggest_explore: order_sales
+    suggest_dimension: order_status.status
+  }
+
+  dimension_group: date {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."SHIPPED_AT" ;;
+  }
+
+  dimension: sale_price {
+    type: number
+    sql: ${TABLE}."SALE_PRICE" ;;
+  }
+
+  measure: sales {
+    type: sum
+    sql: ${sale_price} ;;
+  }
+}
+view: order_status {
+  derived_table: {
+    sql:
+    SELECT
+    "SHIPPED_AT",
+    "STATUS"
+    FROM "PUBLIC"."ORDER_ITEMS" ;;
+  }
+
+  dimension: status {
+    type: string
+    sql: ${TABLE}."STATUS" ;;
+  }
+
+  dimension_group: date {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."SHIPPED_AT" ;;
+  }
+}

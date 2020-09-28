@@ -144,6 +144,7 @@ view: events {
   }
 
   parameter: number_list {
+    suggest_dimension: zip
     type: string
   }
 
