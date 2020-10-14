@@ -20,6 +20,11 @@ view: events {
     html: {{value}} and {{ count._value}} ;;
   }
 
+  measure: city_list {
+    type: list
+    list_field: city
+  }
+
   parameter: test {
     allowed_value: {
       label: "bob"

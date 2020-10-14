@@ -10,3 +10,8 @@ explore: events {
 explore: lookml_novice_dt {}
 
 explore: snow_pdt_users {}
+
+explore: parameter_sql_always_where {
+  sql_always_where: ${parameter_sql_always_where.city} = {% parameter parameter_sql_always_where.city_name %}
+  or ${parameter_sql_always_where.country} = {% parameter parameter_sql_always_where.country_name %}   ;;
+}
