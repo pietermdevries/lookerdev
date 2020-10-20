@@ -1,6 +1,6 @@
 connection: "snowlooker"
 include: "/testboard.dashboard.lookml"
-include: "/snowviews/*.view.lkml"                # include all views in the views/ folder in this project
+include: "/3_snowflake/*.view.lkml"                # include all views in the views/ folder in this project
 
 
 explore: events {
