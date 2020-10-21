@@ -26,7 +26,8 @@ explore: connection_reg_r3 {}
 
 explore: epoch_test {}
 
-explore: events {
+explore: mysql_events {
+  view_name: events
   join: users {
     type: left_outer
     sql_on: ${events.user_id} = ${users.id} ;;

@@ -31,6 +31,11 @@ view: orders {
     sql: ${TABLE}.created_at ;;
   }
 
+  dimension: day {
+    type: number
+    sql: PARSE_DATE("%d", ${created_date}) ;;
+  }
+
   dimension: order_amount {
     type: number
     sql:

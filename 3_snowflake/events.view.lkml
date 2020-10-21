@@ -20,6 +20,16 @@ view: events {
     html: {{value}} and {{ count._value}} ;;
   }
 
+  dimension: city_dim {
+    type: string
+    sql: CONCAT( '"' || ${TABLE}."CITY" || '"') ;;
+  }
+
+  parameter: city_param {
+    type: unquoted
+    suggest_dimension: city_dim
+  }
+
   measure: city_list {
     type: list
     list_field: city
