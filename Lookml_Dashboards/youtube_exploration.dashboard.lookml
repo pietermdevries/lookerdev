@@ -407,7 +407,6 @@
       channel_basic_a2_daily_first.subscriber_change, channel_basic_a2_daily_first.like_change,
       channel_basic_a2_daily_first.avg_watch_time, channel_basic_a2_daily_first.comments,
       channel_basic_a2_daily_first.shares, channel_basic_a2_daily_first.key_points]
-    filters: {}
     sorts: [channel_basic_a2_daily_first.key_points desc]
     limit: 20
     query_timezone: America/Los_Angeles
@@ -488,70 +487,6 @@
     col: 5
     width: 10
     height: 6
-  - title: Traffic Pie
-    name: Traffic Pie
-    model: thesis_cool
-    explore: traffic_source
-    type: looker_pie
-    fields: [traffic_source.views, traffic_source.traffic_source]
-    filters:
-      traffic_source.traffic_source: "-NULL"
-    sorts: [traffic_source.views desc]
-    limit: 500
-    column_limit: 50
-    series_types: {}
-    listen:
-      Date Filter: channel_basic_a2_daily_first._data_date
-      Series Title: video_info.title
-    row: 24
-    col: 5
-    width: 10
-    height: 6
-  - title: Search Terms
-    name: Search Terms
-    model: thesis_cool
-    explore: traffic_source
-    type: looker_grid
-    fields: [traffic_source.views, traffic_source.traffic_source_detail, traffic_source.watch_time_minutes]
-    filters:
-      traffic_source.traffic_source_detail: "-NULL"
-      traffic_source.traffic_source: Youtube Search
-    sorts: [traffic_source.views desc]
-    limit: 500
-    column_limit: 50
-    dynamic_fields: [{table_calculation: avg_watch_time, label: AVG Watch TIme, expression: "${traffic_source.watch_time_minutes}/${traffic_source.views}",
-        value_format: !!null '', value_format_name: decimal_2, _kind_hint: measure,
-        _type_hint: number}]
-    show_view_names: false
-    show_row_numbers: true
-    transpose: false
-    truncate_text: true
-    hide_totals: false
-    hide_row_totals: false
-    size_to_fit: true
-    series_cell_visualizations:
-      traffic_source.views:
-        is_active: true
-      traffic_source.watch_time_minutes:
-        is_active: true
-      avg_watch_time:
-        is_active: true
-    table_theme: white
-    limit_displayed_rows: false
-    enable_conditional_formatting: false
-    header_text_alignment: left
-    header_font_size: '12'
-    rows_font_size: '12'
-    conditional_formatting_include_totals: false
-    conditional_formatting_include_nulls: false
-    series_types: {}
-    listen:
-      Date Filter: channel_basic_a2_daily_first._data_date
-      Series Title: video_info.title
-    row: 24
-    col: 15
-    width: 9
-    height: 6
   - title: Total Views
     name: Total Views
     model: thesis_cool
@@ -574,33 +509,6 @@
       Series Title: video_info.title
     row: 0
     col: 5
-    width: 5
-    height: 2
-  - title: Average Watch Time
-    name: Average Watch Time
-    model: thesis_cool
-    explore: channel_basic_a2_daily_first
-    type: single_value
-    fields: [channel_basic_a2_daily_first.avg_watch_time]
-    limit: 500
-    custom_color_enabled: true
-    show_single_value_title: true
-    show_comparison: false
-    comparison_type: value
-    comparison_reverse_colors: false
-    show_comparison_label: false
-    enable_conditional_formatting: false
-    conditional_formatting_include_totals: false
-    conditional_formatting_include_nulls: false
-    series_types: {}
-    note_state: expanded
-    note_display: above
-    note_text: Here is my test note
-    listen:
-      Date Filter: channel_basic_a2_daily_first._data_date
-      Series Title: video_info.title
-    row: 0
-    col: 10
     width: 5
     height: 2
   - title: Subscriber Change
@@ -770,54 +678,35 @@
     col: 5
     width: 10
     height: 7
-  - title: Search Cloud
-    name: Search Cloud
+  - title: Average Watch Time
+    name: Average Watch Time
     model: thesis_cool
     explore: channel_basic_a2_daily_first
-    type: looker_wordcloud
-    fields: [traffic_source.traffic_source_detail, traffic_source.views]
-    filters:
-      traffic_source.traffic_source: Youtube Search
-      traffic_source.traffic_source_detail: "-NULL"
-    sorts: [traffic_source.views desc]
-    limit: 50
-    query_timezone: America/Los_Angeles
+    type: single_value
+    fields: [channel_basic_a2_daily_first.avg_watch_time]
+    limit: 500
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: false
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
     series_types: {}
+    note_state: expanded
+    note_display: above
+    note_text: ''
     listen:
       Date Filter: channel_basic_a2_daily_first._data_date
       Series Title: video_info.title
-    row: 37
-    col: 5
-    width: 10
-    height: 7
-  - title: Watch Time Cloud
-    name: Watch Time Cloud
-    model: thesis_cool
-    explore: channel_basic_a2_daily_first
-    type: looker_wordcloud
-    fields: [traffic_source.traffic_source_detail, traffic_source.watch_time_minutes]
-    filters:
-      traffic_source.traffic_source: Youtube Search
-      traffic_source.traffic_source_detail: "-NULL"
-    sorts: [traffic_source.watch_time_minutes desc]
-    limit: 50
-    query_timezone: America/Los_Angeles
-    color_application:
-      collection_id: b43731d5-dc87-4a8e-b807-635bef3948e7
-      palette_id: fb7bb53e-b77b-4ab6-8274-9d420d3d73f3
-      options:
-        steps: 5
-        reverse: false
-    series_types: {}
-    listen:
-      Date Filter: channel_basic_a2_daily_first._data_date
-      Series Title: video_info.title
-    row: 37
-    col: 15
-    width: 9
-    height: 7
-  - name: Genre_KPI_video
-    title: Genre_KPI_video
+    row: 0
+    col: 10
+    width: 5
+    height: 2
+  - title: Genre_KPI_video
+    name: Genre_KPI_video
     model: thesis_cool
     explore: channel_basic_a2_daily_first
     type: looker_grid
@@ -886,8 +775,7 @@
       channel_basic_a2_daily_first.watch_time_minutes, channel_basic_a2_daily_first.subscriber_change]
     note_state: collapsed
     note_display: above
-    note_text: Here is my test note 2 Here is my test note 2 Here is my test note
-      2 Here is my
+    note_text: ''
     title_hidden: true
     listen:
       Series Title: video_info.title
@@ -895,45 +783,66 @@
     col: 5
     width: 10
     height: 6
-  - name: ''
-    type: text
-    title_text: ''
-    subtitle_text: ''
-    body_text: |-
-      # トリガーの方法
-      <a href="https://www.youtube.com/" target="_blank">Click me</a>
-
-      Read more: https://html.com/attributes/a-target/#ixzz6KPxBOufQ
-      <a href="https://www.youtube.com/">Click me</a>
-      <br>
-      トリガーの種類
-      方法|説明
-      ---|      E-mail|複数宛先に送信可能
-      Webhook|ファイル監視等の機能は無く POST 機能のみ
-      Amazon S3|シークレット・アクセスキー方式
-      SFTP|
-      Slack<br>(Slack アプリ方式)|Slack アプリの名前でメッセージ送信される。<br>宛先は 1 ユーザーのみ(チャンネル不可)
-      Slack<br>(ダイレクト方式)|Looker アカウントに自分の Slack アカウントを連携して使用。<br>メッセージは自分 Slack 名で送信される。<br>チャンネル、ユーザーどちらも送信できるが、複数宛先への送信は不可。
-
-      ## 共通事項
-
-      ### 送信できるデータ
-
-      - PDF
-      - 画像(PNG)
-      - CSV
-      - ダッシュボードのリンク(URL) ※E-mail 方式のみ
-
-      ### トリガー
-
-      | 方法                 | 説明                                                                                                                                                                               |
-      | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-      | 反復する期間         | スケジュール駆動型。日次(曜日指定可)から分単位(5,10,15,20,30 分より選択)<br>CRON の使用不可<br>閾値オーバーなどのイベント駆動には使用不可。                                        |
-      | データグループの更新 | イベント駆動型。モデルの datagroup に SQL 文とモニタリング間隔をセットして作成。セットした SQL の実行結果をキャッシュに格納して変化があったら発報される。<br> 1 秒間隔まで設定可能 |
-    row: 44
-    col: 0
-    width: 24
-    height: 16
+  - title: Search Cloud
+    name: Search Cloud
+    model: thesis_cool
+    explore: traffic_source
+    type: looker_wordcloud
+    fields: [traffic_source.traffic_source_detail, traffic_source.views]
+    filters:
+      traffic_source.traffic_source: Youtube Search
+      traffic_source.traffic_source_detail: "-NULL"
+    sorts: [traffic_source.views desc]
+    limit: 50
+    query_timezone: America/Los_Angeles
+    color_application: undefined
+    show_view_names: false
+    show_row_numbers: true
+    truncate_column_names: false
+    hide_totals: false
+    hide_row_totals: false
+    table_theme: editable
+    limit_displayed_rows: false
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    series_types: {}
+    listen:
+      Date Filter: traffic_source._data_date
+    row: 37
+    col: 5
+    width: 10
+    height: 7
+  - title: Watch Time Cloud
+    name: Watch Time Cloud
+    model: thesis_cool
+    explore: traffic_source
+    type: looker_wordcloud
+    fields: [traffic_source.traffic_source_detail, traffic_source.watch_time_minutes]
+    filters:
+      traffic_source.traffic_source: Youtube Search
+      traffic_source.traffic_source_detail: "-NULL"
+    limit: 50
+    query_timezone: America/Los_Angeles
+    color_application: undefined
+    show_view_names: false
+    show_row_numbers: true
+    truncate_column_names: false
+    hide_totals: false
+    hide_row_totals: false
+    table_theme: editable
+    limit_displayed_rows: false
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    series_types: {}
+    listen: {}
+    row: 37
+    col: 15
+    width: 9
+    height: 7
   filters:
   - name: Date Filter
     title: Date Filter
@@ -941,6 +850,9 @@
     default_value: after 7 days ago
     allow_multiple_values: true
     required: true
+    ui_config:
+      type: advanced
+      display: popover
     model: thesis_cool
     explore: channel_basic_a2_daily_first
     listens_to_filters: []
@@ -951,6 +863,9 @@
     default_value: ''
     allow_multiple_values: true
     required: false
+    ui_config:
+      type: advanced
+      display: popover
     model: thesis_cool
     explore: channel_basic_a2_daily_first
     listens_to_filters: [Series Title]
@@ -961,6 +876,9 @@
     default_value: ''
     allow_multiple_values: true
     required: false
+    ui_config:
+      type: advanced
+      display: popover
     model: thesis_cool
     explore: channel_basic_a2_daily_first
     listens_to_filters: []

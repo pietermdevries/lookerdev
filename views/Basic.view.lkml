@@ -636,6 +636,7 @@ measure: combo_metric {
   }
 
     parameter: yesno_param {
+      hidden: yes
       view_label: "test"
       type: string
       allowed_value: {
@@ -649,6 +650,7 @@ measure: combo_metric {
     }
 
     measure: yesno_measure {
+      hidden: yes
       view_label: "test"
       type: sum
       value_format: "$#,##0"
@@ -659,22 +661,6 @@ measure: combo_metric {
       }
     }
     #https://localhost:9999/explore/thesis_cool/channel_basic_a2_daily_first?fields=channel_basic_a2_daily_first.yesno_measure&f[channel_basic_a2_daily_first.yesno_param]=Yes&vis=%7B%7D&filter_config=%7B%22channel_basic_a2_daily_first.yesno_param%22%3A%5B%7B%22type%22%3A%22is%22%2C%22values%22%3A%5B%7B%22constant%22%3A%22Yes%22%7D%2C%7B%7D%5D%2C%22id%22%3A0%2C%22error%22%3Afalse%7D%5D%7D&origin=share-expanded
-
-
-#     #置き換え後のキャンペーン名
-#     dimension: relate_campaign_name {
-#       label: "Campaign"
-#       type: string
-#       sql:IFNULL(
-#           ${m_change_name_manage_by_campaign.relate_media_campaign_disply_name},
-#           ${campaign});;
-#       drill_fields: [detail*]
-#       link: {
-#         label: "デバイス毎の指標"
-#         url:"{{link}}&sorts=ad_common.device+desc&limit=20"
-#       }
-#     }
-
 
 ### param stuff
     dimension: comment_num {
@@ -706,6 +692,7 @@ measure: combo_metric {
     }
 
     parameter: date_format {
+      hidden: yes
       view_label: "test"
       type: string
       allowed_value: { value: "%d %m %Y" label: "dd/mm/yyyy" }
@@ -714,6 +701,7 @@ measure: combo_metric {
     }
 
     dimension: date_formatted {
+      hidden: yes
       view_label: "test"
       type: date
       sql: cast(${_data_date} as timestamp) ;;
@@ -722,6 +710,7 @@ measure: combo_metric {
 
 
     dimension: formatted_date {
+      hidden: yes
       view_label: "test"
       type: date
 #      sql:       FORMAT_DATE({% date_format._parameter_value %},CAST(${_data_date} as timestamp)) ;;

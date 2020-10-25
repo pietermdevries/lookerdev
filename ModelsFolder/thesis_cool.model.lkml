@@ -1,4 +1,4 @@
-connection: "private_yt"
+connection: "@{connection}"
 #include: "manifest.lkml"
 label: "Youtube"
 
@@ -47,26 +47,12 @@ explore: series_analysis {
   }
 }
 
-explore: +series_analysis {
-  group_label: "test"
-}
-
 explore: channel_basic_a2_daily_first {
   label: "Master Explore"
-#   always_filter: {
-#     filters: [
-#       channel_basic_a2_daily_first.country_code: "JP, NULL"
-#     ]
-#  }
-#   conditionally_filter: {
-#     filters: [_data_date: "last 7 days"]
-#     unless: [video_info.title]
-#   }
   aggregate_table: views_last_7_days {
     query:  {
       dimensions: [channel_basic_a2_daily_first.date]
       measures: [channel_basic_a2_daily_first.views]
-#      filters: [channel_basic_a2_daily_first.date: "7 days"]  # <-- time filter
       }
       materialization: {datagroup_trigger:youtube_transfer}
       }
@@ -75,11 +61,6 @@ explore: channel_basic_a2_daily_first {
     sql_on: ${video_info.video_id} = ${channel_basic_a2_daily_first.video_id} ;;
     relationship: many_to_one
   }
-#   join: video_based_cohort_analysis {
-#     type: left_outer
-#     sql_on: ${channel_basic_a2_daily_first.video_id} =  ${video_based_cohort_analysis.video_id};;
-#     relationship: many_to_one
-#   }
   join: video_days {
     type: left_outer
     sql_on: ${channel_basic_a2_daily_first.video_id} = ${video_days.video_id} ;;
@@ -96,24 +77,14 @@ explore: channel_basic_a2_daily_first {
     relationship: many_to_many
 }
   join: playback {
+    view_label: "Basic"
+    fields: [playback.playback_location_detail,playback.playback_location]
     type: left_outer
     sql_on: ${channel_basic_a2_daily_first.video_id} = ${playback.video_id}
     AND ${channel_basic_a2_daily_first._data_date} = ${playback._data_date} ;;
     relationship: many_to_many
   }
-  join: traffic_source {
-    type:  left_outer
-    sql_on: ${channel_basic_a2_daily_first.video_id} = ${traffic_source.video_id}
-    AND ${channel_basic_a2_daily_first._data_date} = ${traffic_source._data_date};;
-    relationship: many_to_one
-  }
-  join: top_10 {
-    type: left_outer
-    sql_on: ${channel_basic_a2_daily_first.video_id} = ${top_10.video_id};;
-    relationship: many_to_one
-  }
 }
-
 
 
 explore: demographics_dt {
@@ -135,15 +106,9 @@ explore: genre_total {
 }
 
 explore: traffic_source {
-  join: channel_basic_a2_daily_first {
-    type: left_outer
-    sql_on: ${traffic_source.video_id} = ${channel_basic_a2_daily_first.video_id}
-    and ${traffic_source._data_date} = ${channel_basic_a2_daily_first._data_date};;
-    relationship: many_to_many
-  }
   join: video_info {
     type: left_outer
-    sql_on: ${channel_basic_a2_daily_first.video_id} = ${video_info.video_id} ;;
+    sql_on: ${traffic_source.video_id} = ${video_info.video_id} ;;
     relationship: many_to_one
   }
 }

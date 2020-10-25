@@ -1,6 +1,7 @@
 - dashboard: video
   title: Video
   layout: newspaper
+  preferred_viewer: dashboards
   elements:
   - title: Views over time
     name: Views over time
@@ -109,7 +110,7 @@
     listen:
       Video_Name: video_info.video_name
       Date Filter: channel_basic_a2_daily_first._data_date
-    row: 4
+    row: 2
     col: 8
     width: 8
     height: 5
@@ -151,7 +152,7 @@
     listen:
       Video_Name: video_info.video_name
       Date Filter: channel_basic_a2_daily_first._data_date
-    row: 9
+    row: 7
     col: 8
     width: 4
     height: 5
@@ -197,7 +198,7 @@
     listen:
       Video_Name: video_info.video_name
       Date Filter: channel_basic_a2_daily_first._data_date
-    row: 9
+    row: 7
     col: 12
     width: 4
     height: 5
@@ -229,7 +230,7 @@
     merged_queries:
     - model: thesis_cool
       explore: channel_basic_a2_daily_first
-      type: looker_line
+      type: table
       fields: [channel_basic_a2_daily_first.views, video_days.days_after_post]
       filters:
         video_days.days_after_post: NOT NULL
@@ -239,7 +240,7 @@
       join_fields: []
     - model: thesis_cool
       explore: channel_basic_a2_daily_first
-      type: looker_line
+      type: table
       fields: [channel_basic_a2_daily_first.view_per_video, video_days.days_after_post]
       filters:
         video_days.days_after_post: NOT NULL
@@ -247,32 +248,6 @@
       limit: 500
       column_limit: 50
       query_timezone: America/Los_Angeles
-      x_axis_gridlines: false
-      y_axis_gridlines: false
-      show_view_names: false
-      show_y_axis_labels: true
-      show_y_axis_ticks: true
-      y_axis_tick_density: default
-      y_axis_tick_density_custom: 5
-      show_x_axis_label: false
-      show_x_axis_ticks: true
-      y_axis_scale_mode: linear
-      x_axis_reversed: false
-      y_axis_reversed: false
-      plot_size_by_field: false
-      trellis: ''
-      stacking: ''
-      limit_displayed_rows: false
-      legend_position: center
-      series_types: {}
-      point_style: none
-      show_value_labels: true
-      label_density: 25
-      x_axis_scale: auto
-      y_axis_combined: true
-      swap_axes: false
-      show_null_points: true
-      interpolation: linear
       join_fields:
       - field_name: video_days.days_after_post
         source_field_name: video_days.days_after_post
@@ -321,13 +296,14 @@
     show_null_points: false
     interpolation: linear
     type: looker_line
+    column_limit: 50
     dynamic_fields: [{table_calculation: vs_average, label: "% vs Average", expression: "${channel_basic_a2_daily_first.views}/${channel_basic_a2_daily_first.view_per_video}",
         value_format: !!null '', value_format_name: percent_1, _kind_hint: measure,
         _type_hint: number}]
     listen:
     - Video_Name: video_info.video_name
     -
-    row: 14
+    row: 12
     col: 8
     width: 8
     height: 6
@@ -488,178 +464,6 @@
     listen:
       Video_Name: video_info.video_name
       Date Filter: demographics_dt._data_date
-    row: 20
-    col: 8
-    width: 8
-    height: 6
-  - title: Traffic Source
-    name: Traffic Source
-    model: thesis_cool
-    explore: traffic_source
-    type: looker_pie
-    fields: [traffic_source.traffic_source, traffic_source.views]
-    filters:
-      traffic_source.traffic_source: "-NULL"
-    sorts: [traffic_source.views desc]
-    limit: 500
-    series_types: {}
-    listen:
-      Video_Name: video_info.video_name
-      Date Filter: channel_basic_a2_daily_first._data_date
-    row: 26
-    col: 8
-    width: 8
-    height: 6
-  - title: Search Terms
-    name: Search Terms
-    model: thesis_cool
-    explore: traffic_source
-    type: looker_grid
-    fields: [traffic_source.views, traffic_source.traffic_source_detail, traffic_source.watch_time_minutes]
-    filters:
-      traffic_source.traffic_source: Youtube Search
-      traffic_source.traffic_source_detail: "-NULL"
-    sorts: [traffic_source.views desc]
-    limit: 500
-    dynamic_fields: [{table_calculation: average_watch_time, label: Average Watch
-          TIme, expression: "${traffic_source.watch_time_minutes}/${traffic_source.views}",
-        value_format: !!null '', value_format_name: decimal_2, _kind_hint: measure,
-        _type_hint: number}]
-    show_view_names: false
-    show_row_numbers: true
-    transpose: false
-    truncate_text: true
-    hide_totals: false
-    hide_row_totals: false
-    size_to_fit: true
-    series_cell_visualizations:
-      traffic_source.views:
-        is_active: true
-      traffic_source.watch_time_minutes:
-        is_active: true
-      calculation_1:
-        is_active: true
-      average_watch_time:
-        is_active: true
-    table_theme: white
-    limit_displayed_rows: false
-    enable_conditional_formatting: false
-    header_text_alignment: left
-    header_font_size: '12'
-    rows_font_size: '12'
-    conditional_formatting_include_totals: false
-    conditional_formatting_include_nulls: false
-    series_types: {}
-    listen:
-      Video_Name: video_info.video_name
-      Date Filter: channel_basic_a2_daily_first._data_date
-    row: 18
-    col: 16
-    width: 8
-    height: 6
-  - name: Vs Average Likes
-    title: Vs Average Likes
-    merged_queries:
-    - model: thesis_cool
-      explore: channel_basic_a2_daily_first
-      type: looker_line
-      fields: [video_days.days_after_post, channel_basic_a2_daily_first.like_change]
-      filters:
-        video_days.days_after_post: NOT NULL
-      limit: 500
-      query_timezone: America/Los_Angeles
-      join_fields: []
-    - model: thesis_cool
-      explore: channel_basic_a2_daily_first
-      type: looker_line
-      fields: [video_days.days_after_post, channel_basic_a2_daily_first.like_change_per_day]
-      filters:
-        channel_basic_a2_daily_first.video_id: ''
-        video_days.days_after_post: NOT NULL
-      sorts: [channel_basic_a2_daily_first.like_change_per_day desc]
-      limit: 500
-      column_limit: 50
-      query_timezone: America/Los_Angeles
-      x_axis_gridlines: false
-      y_axis_gridlines: false
-      show_view_names: false
-      show_y_axis_labels: true
-      show_y_axis_ticks: true
-      y_axis_tick_density: default
-      y_axis_tick_density_custom: 5
-      show_x_axis_label: false
-      show_x_axis_ticks: true
-      y_axis_scale_mode: linear
-      x_axis_reversed: false
-      y_axis_reversed: false
-      plot_size_by_field: false
-      trellis: ''
-      stacking: ''
-      limit_displayed_rows: false
-      legend_position: center
-      series_types: {}
-      point_style: none
-      show_value_labels: true
-      label_density: 25
-      x_axis_scale: auto
-      y_axis_combined: true
-      swap_axes: false
-      show_null_points: true
-      interpolation: linear
-      join_fields:
-      - field_name: video_days.days_after_post
-        source_field_name: video_days.days_after_post
-    color_application:
-      collection_id: b43731d5-dc87-4a8e-b807-635bef3948e7
-      palette_id: fb7bb53e-b77b-4ab6-8274-9d420d3d73f3
-      options:
-        steps: 5
-        reverse: false
-    x_axis_gridlines: false
-    y_axis_gridlines: true
-    show_view_names: false
-    y_axes: [{label: '', orientation: left, series: [{axisId: channel_basic_a2_daily_first.like_change,
-            id: channel_basic_a2_daily_first.like_change, name: Like Change}, {axisId: channel_basic_a2_daily_first.like_change_per_day,
-            id: channel_basic_a2_daily_first.like_change_per_day, name: Like Change
-              per Day}], showLabels: true, showValues: true, unpinAxis: false, tickDensity: default,
-        type: linear}, {label: '', orientation: right, series: [{axisId: vs_average,
-            id: vs_average, name: "% vs Average"}], showLabels: true, showValues: true,
-        unpinAxis: false, tickDensity: default, type: linear}]
-    show_y_axis_labels: true
-    show_y_axis_ticks: true
-    y_axis_tick_density: default
-    y_axis_tick_density_custom: 5
-    show_x_axis_label: true
-    show_x_axis_ticks: true
-    y_axis_scale_mode: linear
-    x_axis_reversed: false
-    y_axis_reversed: false
-    plot_size_by_field: false
-    trellis: ''
-    stacking: ''
-    limit_displayed_rows: false
-    legend_position: center
-    series_types:
-      channel_basic_a2_daily_first.views: column
-      channel_basic_a2_daily_first.view_per_video: column
-      channel_basic_a2_daily_first.like_change: column
-      channel_basic_a2_daily_first.like_change_per_day: column
-    point_style: none
-    series_colors:
-      calculation_1: "#9174F0"
-    show_value_labels: true
-    label_density: 25
-    x_axis_scale: auto
-    y_axis_combined: true
-    show_null_points: false
-    interpolation: linear
-    type: looker_line
-    dynamic_fields: [{table_calculation: vs_average, label: "% vs Average", expression: "${channel_basic_a2_daily_first.like_change}/${channel_basic_a2_daily_first.like_change_per_day}",
-        value_format: !!null '', value_format_name: percent_1, _kind_hint: measure,
-        _type_hint: number}]
-    listen:
-    - Video_Name: video_info.video_name
-    -
     row: 12
     col: 16
     width: 8
@@ -710,43 +514,16 @@
     col: 0
     width: 4
     height: 3
-  - title: Metric Fun
-    name: Metric Fun
-    model: thesis_cool
-    explore: channel_basic_a2_daily_first
-    type: looker_line
-    fields: [channel_basic_a2_daily_first.metric_chooser, channel_basic_a2_daily_first._data_date,
-      video_info.video_name]
-    pivots: [video_info.video_name]
-    filters:
-      channel_basic_a2_daily_first.dynamic_measure: views
-      channel_basic_a2_daily_first.metric_chooser: NOT NULL
-    sorts: [channel_basic_a2_daily_first._data_date desc, video_info.video_name]
-    limit: 500
-    column_limit: 50
-    query_timezone: America/Los_Angeles
-    listen:
-      Video_Name: video_info.video_name
-      Date Filter: channel_basic_a2_daily_first._data_date
-    row: 18
-    col: 0
-    width: 8
-    height: 6
-  - name: Link to home Dashboard
-    type: text
-    title_text: Link to home Dashboard
-    body_text: <a href="/dashboards/4" class="btn btn-primary">Go somewhere</a>
-    row: 24
-    col: 0
-    width: 8
-    height: 6
   filters:
   - name: Video_Name
     title: Video_Name
     type: field_filter
-    default_value: '"1,2"'
+    default_value: Fate/Zero 1話
     allow_multiple_values: true
     required: true
+    ui_config:
+      type: advanced
+      display: popover
     model: thesis_cool
     explore: channel_basic_a2_daily_first
     listens_to_filters: []
@@ -757,3 +534,6 @@
     default_value: after 2 weeks ago
     allow_multiple_values: true
     required: false
+    ui_config:
+      type: advanced
+      display: popover

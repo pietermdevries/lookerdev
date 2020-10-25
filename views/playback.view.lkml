@@ -38,12 +38,14 @@ view: playback {
   }
 
   dimension: playback_location {
+    group_label: "Playback"
     type: string
     sql: ${TABLE}.playback_location ;;
     drill_fields: [playback*]
   }
 
   dimension: playback_location_detail {
+    group_label: "Playback"
     type: string
     sql: ${TABLE}.playback_location_detail ;;
   }
