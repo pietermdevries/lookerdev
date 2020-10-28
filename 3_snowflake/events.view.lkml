@@ -1,7 +1,7 @@
 view: events {
   sql_table_name: "PUBLIC"."EVENTS"
     ;;
-  drill_fields: [id]
+
 
   dimension: id {
     primary_key: yes
@@ -20,6 +20,21 @@ view: events {
     html: {{value}} and {{ count._value}} ;;
   }
 
+  dimension: city_dim {
+    type: string
+    sql: CONCAT( '"' || ${TABLE}."CITY" || '"') ;;
+  }
+
+  parameter: city_param {
+    type: unquoted
+    suggest_dimension: city_dim
+  }
+
+  measure: city_list {
+    type: list
+    list_field: city
+  }
+
   parameter: test {
     allowed_value: {
       label: "bob"
@@ -27,11 +42,14 @@ view: events {
     }
   }
 
+  set: detail {
+    fields: [city, country]
+}
   dimension: country {
     type: string
     map_layer_name: countries
     sql: ${TABLE}."COUNTRY" ;;
-    html: {{value}} and {{ count._value}} ;;
+#    html: {{value}} and {{ count._value}} ;;
   }
 
   filter: US {
@@ -138,7 +156,11 @@ view: events {
 
   measure: count {
     type: count
-    drill_fields: [id, users.first_name, users.last_name, users.id]
+    drill_fields: [detail*, count]
+    link: {
+      label: "Explore Top 20 Results by count"
+      url: "{{ link }}&sorts=order_items.sale_price+desc&limit=20"
+    }
   }
 
   measure: pic_count {
@@ -202,6 +224,25 @@ view: events {
     # <li> Hi, my name is bob </li>
     # <li> His name is Jack </li>
     # </ul> ;;
+  }
+
+  dimension: userattr_name {
+    type: string
+    sql: {% if _user_attributes['name'] == 'Pieter deVries' %}
+          ${city}
+         {% else %}
+          ${browser}
+         {% endif %};;
+  }
+
+  dimension: me {
+    sql: 'Pieter DeVries' ;;
+    hidden: yes
+  }
+
+  dimension: is_pieter {
+    type: yesno
+    sql: ${me} = '{{ _user_attributes['name'] }}'  ;;
   }
 
 }
