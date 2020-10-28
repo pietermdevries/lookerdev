@@ -17,6 +17,7 @@ view: events {
   dimension: city {
     type: string
     sql: ${TABLE}."CITY" ;;
+    html: {{value}} and {{ count._value}} ;;
   }
 
   parameter: test {
@@ -30,6 +31,7 @@ view: events {
     type: string
     map_layer_name: countries
     sql: ${TABLE}."COUNTRY" ;;
+    html: {{value}} and {{ count._value}} ;;
   }
 
   filter: US {
@@ -110,6 +112,7 @@ view: events {
   dimension: state {
     type: string
     sql: ${TABLE}."STATE" ;;
+    html: {{value}} and {{ count._value}} ;;
   }
 
   dimension: traffic_source {
@@ -190,5 +193,15 @@ view: events {
 　  type: count
     html: {{events.zip._value}} {{value}} ;;
 　}
+
+  dimension: rule_info {
+    type: string
+    sql: '1' ;;
+    # html:
+    # <ul>
+    # <li> Hi, my name is bob </li>
+    # <li> His name is Jack </li>
+    # </ul> ;;
+  }
 
 }
