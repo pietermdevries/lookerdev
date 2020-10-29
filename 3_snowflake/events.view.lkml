@@ -245,4 +245,44 @@ view: events {
     sql: ${me} = '{{ _user_attributes['name'] }}'  ;;
   }
 
+  filter: this_period_filter {
+    type: date
+    description: "Use this filter to define the current and previous period for analysis"
+    sql: ${period} IS NOT NULL ;;
+
+  }
+
+# ${created_raw} is the timestamp dimension we are building our reporting period off of
+
+  dimension: period {
+    type: string
+    description: "The reporting period as selected by the This Period Filter"
+    sql:
+    CASE
+      WHEN {% date_start this_period_filter %} is not null AND {% date_end this_period_filter %} is not null /* date ranges or in the past x days */
+        THEN
+          CASE
+            WHEN ${created_raw} >= {% date_start this_period_filter %}
+              AND ${created_raw} <= {% date_end this_period_filter %}
+              THEN 'This Period'
+            WHEN ${created_raw} >= DATEADD(day,-1*DATEDIFF(day,{% date_start this_period_filter %}, {% date_end this_period_filter %} ) + 1, DATEADD(day,-1,{% date_start this_period_filter %} ) )
+              AND ${created_raw} < DATEADD(day,-1,{% date_start this_period_filter %} ) + 1
+              THEN 'Previous Period'
+          END
+        WHEN {% date_start this_period_filter %} is null AND {% date_end this_period_filter %} is null /* has any value or is not null */
+          THEN CASE WHEN ${created_raw} is not null THEN 'Has Value' ELSE 'Is Null' END
+        WHEN {% date_start this_period_filter %} is null AND {% date_end this_period_filter %} is not null /* on or before */
+          THEN
+            CASE
+              WHEN ${created_raw} <= {% date_end this_period_filter %} THEN 'In Period'
+              WHEN ${created_raw} > {% date_end this_period_filter %} THEN 'Not In Period'
+            END
+          WHEN {% date_start this_period_filter %} is not null AND {% date_end this_period_filter %} is null /* on or after */
+            THEN
+              CASE
+                WHEN ${created_raw} >= {% date_start this_period_filter %} THEN 'In Period'
+                WHEN ${created_raw} < {% date_start this_period_filter %} THEN 'Not In Period'
+              END
+            END ;;
+    }
 }

@@ -29,6 +29,11 @@ view: orders {
     </a> {{value}};;
     }
 
+    dimension: status2 {
+      sql: case when ${status} = "pending" then "bob"
+      else ${status} end;;
+    }
+
   dimension: user_id {
     type: number
     # hidden: yes
