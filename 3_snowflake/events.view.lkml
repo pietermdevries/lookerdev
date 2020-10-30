@@ -44,7 +44,7 @@ view: events {
 
   set: detail {
     fields: [city, country]
-}
+  }
   dimension: country {
     type: string
     map_layer_name: countries
@@ -176,11 +176,11 @@ view: events {
   dimension: secondary_dimension {
     type: string
     sql: array_construct(
-    TO_NUMBER(SPLIT_PART({% parameter number_list %}, ',', 1)),
-    TO_NUMBER(
-    IFF(SPLIT_PART({% parameter number_list %}, ',', 2) = '', 0, SPLIT_PART({% parameter number_list %}, ',', 2)))
-    )
-    ;;
+          TO_NUMBER(SPLIT_PART({% parameter number_list %}, ',', 1)),
+          TO_NUMBER(
+          IFF(SPLIT_PART({% parameter number_list %}, ',', 2) = '', 0, SPLIT_PART({% parameter number_list %}, ',', 2)))
+          )
+          ;;
   }
 
   dimension: foo {
@@ -211,10 +211,10 @@ view: events {
 
   }
 
-　measure: html_count {
-　  type: count
+  measure: html_count {
+    type: count
     html: {{events.zip._value}} {{value}} ;;
-　}
+  }
 
   dimension: rule_info {
     type: string
@@ -284,5 +284,14 @@ view: events {
                 WHEN ${created_raw} < {% date_start this_period_filter %} THEN 'Not In Period'
               END
             END ;;
-    }
+  }
+
+  measure: liquid_label {
+    description: "Budget Filterで選択した項目の予定値を表示します。"
+    type: sum
+    label:"
+    {% parameter date_granularity %}
+    "
+    sql: ${sequence_number} ;;
+  }
 }
