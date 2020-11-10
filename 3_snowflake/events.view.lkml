@@ -17,7 +17,7 @@ view: events {
   dimension: city {
     type: string
     sql: ${TABLE}."CITY" ;;
-    html: {{value}} and {{ count._value}} ;;
+    # html: {{value}} and {{ count._value}} ;;
   }
 
   dimension: city_dim {
@@ -130,7 +130,7 @@ view: events {
   dimension: state {
     type: string
     sql: ${TABLE}."STATE" ;;
-    html: {{value}} and {{ count._value}} ;;
+    # html: {{value}} and {{ count._value}} ;;
   }
 
   dimension: traffic_source {
