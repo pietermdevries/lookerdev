@@ -43,8 +43,16 @@ view: events {
   }
 
   set: detail {
-    fields: [city, country]
+    fields: [city, country,created_date,event_type,city,browser,traffic_source,zip,city_dim,city_list,city_param,count,country,created_date]
   }
+  set: detail2 {
+    fields: [super_long,city, country,created_date,event_type,city,browser,traffic_source,zip,city_dim,created_day_of_month,created_month,created_day_of_month,created_time,longitude,latitude]
+  }
+
+  dimension: super_long {
+    sql: ${browser} || ${city} || ${browser}
+    ;;  }
+
   dimension: country {
     type: string
     map_layer_name: countries
@@ -157,11 +165,16 @@ view: events {
   measure: count {
     type: count
     drill_fields: [detail*, count]
-    link: {
-      label: "Explore Top 20 Results by count"
-      url: "{{ link }}&sorts=order_items.sale_price+desc&limit=20"
-    }
+    # link: {
+    #   label: "Explore Top 20 Results by count"
+    #   url: "{{ link }}&sorts=order_items.sale_price+desc&limit=20"
+    # }
   }
+
+  measure: count2 {
+    type: count
+    drill_fields: [detail2*]
+    }
 
   measure: pic_count {
     type: count
