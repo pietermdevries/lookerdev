@@ -2,7 +2,9 @@ view: events {
   sql_table_name: "PUBLIC"."EVENTS"
     ;;
 
-
+  dimension: filter_value {
+    sql: {% date_start created_date %}  ;;
+  }
   dimension: id {
     primary_key: yes
     type: number
@@ -18,6 +20,17 @@ view: events {
     type: string
     sql: ${TABLE}."CITY" ;;
     # html: {{value}} and {{ count._value}} ;;
+  }
+
+  dimension: user_loc {
+    type: location
+    sql_latitude: ${latitude} ;;
+    sql_longitude: ${longitude} ;;
+  }
+
+  dimension: rank9 {
+    type: string
+    sql: '9位' ;;
   }
 
   dimension: city_dim {
@@ -169,6 +182,11 @@ view: events {
     #   label: "Explore Top 20 Results by count"
     #   url: "{{ link }}&sorts=order_items.sale_price+desc&limit=20"
     # }
+  }
+
+  measure: chrome_users {
+    type: number
+    sql: COUNT(CASE WHEN (events."BROWSER") LIKE (CAST('%' AS VARCHAR) || CAST(REPLACE(REPLACE(REPLACE('Chrome', '^', '^^'), '%', '^%'), '_', '^_') AS VARCHAR) || CAST('%' AS VARCHAR)) ESCAPE '^' THEN 1 ELSE NULL END) ;;
   }
 
   measure: count2 {

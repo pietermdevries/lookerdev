@@ -4,6 +4,14 @@ include: "/3_snowflake/*.view.lkml"                # include all views in the vi
 
 
 explore: events {
+  query: pivots {
+    dimensions: [browser, created_month_name]
+    measures: [count]
+    filters: [events.created_date: "1 quarters"]
+    pivots: [created_month_name]
+  }
+
+
   group_label: "pieter"
 }
 

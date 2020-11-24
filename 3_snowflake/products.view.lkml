@@ -1,3 +1,4 @@
+explore: products {}
 view: products {
   sql_table_name: "PUBLIC"."PRODUCTS"
     ;;
@@ -53,5 +54,16 @@ view: products {
   measure: count {
     type: count
     drill_fields: [id, name, distribution_centers.name, distribution_centers.id, inventory_items.count]
+  }
+
+  measure: cost_percentile {
+    type: percentile
+    percentile: 10
+    sql: ${cost} ;;
+  }
+
+  measure: total_cost {
+    type: sum
+    sql: ${cost} ;;
   }
 }
