@@ -90,7 +90,8 @@ view: events {
       quarter,
       year,
       day_of_month,
-      month_name
+      month_name,
+      day_of_week_index
     ]
     sql: ${TABLE}."CREATED_AT" ;;
   }
@@ -169,6 +170,20 @@ view: events {
     # hidden: yes
     sql: ${TABLE}."USER_ID" ;;
   }
+
+  ########
+
+  measure: sum_measure {
+    type: sum
+    sql: ${user_id} ;;
+  }
+
+  measure: avg_measure {
+    type: average
+    sql: ${user_id} ;;
+  }
+
+  #######
 
   dimension: zip {
     type: zipcode
