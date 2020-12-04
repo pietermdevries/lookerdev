@@ -17,3 +17,5 @@ explore: aircraft {
     }
   }
 }
+
+explore: accidents {}

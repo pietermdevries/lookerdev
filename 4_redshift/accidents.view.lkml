@@ -2,6 +2,26 @@ view: accidents {
   sql_table_name: public.accidents ;;
   drill_fields: [id]
 
+### EXPERIMENTAL
+
+
+  filter: filter_date {
+    description: "The Datetime field to filter on - allows for user timezones to be selected."
+
+    type: date_time
+    datatype: datetime
+    convert_tz: yes
+  }
+
+  dimension: date_test {
+    view_label: "test_field"
+    sql: {% date_start accidents.filter_date %} ;;
+    type: date_time
+  }
+
+
+### EXPERIMENTAL
+
   dimension: id {
     primary_key: yes
     type: number
@@ -184,6 +204,10 @@ view: accidents {
 
   measure: count {
     type: count
-    drill_fields: [id, airport_name]
+    drill_fields: [airport_name,count]
+    link: {
+      label: "limit20"
+      url: "{{link}}&limit=20"
+    }
   }
 }
