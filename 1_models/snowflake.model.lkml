@@ -4,14 +4,27 @@ include: "/3_snowflake/*.view.lkml"                # include all views in the vi
 
 
 explore: events {
+  access_filter: {
+    field: events.browser
+    user_attribute: department
+  }
   query: pivots {
     dimensions: [browser, created_month_name]
     measures: [count]
     filters: [events.created_date: "1 quarters"]
     pivots: [created_month_name]
   }
+  aggregate_table: test_access_filter {
+    query: {
 
-
+    dimensions: [browser, created_month_name]
+    measures: [count]
+    pivots: [created_month_name]
+  }
+  materialization: {
+    sql_trigger_value: SELECT CURDATE() ;;
+  }
+  }
   group_label: "pieter"
 }
 

@@ -5,6 +5,14 @@ view: events {
   dimension: filter_value {
     sql: {% date_start created_date %}  ;;
   }
+
+  dimension: double_filter_value {
+    sql: Concat(
+    TO_VARCHAR( {% condition events.created_date %} ${TABLE}."CREATED_AT" {% endcondition %}),
+    TO_VARCHAR( {% condition events.created_month %} ${TABLE}."CREATED_AT" {% endcondition %})
+    );;
+  }
+
   dimension: id {
     primary_key: yes
     type: number
