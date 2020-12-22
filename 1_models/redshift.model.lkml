@@ -1,4 +1,4 @@
-connection: "faa_redshift"
+# connection: "faa_redshift"
 
 include: "/4_redshift/*.view.lkml"                # include all views in the views/ folder in this project
 
