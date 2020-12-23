@@ -222,6 +222,9 @@ dimension: language {
   measure: sum_measure {
     type: sum
     sql: ${user_id} ;;
+    html:
+    <p><font style="color:grey;font-size:25px;"> {{rendered_value}} </font><br>
+    <font style="color:red;font-size:6px;"> (No "A" read) </font></p>;;
   }
 
   measure: avg_measure {
