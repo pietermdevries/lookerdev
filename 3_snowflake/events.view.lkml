@@ -1,6 +1,30 @@
+include: "/field_extend.view"
 view: events {
+extends: [field_extend]
   sql_table_name: "PUBLIC"."EVENTS"
     ;;
+
+
+dimension: dashboard_title {
+  sql: 'Title' ;;
+  html: <h1 style="color: #52C6EF;"> VP-C level Fraud Dashboard:</h1> <h2> Comparing <b>{{ rendered_value }}</b> with Benchmarks </h2>
+  ;;
+}
+
+parameter: language_select {
+  allowed_value: {
+    label: "Japanese"
+    value: "jp"
+  }
+  allowed_value: {
+    label: "English"
+    value: "en"
+  }
+}
+
+dimension: language {
+  sql: {% parameter language_select %} ;;
+}
 
   dimension: filter_value {
     sql: {% date_start created_date %}  ;;
@@ -11,6 +35,20 @@ view: events {
     TO_VARCHAR( {% condition events.created_date %} ${TABLE}."CREATED_AT" {% endcondition %}),
     TO_VARCHAR( {% condition events.created_month %} ${TABLE}."CREATED_AT" {% endcondition %})
     );;
+  }
+
+  filter: date_start {
+    type: date
+    default_value: "7 days ago"
+  }
+
+  filter: date_end {
+    type: date
+  }
+
+  dimension: test_date {
+    type: date
+    sql: ${created_date} BETWEEN ${date_start} AND ${date_end};;
   }
 
   dimension: id {
@@ -186,6 +224,9 @@ view: events {
   measure: sum_measure {
     type: sum
     sql: ${user_id} ;;
+    html:
+    <p><font style="color:grey;font-size:25px;"> {{rendered_value}} </font><br>
+    <font style="color:red;font-size:6px;"> (No "A" read) </font></p>;;
   }
 
   measure: avg_measure {
