@@ -99,7 +99,9 @@ view: events {
       year,
       day_of_month,
       month_name,
-      day_of_week_index
+      day_of_week_index,
+      day_of_week,
+      hour_of_day
     ]
     sql: ${TABLE}."CREATED_AT" ;;
   }
