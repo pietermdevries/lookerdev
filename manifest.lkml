@@ -1,4 +1,4 @@
-project_name: "testpieter"
+project_name: "the_pieter"
 
 visualization: {
   id: "multiple-value-jp"
