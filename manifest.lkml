@@ -5,3 +5,8 @@ visualization: {
   label: "Multiple Value JP Dev"
   file: "multiple_value.js"
 }
+
+constant: override_me {
+  value: "previous_value"
+  export: override_required
+}
