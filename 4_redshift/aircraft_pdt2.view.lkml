@@ -6,7 +6,7 @@ view: aircraft_pdt2 {
   sql:
   SELECT *
   FROM "public"."aircraft"
-  WHERE DATE("public"."aircraft"."last_action_date" ) = '2006-01-27'
+  WHERE DATE("public"."aircraft"."last_action_date" ) = '2006-01-26'
   ;;
   sql_trigger_value: SELECT CURRENT_TIME ;;
   }
