@@ -1,6 +1,6 @@
 ## Last 7 days of data
-explore: aircraft_pdt {}
-view: aircraft_pdt {
+explore: aircraft_pdt2 {}
+view: aircraft_pdt2 {
   derived_table: {
   sql:
   SELECT *
