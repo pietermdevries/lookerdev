@@ -2,6 +2,7 @@
 explore: aircraft_pdt2 {}
 view: aircraft_pdt2 {
   derived_table: {
+    publish_as_db_view: yes
   sql:
   SELECT *
   FROM "public"."aircraft"
