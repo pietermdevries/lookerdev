@@ -11,6 +11,10 @@ dimension: dashboard_title {
   ;;
 }
 
+dimension: array_test {
+  sql: ARRAY_CONSTRUCT(${state},${city},${browser}) ;;
+}
+
 parameter: language_select {
   allowed_value: {
     label: "Japanese"
