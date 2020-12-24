@@ -1,13 +1,13 @@
 ## Last 7 days of data
+explore: aircraft_pdt {}
 view: aircraft_pdt {
   derived_table: {
   sql:
   SELECT *
-  FROM public.aircraft
-  WHERE
-  WHERE ((( "last_action_date" ) >= ((DATE(DATEADD(day,-6, DATE_TRUNC('day',GETDATE()) )))) AND ( "last_action_date" ) < ((DATE(DATEADD(day,7, DATEADD(day,-6, DATE_TRUNC('day',GETDATE()) ) ))))))
+  FROM "public"."aircraft"
+  WHERE DATE("public"."aircraft"."last_action_date" ) = '2006-01-27'
   ;;
-  sql_trigger_value: SELECT CURRENT_TIME() ;;
+  sql_trigger_value: SELECT CURRENT_TIME ;;
   }
   dimension: address1 {
     type: string
