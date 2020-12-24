@@ -10,6 +10,7 @@ view: aircraft_pdt2 {
   ;;
   sql_trigger_value: SELECT CURRENT_TIME ;;
   }
+  dimension: bob {}
   dimension: address1 {
     type: string
     sql: ${TABLE}.address1 ;;
