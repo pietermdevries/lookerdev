@@ -11,11 +11,24 @@ dimension: dashboard_title {
   ;;
 }
 
+# dimension: paragraph {
+#   sql: "worst SAO game yet. I'm not even talking about the unpausable cutscenes, the terrible camera,
+#         the ally AI, the terrible tutorials, the awful Chapter 1 or even the awful pacing.
+#         It's just amazing how teams created this and thought, this is good and a quality team played it and thought this is what people want.
+#         It boggles the mind. First of all the loading times, if you're playing it on the PS4 have social media,
+#         a book or another game playing because you'll be getting further in those than this game with the loading times.
+#         They are enough to make prey blush, and they're constant. At one point, you go from 2D scenes, to loading,
+#         to walking to a wagon, to more loading, kill 1 enemy, and back to loading. Not just once, you do this multiple times.
+#         Don't even expect the AI as in previous SAO games to be of any use, they barely attack even if you try to force them too.
+#         Then again some mechanics only work if the game can be bothered, for example you learn fast travel points almost instantly" ;;
+# }
+
 dimension: array_test {
   sql: ARRAY_CONSTRUCT(${state},${city},${browser}) ;;
 }
 
 parameter: language_select {
+  type: unquoted
   allowed_value: {
     label: "Japanese"
     value: "jp"
@@ -24,6 +37,18 @@ parameter: language_select {
     label: "English"
     value: "en"
   }
+}
+
+dimension: parameter_label {
+  label_from_parameter: language_select
+  sql:  ARRAY_CONSTRUCT(${state},${city},${browser})  ;;
+  html:
+  {% if language_select._parameter_value  == jp %}
+  Japanese {{value}}
+  {%else%}
+  {{value}}
+  {%endif%}
+  ;;
 }
 
 dimension: language {
