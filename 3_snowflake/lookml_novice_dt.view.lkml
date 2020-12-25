@@ -7,29 +7,13 @@ view: lookml_novice_dt {
           "CITY" AS "街",
           "CREATED_AT" AS created_date
           FROM "PUBLIC"."USERS"
-
-           WHERE {% condition date_format %} date_format {% endcondition %};;
+          WHERE {% condition date_filter %} "CREATED_AT" {% endcondition %}
+          ;;
   }
 
-#   filter: date_filter {
-#     type: date
-#   }
-#
-#   filter: date_filter_suggestions {
-#     suggestions: ["13/01/2015","01/13/2015"]
-#   }
-
-  parameter: date_format {
-    type: unquoted
-    allowed_value: {
-      label: "USA Style Dates"
-      value: "USA"
-    }
-    allowed_value: {
-      label: "EU Style Dates"
-      value: "EU"
-    }
-  }
+filter: date_filter {
+  type: date
+}
 
   dimension: city {
     sql: ${TABLE}."街" ;;
@@ -40,11 +24,8 @@ view: lookml_novice_dt {
     type: string
 #     sql: ${TABLE}."CREATED_DATE" ;;
     sql:
-    {% if date_format._parameter_value == "EU" %}
       to_char(${TABLE}.created_date ,'DD/MM/YYYY')
-    {% else %}
-      to_char(${TABLE}.created_date ,'MM/DD/YYYY')
-    {% endif %}  ;;
+ ;;
   }
 
   dimension: html_date {
