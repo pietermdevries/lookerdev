@@ -40,15 +40,22 @@ parameter: language_select {
 }
 
 dimension: parameter_label {
-  label_from_parameter: language_select
-  sql:  ARRAY_CONSTRUCT(${state},${city},${browser})  ;;
-  html:
-  {% if language_select._parameter_value  == jp %}
-  Japanese {{value}}
+  # label_from_parameter: language_select
+  label: "
+  {% if language_select._parameter_value   == 'jp' %}
+  Japanese
   {%else%}
-  {{value}}
+  Else
   {%endif%}
-  ;;
+"
+  sql:  ARRAY_CONSTRUCT(${state},${city},${browser})  ;;
+  # html:
+  # {% if language_select._parameter_value  == "jp" %}
+  # Japanese {{value}}
+  # {%else%}
+  # {{value}}
+  # {%endif%}
+  # ;;
 }
 
 dimension: language {
