@@ -18,4 +18,6 @@ explore: aircraft {
   }
 }
 
-explore: accidents {}
+explore: accidents {
+  from: accidents
+}
