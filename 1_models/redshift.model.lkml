@@ -19,5 +19,4 @@ explore: aircraft {
 }
 
 explore: accidents {
-  from: accidents
 }
