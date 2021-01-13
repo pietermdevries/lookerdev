@@ -9,6 +9,7 @@ explore: aircraft {
     query: {
       dimensions: [region]
       measures: [count]
+      filters: [aircraft.air_worth_date: "10 years"]
       timezone: "America/Los_Angeles"
     }
 
