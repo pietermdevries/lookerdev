@@ -5,7 +5,8 @@ view: lookml_novice_dt {
   derived_table: {
     sql: SELECT
           "CITY" AS "街",
-          "CREATED_AT" AS created_date
+          "CREATED_AT" AS created_date,
+          COUNT(*) AS number_of_rows
           FROM "PUBLIC"."USERS"
           WHERE {% condition date_filter %} "CREATED_AT" {% endcondition %}
           ;;

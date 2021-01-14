@@ -156,4 +156,10 @@ view: aircraft {
     type: count
     drill_fields: [name]
   }
+
+  measure: status_count {
+    type: count_distinct
+    allow_approximate_optimization: yes
+    sql: ${status_code} ;;
+  }
 }
