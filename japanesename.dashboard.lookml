@@ -137,30 +137,3 @@
     col: 8
     width: 8
     height: 6
-  filters:
-  - name: Email
-    title: Email
-    type: field_filter
-    default_value: ''
-    allow_multiple_values: true
-    required: false
-    ui_config:
-      type: advanced
-      display: popover
-    model: flex_look
-    explore: orders
-    listens_to_filters: []
-    field: users.email
-  - name: Status
-    title: Status
-    type: field_filter
-    default_value: cancelled
-    allow_multiple_values: true
-    required: false
-    ui_config:
-      type: radio_buttons
-      display: inline
-    model: flex_look
-    explore: orders
-    listens_to_filters: []
-    field: orders.status
