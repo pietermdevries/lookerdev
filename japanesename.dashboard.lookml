@@ -1,5 +1,5 @@
-- dashboard: 日本語
-  title: 日本語
+- dashboard: nihongo
+  title: nihongo
   layout: newspaper
   preferred_viewer: dashboards-next
   elements:
