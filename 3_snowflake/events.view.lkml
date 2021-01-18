@@ -73,6 +73,19 @@ dimension: language {
     );;
   }
 
+  parameter: test_year_date {
+    type: number
+    allowed_value: {
+      value: "2020"
+    }
+    allowed_value: {
+      value: "2021"
+    }
+    allowed_value: {
+      value: "2019"
+    }
+  }
+
   filter: date_start {
     type: date
     default_value: "7 days ago"
