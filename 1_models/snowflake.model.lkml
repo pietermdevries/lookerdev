@@ -1,5 +1,6 @@
 connection: "snowlooker"
 include: "/testboard.dashboard.lookml"
+include: "/japanesename.dashboard.lookml"
 include: "/3_snowflake/*.view.lkml"                # include all views in the views/ folder in this project
 
 
