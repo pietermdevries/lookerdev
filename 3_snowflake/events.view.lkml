@@ -440,4 +440,9 @@ dimension: language {
     "
     sql: ${sequence_number} ;;
   }
+
+  measure: formatted_seconds {
+    sql: ${user_id} ;;
+    html: {{ rendered_value | round: 2 | date: "%M:%S" }};;
+  }
 }
