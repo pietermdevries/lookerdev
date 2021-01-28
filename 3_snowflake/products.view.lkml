@@ -23,6 +23,7 @@ view: products {
   dimension: cost {
     type: number
     sql: ${TABLE}."COST" ;;
+    value_format: "\"¥\"#,##0"
   }
 
   dimension: department {
