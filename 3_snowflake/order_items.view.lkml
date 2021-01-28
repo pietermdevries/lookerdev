@@ -148,7 +148,7 @@ view: order_sales {
       quarter,
       year
     ]
-    sql: TO_TIMESTAMP_TZ(CONCAT(RTRIM(${TABLE}."SHIPPED_AT", 'Z'), ' -100')) ;;
+    sql: ${TABLE}."SHIPPED_AT" ;;
   }
 
   dimension: sale_price {
