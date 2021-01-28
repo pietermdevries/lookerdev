@@ -20,7 +20,7 @@ view: order_items {
       quarter,
       year
     ]
-    sql: ${TABLE}."CREATED_AT" ;;
+    sql: TO_TIMESTAMP_TZ(CONCAT(RTRIM(${TABLE}."CREATED_AT", 'Z'), ' -100')) ;;
   }
 
   dimension_group: delivered {
