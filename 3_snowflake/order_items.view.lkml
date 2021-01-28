@@ -109,6 +109,7 @@ view: order_items {
     ]
   }
 }
+explore: order_items {}
 explore: order_sales {
   # join: order_status {
   #   sql_on: ${order_sales.date_date} = ${order_status.date_date} ;;
