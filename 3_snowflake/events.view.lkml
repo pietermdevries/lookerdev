@@ -1,4 +1,5 @@
 include: "/field_extend.view"
+
 view: events {
 extends: [field_extend]
   sql_table_name: "PUBLIC"."EVENTS"
@@ -38,6 +39,17 @@ parameter: language_select {
     value: "en"
   }
 }
+
+  parameter: number_of_days_test {
+    type: number
+  }
+
+  filter: date_selector_test {
+    type: date
+    sql: ${created_date} >= dateadd( day,interval -{% parameter number_of_days_test %},{% date_start date_selector_test %} )
+        AND
+        ${created_date} <= dateadd( day, interval {% parameter number_of_days_test %},{% date_start date_selector_test %}) ;;
+  }
 
 dimension: parameter_label {
   # label_from_parameter: language_select
@@ -162,6 +174,7 @@ dimension: language {
     ;;  }
 
   dimension: country {
+    label: "HAPPYDAY"
     type: string
     map_layer_name: countries
     sql: ${TABLE}."COUNTRY" ;;
@@ -186,11 +199,13 @@ dimension: language {
       year,
       day_of_month,
       month_name,
+      month_num,
       day_of_week_index,
       day_of_week,
       hour_of_day
     ]
     sql: ${TABLE}."CREATED_AT" ;;
+    drill_fields: [country]
   }
 
   dimension: date{
@@ -203,6 +218,27 @@ dimension: language {
     ELSE ${created_week}
     END ;;
   }
+
+  parameter: date_detail {
+    type: unquoted
+    default_value: "Week"
+    allowed_value: { value: "Hour" }
+    allowed_value: { value: "Day" }
+    allowed_value: { label:"Week (Mon-Sun)" value: "Week" }
+    allowed_value: { label:"Week (Sun-Sat)" value: "WeekSunday" }
+    allowed_value: { value: "Month" }
+    allowed_value: { value: "Year" }
+  }
+  dimension: calendar {
+    type: date_time
+    label_from_parameter: date_detail
+    sql:
+    {% if date_detail._parameter_value == "WeekSunday" %}
+    DATE_TRUNC('day',DATEADD('day', (0 - EXTRACT(DOW FROM ${created_raw})), ${created_raw}))
+    {% else %}
+    DATE_TRUNC({% parameter date_detail %}, ${created_raw})
+    {% endif %} ;;
+}
 
 
   parameter: date_granularity {
