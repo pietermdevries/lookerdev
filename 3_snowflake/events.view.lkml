@@ -255,6 +255,24 @@ dimension: language {
   dimension: ip_address {
     type: string
     sql: ${TABLE}."IP_ADDRESS" ;;
+    # link: {
+    #   url: "
+    #   {% if value > 10 %}
+    #   www.google.com
+    #   {% else%}
+    #   www.yahoo.com
+    #   {% endif %}"
+    # }
+    link: {
+      label: "link"
+      url: "
+      {% if ip_address._value > 10 %}
+      https://www.google.com/
+      {% else%}
+      https://www.yahoo.com/
+      {% endif %}"
+    }
+
   }
 
   dimension: latitude {
