@@ -20,7 +20,7 @@ view: order_items {
       quarter,
       year
     ]
-    sql: ${TABLE}."CREATED_AT" ;;
+    sql: TO_TIMESTAMP_TZ(CONCAT(RTRIM(${TABLE}."CREATED_AT", 'Z'), ' -100')) ;;
   }
 
   dimension_group: delivered {
@@ -109,6 +109,7 @@ view: order_items {
     ]
   }
 }
+explore: order_items {}
 explore: order_sales {
   # join: order_status {
   #   sql_on: ${order_sales.date_date} = ${order_status.date_date} ;;
