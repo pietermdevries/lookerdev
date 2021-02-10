@@ -5,6 +5,10 @@ extends: [field_extend]
   sql_table_name: "PUBLIC"."EVENTS"
     ;;
 
+dimension: whitespace {
+  type: string
+  sql: 'field ' ;;
+}
 
 dimension: dashboard_title {
   sql: 'Title' ;;
