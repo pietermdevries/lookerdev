@@ -206,7 +206,8 @@ dimension: language {
       month_num,
       day_of_week_index,
       day_of_week,
-      hour_of_day
+      hour_of_day,
+      hour
     ]
     sql: ${TABLE}."CREATED_AT" ;;
     drill_fields: [country]

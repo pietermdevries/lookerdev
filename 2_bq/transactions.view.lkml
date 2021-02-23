@@ -118,6 +118,11 @@ dimension: size {
     description: "The fee paid by this transaction"
   }
 
+  dimension: inputs {
+    hidden: yes
+    sql: ${TABLE}.inputs ;;
+  }
+
   ## Measures
 
   measure: total_input_value {

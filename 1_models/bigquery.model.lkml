@@ -10,4 +10,10 @@ explore: transactions {
     relationship: one_to_many
     sql_on: ${transactions.block_hash} = ${blocks.hash} ;;
   }
+
+  join: inputs {
+    view_label: "Transcation Inputs"
+    sql: LEFT JOIN UNNEST(transactions.inputs) as inputs ;;
+    relationship: one_to_many
+  }
 }
