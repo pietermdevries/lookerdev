@@ -257,6 +257,12 @@ dimension: language {
     sql: ${TABLE}."EVENT_TYPE" ;;
   }
 
+  measure: event_list {
+    type: list
+    list_field: event_type
+    html: {{event_type._value}} and {{value}} and {{ip_address._value}} ;;
+  }
+
   dimension: ip_address {
     type: string
     sql: ${TABLE}."IP_ADDRESS" ;;
@@ -378,6 +384,12 @@ dimension: language {
     type: string
   }
 
+  dimension: assigned {
+    sql:
+    {% assign array = number_list._parameter_value | split: "," %}
+    array;;
+  }
+
   dimension: secondary_dimension {
     type: string
     sql: array_construct(
@@ -388,17 +400,17 @@ dimension: language {
           ;;
   }
 
-  dimension: foo {
-    type: string
-    sql: case
-      when ${user_id} in
-        (
-        TO_NUMBER(SPLIT_PART({% parameter number_list %}, ',', 0),
-        TO_NUMBER(IF(SPLIT_PART({% parameter number_list %}, ',', 1) = '', 0))
-        ) then 'bob'
-      else 'jack'
-      end ;;
-  }
+  # dimension: foo {
+  #   type: string
+  #   sql: case
+  #     when ${user_id} in
+  #       (
+  #       TO_NUMBER(SPLIT_PART({% parameter number_list %}, ',', 0),
+  #       TO_NUMBER(IF(SPLIT_PART({% parameter number_list %}, ',', 1) = '', 0))
+  #       ) then 'bob'
+  #     else 'jack'
+  #     end ;;
+  # }
 
   dimension: foo2 {
     type: string

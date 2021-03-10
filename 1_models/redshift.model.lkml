@@ -3,6 +3,10 @@ connection: "flightstats"
 include: "/4_redshift/*.view.lkml"                # include all views in the views/ folder in this project
 
 
+datagroup: test {
+  sql_trigger: 1 ;;
+}
+
 explore: aircraft {
   view_label: "pieter"
   aggregate_table: region_rollup {

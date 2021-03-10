@@ -18,6 +18,16 @@ view: blocks {
     description: "The hash of this block"
   }
 
+  dimension: case_test_dim {
+    sql:
+    CASE WHEN ${size} > 1 OR (
+      ${weight}>1 AND (
+        ${number}>1 OR ${version}>1
+        )) THEN "Working"
+    ELSE "Not Working"
+    END ;;
+  }
+
   dimension: size {
     type: number
     sql: ${TABLE}.size ;;
