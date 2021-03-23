@@ -103,6 +103,7 @@ dimension: language {
   }
 
   filter: date_start {
+    description: "start of the filter"
     type: date
     default_value: "7 days ago"
   }
