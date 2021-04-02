@@ -1,5 +1,13 @@
-#project_name: "youtube_analytics"
 
-constant: connection {
-  value: "youtube_database"
+project_name: "the_pieter"
+
+visualization: {
+  id: "multiple-value-jp"
+  label: "Multiple Value JP Dev"
+  file: "multiple_value.js"
 }
+
+constant: override_me {
+  value: "previous_value"
+  export: override_required
+  }
