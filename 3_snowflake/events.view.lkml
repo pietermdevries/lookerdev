@@ -1,5 +1,4 @@
 include: "/field_extend.view"
-
 view: events {
 extends: [field_extend]
   sql_table_name: "PUBLIC"."EVENTS"
@@ -42,6 +41,11 @@ parameter: language_select {
     label: "English"
     value: "en"
   }
+}
+
+dimension: day_rank {
+  sql: (SELECT MIN(rank() over (order by "CREATED_AT"))
+        FROM "PUBLIC"."EVENTS") ;;
 }
 
   parameter: number_of_days_test {
