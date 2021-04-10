@@ -4,6 +4,23 @@ view: products {
     ;;
   drill_fields: [id]
 
+  parameter: test_param {
+    type: unquoted
+    allowed_value: {
+      label: "Total Sale Price"
+      value: "sale_price"
+    }
+    allowed_value: {
+      label: "Total Cost"
+      value: "cost"
+    }
+    allowed_value: {
+      label: "Total Profit"
+      value: "profit"
+    }
+  }
+
+
   dimension: id {
     primary_key: yes
     type: number
@@ -11,6 +28,7 @@ view: products {
   }
 
   dimension: brand {
+    label_from_parameter: test_param
     type: string
     sql: ${TABLE}."BRAND" ;;
   }
@@ -23,6 +41,7 @@ view: products {
   dimension: cost {
     type: number
     sql: ${TABLE}."COST" ;;
+    value_format: "\"¥\"#,##0"
   }
 
   dimension: department {

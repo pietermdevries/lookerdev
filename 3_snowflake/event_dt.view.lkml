@@ -6,6 +6,7 @@ extends: [parameter_view]
     sql:
     SELECT *
     FROM {% parameter table_name %}."EVENTS"
+    ORDER BY browser desc
       ;;
     }
     drill_fields: [id]

@@ -4,6 +4,10 @@ view: events_ndt1 {
     explore_source: events {
       column: created_date {}
       column: count {}
+      bind_filters: {
+        to_field: events.created_date
+        from_field: events_ndt1.created_date
+      }
     }
 
   }

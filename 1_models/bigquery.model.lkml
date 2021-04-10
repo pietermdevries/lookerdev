@@ -1,7 +1,19 @@
-connection: "pieter_bq_dont_use_me"
+connection: "pieter_bq"
+include: "/2_bq/*"              # include all views in the views/ folder in this project
+include: "/views/log/*"
 
-include: "/2_bq/*/*"                # include all views in the views/ folder in this project
+explore: transactions {
+  always_filter: {
+    filters: [transactions.date_filter: "Today"]
+  }
+  join: blocks {
+    relationship: one_to_many
+    sql_on: ${transactions.block_hash} = ${blocks.hash} ;;
+  }
 
-explore: orders {
-  from:  orders
+  join: inputs {
+    view_label: "Transcation Inputs"
+    sql: LEFT JOIN UNNEST(transactions.inputs) as inputs ;;
+    relationship: one_to_many
+  }
 }

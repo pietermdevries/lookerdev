@@ -2,7 +2,38 @@ view: users {
   sql_table_name: "PUBLIC"."USERS"
     ;;
   drill_fields: [id]
+######
 
+
+  parameter: choose_dimension {
+    type: string
+    allowed_value: {
+      label: "年齢"
+      value: "age"
+    }
+    allowed_value: {
+      label: "街"
+      value: "city"
+    }
+    allowed_value: {
+      label: "国"
+      value: "country"
+    }
+  }
+
+  dimension: test_parameter {
+    sql: {% if choose_dimension._parameter_value == 'age' %}
+        "city"
+        {% else %}
+        "not-city"
+        {% endif%};;
+  }
+
+
+
+
+
+#######
   dimension: id {
     primary_key: yes
     type: number

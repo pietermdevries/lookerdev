@@ -1,4 +1,5 @@
 connection: "the_look"
+include: "Athena.model"
 
 # include all the views
 include: "/views/**/*.view"

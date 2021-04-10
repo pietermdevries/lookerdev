@@ -1,9 +1,14 @@
 include: "/field_extend.view"
+
 view: events {
 extends: [field_extend]
   sql_table_name: "PUBLIC"."EVENTS"
     ;;
 
+dimension: whitespace {
+  type: string
+  sql: 'field ' ;;
+}
 
 dimension: dashboard_title {
   sql: 'Title' ;;
@@ -38,6 +43,17 @@ parameter: language_select {
     value: "en"
   }
 }
+
+  parameter: number_of_days_test {
+    type: number
+  }
+
+  filter: date_selector_test {
+    type: date
+    sql: ${created_date} >= dateadd( day,interval -{% parameter number_of_days_test %},{% date_start date_selector_test %} )
+        AND
+        ${created_date} <= dateadd( day, interval {% parameter number_of_days_test %},{% date_start date_selector_test %}) ;;
+  }
 
 dimension: parameter_label {
   # label_from_parameter: language_select
@@ -162,6 +178,7 @@ dimension: language {
     ;;  }
 
   dimension: country {
+    label: "HAPPYDAY"
     type: string
     map_layer_name: countries
     sql: ${TABLE}."COUNTRY" ;;
@@ -186,11 +203,14 @@ dimension: language {
       year,
       day_of_month,
       month_name,
+      month_num,
       day_of_week_index,
       day_of_week,
-      hour_of_day
+      hour_of_day,
+      hour
     ]
     sql: ${TABLE}."CREATED_AT" ;;
+    drill_fields: [country]
   }
 
   dimension: date{
@@ -204,6 +224,27 @@ dimension: language {
     END ;;
   }
 
+  parameter: date_detail {
+    type: unquoted
+    default_value: "Week"
+    allowed_value: { value: "Hour" }
+    allowed_value: { value: "Day" }
+    allowed_value: { label:"Week (Mon-Sun)" value: "Week" }
+    allowed_value: { label:"Week (Sun-Sat)" value: "WeekSunday" }
+    allowed_value: { value: "Month" }
+    allowed_value: { value: "Year" }
+  }
+  dimension: calendar {
+    type: date_time
+    label_from_parameter: date_detail
+    sql:
+    {% if date_detail._parameter_value == "WeekSunday" %}
+    DATE_TRUNC('day',DATEADD('day', (0 - EXTRACT(DOW FROM ${created_raw})), ${created_raw}))
+    {% else %}
+    DATE_TRUNC({% parameter date_detail %}, ${created_raw})
+    {% endif %} ;;
+}
+
 
   parameter: date_granularity {
     type: string
@@ -216,9 +257,33 @@ dimension: language {
     sql: ${TABLE}."EVENT_TYPE" ;;
   }
 
+  measure: event_list {
+    type: list
+    list_field: event_type
+    html: {{event_type._value}} and {{value}} and {{ip_address._value}} ;;
+  }
+
   dimension: ip_address {
     type: string
     sql: ${TABLE}."IP_ADDRESS" ;;
+    # link: {
+    #   url: "
+    #   {% if value > 10 %}
+    #   www.google.com
+    #   {% else%}
+    #   www.yahoo.com
+    #   {% endif %}"
+    # }
+    link: {
+      label: "link"
+      url: "
+      {% if ip_address._value > 10 %}
+      https://www.google.com/
+      {% else%}
+      https://www.yahoo.com/
+      {% endif %}"
+    }
+
   }
 
   dimension: latitude {
@@ -319,6 +384,12 @@ dimension: language {
     type: string
   }
 
+  dimension: assigned {
+    sql:
+    {% assign array = number_list._parameter_value | split: "," %}
+    array;;
+  }
+
   dimension: secondary_dimension {
     type: string
     sql: array_construct(
@@ -329,17 +400,17 @@ dimension: language {
           ;;
   }
 
-  dimension: foo {
-    type: string
-    sql: case
-      when ${user_id} in
-        (
-        TO_NUMBER(SPLIT_PART({% parameter number_list %}, ',', 0),
-        TO_NUMBER(IF(SPLIT_PART({% parameter number_list %}, ',', 1) = '', 0))
-        ) then 'bob'
-      else 'jack'
-      end ;;
-  }
+  # dimension: foo {
+  #   type: string
+  #   sql: case
+  #     when ${user_id} in
+  #       (
+  #       TO_NUMBER(SPLIT_PART({% parameter number_list %}, ',', 0),
+  #       TO_NUMBER(IF(SPLIT_PART({% parameter number_list %}, ',', 1) = '', 0))
+  #       ) then 'bob'
+  #     else 'jack'
+  #     end ;;
+  # }
 
   dimension: foo2 {
     type: string
