@@ -66,12 +66,12 @@ dimension: language {
     sql: {% date_start created_date %}  ;;
   }
 
-  dimension: double_filter_value {
-    sql: Concat(
-    TO_VARCHAR( {% condition events.created_date %} ${TABLE}."CREATED_AT" {% endcondition %}),
-    TO_VARCHAR( {% condition events.created_month %} ${TABLE}."CREATED_AT" {% endcondition %})
-    );;
-  }
+  # dimension: double_filter_value {
+  #   sql: Concat(
+  #   TO_VARCHAR( {% condition events.created_date %} ${TABLE}."CREATED_AT" {% endcondition %}),
+  #   TO_VARCHAR( {% condition events.created_month %} ${TABLE}."CREATED_AT" {% endcondition %})
+  #   );;
+  # }
 
   parameter: test_year_date {
     type: number
