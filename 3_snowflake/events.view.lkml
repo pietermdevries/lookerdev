@@ -4,6 +4,12 @@ extends: [field_extend]
   sql_table_name: "PUBLIC"."EVENTS"
     ;;
 
+dimension: suggested_dimensio {
+  sql: ${user_id} ;;
+  suggest_explore: users
+  suggest_dimension: users.first_name
+}
+
 dimension: whitespace {
   type: string
   sql: 'field ' ;;
@@ -15,17 +21,14 @@ dimension: dashboard_title {
   ;;
 }
 
-# dimension: paragraph {
-#   sql: "worst SAO game yet. I'm not even talking about the unpausable cutscenes, the terrible camera,
-#         the ally AI, the terrible tutorials, the awful Chapter 1 or even the awful pacing.
-#         It's just amazing how teams created this and thought, this is good and a quality team played it and thought this is what people want.
-#         It boggles the mind. First of all the loading times, if you're playing it on the PS4 have social media,
-#         a book or another game playing because you'll be getting further in those than this game with the loading times.
-#         They are enough to make prey blush, and they're constant. At one point, you go from 2D scenes, to loading,
-#         to walking to a wagon, to more loading, kill 1 enemy, and back to loading. Not just once, you do this multiple times.
-#         Don't even expect the AI as in previous SAO games to be of any use, they barely attack even if you try to force them too.
-#         Then again some mechanics only work if the game can be bothered, for example you learn fast travel points almost instantly" ;;
-# }
+dimension: paragraph {
+  sql: "worst SAO game yet. I'm not even talking about the unpausable cutscenes, the terrible camera,       the ally AI, the terrible tutorials, the awful Chapter 1 or even the awful pacing.It's just amazing how teams created this and thought, this is good and a quality team played it and thought this is what people want.It boggles the mind. First of all the loading times, if you're playing it on the PS4 have social media,
+        a book or another game playing because you'll be getting further in those than this game with the loading times.
+        They are enough to make prey blush, and they're constant. At one point, you go from 2D scenes, to loading,
+        to walking to a wagon, to more loading, kill 1 enemy, and back to loading. Not just once, you do this multiple times.
+        Don't even expect the AI as in previous SAO games to be of any use, they barely attack even if you try to force them too.
+        Then again some mechanics only work if the game can be bothered, for example you learn fast travel points almost instantly" ;;
+}
 
 dimension: array_test {
   sql: ARRAY_CONSTRUCT(${state},${city},${browser}) ;;
@@ -343,11 +346,20 @@ dimension: language {
   measure: sum_measure {
     type: sum
     sql: ${user_id} ;;
-    html:
-    <p><font style="color:grey;font-size:25px;"> {{rendered_value}} </font><br>
-    <font style="color:red;font-size:6px;"> (No "A" read) </font></p>;;
+    action: {
+label: "Update Transfer Form"
+url: "https://docs.google.com/spreadsheets/d/1bMnpB59leX9Vx1d9_8VEA23NVEMU8yaH4MVHoiYtDZQ/edit#gid=0"
+# form_url: ""
+    form_param: {
+      name: "Dispatch_ID"
+      type: string
+      label: "Enter Dispatch ID"
+      default: "{{ }}"
+      description: "Enter Dispatch"
+      required: yes
+    }
   }
-
+}
   measure: avg_measure {
     type: average
     sql: ${user_id} ;;

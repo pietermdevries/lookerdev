@@ -2,6 +2,7 @@ connection: "snowlooker"
 include: "/hidetitel.dashboard.lookml"
 include: "/testboard.dashboard.lookml"
 include: "/japanesename.dashboard.lookml"
+include: "/radial_gauge.dashboard.lookml"
 include: "/3_snowflake/*.view.lkml"                # include all views in the views/ folder in this project
 
 
@@ -52,6 +53,8 @@ explore: +languages {
     }
   }
 }
+
+explore: users {}
 
 
 explore: sets {
