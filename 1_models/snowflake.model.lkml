@@ -6,7 +6,8 @@ include: "/radial_gauge.dashboard.lookml"
 include: "/3_snowflake/*.view.lkml"                # include all views in the views/ folder in this project
 
 
-explore: events {
+explore: pieter_events {
+  view_name: events
   group_label: "pieter"
   query: pivots {
     dimensions: [browser, created_month_name]
@@ -18,7 +19,7 @@ explore: events {
 }
 
 explore: extended_events {
-  extends: [events]
+  extends: [pieter_events]
   view_name: events
 }
 
