@@ -1,8 +1,9 @@
 explore: events_ndt1 {}
 view: events_ndt1 {
   derived_table: {
-    explore_source: events {
+    explore_source: pieter_events {
       column: created_date {}
+      column: parameterized_field {}
       column: count {}
       bind_filters: {
         to_field: events.created_date
@@ -17,6 +18,13 @@ view: events_ndt1 {
   dimension: count {
     type: number
   }
+
+  dimension: parameterized_field {}
+
+  parameter: parameter_filter {
+    type: number
+  }
+
 
   parameter: test {
     type: number

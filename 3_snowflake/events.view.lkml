@@ -10,6 +10,22 @@ dimension: suggested_dimensio {
   suggest_dimension: users.first_name
 }
 
+dimension: chosen_field {
+  type: string
+  sql: 1 ;;
+    action: {
+      label: "send to google sheets"
+      url: "https://docs.google.com/spreadsheets/d/1kGcUnC0EjSwS93GMggDX1h8mhMmB_usmCyXZCuSyCzk/edit?usp=sharing&resourcekey=0-3avgEbQXCEMMulKI42gvbQ"
+      icon_url: "https://looker.com/favicon.ico"
+      form_url: "https://example.com/ping/{{ value }}/form.json"
+      param: {
+        name: "name string"
+        value: "value string"
+      }
+}
+
+
+
 dimension: whitespace {
   type: string
   sql: 'field ' ;;
