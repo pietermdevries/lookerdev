@@ -15,6 +15,11 @@ dimension: dashboard_title {
   ;;
 }
 
+dimension: the_number_list {
+  type: string
+  sql: '[1,2,3]' ;;
+}
+
 # dimension: paragraph {
 #   sql: "worst SAO game yet. I'm not even talking about the unpausable cutscenes, the terrible camera,
 #         the ally AI, the terrible tutorials, the awful Chapter 1 or even the awful pacing.
@@ -135,9 +140,18 @@ dimension: language {
   dimension: city {
     type: string
     sql: ${TABLE}."CITY" ;;
+    action: {
+      label: "Label to Appear in Action Menu"
+      url: "https://docs.google.com/spreadsheets/d/1kGcUnC0EjSwS93GMggDX1h8mhMmB_usmCyXZCuSyCzk/edit?resourcekey=0-3avgEbQXCEMMulKI42gvbQ#gid=0"
+      icon_url: "https://looker.com/favicon.ico"
+      form_url: "https://example.com/ping/{{ value }}/form.json"
+      param: {
+        name: "name string"
+        value: "value string"
+      }
     # html: {{value}} and {{ count._value}} ;;
   }
-
+}
   dimension: user_loc {
     type: location
     sql_latitude: ${latitude} ;;
