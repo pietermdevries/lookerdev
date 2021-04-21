@@ -24,7 +24,7 @@ derived_table: {
       label: "国"
       value: "country"
     }
-    default_value: "city"
+    default_value: "age"
   }
 
   dimension: test_parameter {
