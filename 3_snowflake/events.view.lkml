@@ -23,7 +23,7 @@ dimension: chosen_field {
         value: "value string"
       }
 }
-
+}
 
 
 dimension: whitespace {
