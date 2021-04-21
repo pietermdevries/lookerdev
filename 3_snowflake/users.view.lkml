@@ -72,6 +72,12 @@ dimension: lag {
     sql: ${TABLE}."AGE" ;;
   }
 
+  dimension: number {
+    type: number
+    sql: ${age} ;;
+    value_format: "$#.00;($#.00)"
+  }
+
   dimension: city {
     type: string
     sql: ${TABLE}."CITY" ;;

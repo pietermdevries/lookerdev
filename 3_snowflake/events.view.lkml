@@ -4,6 +4,28 @@ extends: [field_extend]
   sql_table_name: "PUBLIC"."EVENTS"
     ;;
 
+dimension: suggested_dimensio {
+  sql: ${user_id} ;;
+  suggest_explore: users
+  suggest_dimension: users.first_name
+}
+
+dimension: chosen_field {
+  type: string
+  sql: 1 ;;
+    action: {
+      label: "send to google sheets"
+      url: "https://docs.google.com/spreadsheets/d/1kGcUnC0EjSwS93GMggDX1h8mhMmB_usmCyXZCuSyCzk/edit?usp=sharing&resourcekey=0-3avgEbQXCEMMulKI42gvbQ"
+      icon_url: "https://looker.com/favicon.ico"
+      form_url: "https://example.com/ping/{{ value }}/form.json"
+      param: {
+        name: "name string"
+        value: "value string"
+      }
+}
+}
+
+
 dimension: whitespace {
   type: string
   sql: 'field ' ;;
@@ -31,6 +53,7 @@ dimension: the_number_list {
 #         Don't even expect the AI as in previous SAO games to be of any use, they barely attack even if you try to force them too.
 #         Then again some mechanics only work if the game can be bothered, for example you learn fast travel points almost instantly" ;;
 # }
+
 
 dimension: array_test {
   sql: ARRAY_CONSTRUCT(${state},${city},${browser}) ;;
@@ -357,11 +380,20 @@ dimension: language {
   measure: sum_measure {
     type: sum
     sql: ${user_id} ;;
-    html:
-    <p><font style="color:grey;font-size:25px;"> {{rendered_value}} </font><br>
-    <font style="color:red;font-size:6px;"> (No "A" read) </font></p>;;
+    action: {
+label: "Update Transfer Form"
+url: "https://docs.google.com/spreadsheets/d/1bMnpB59leX9Vx1d9_8VEA23NVEMU8yaH4MVHoiYtDZQ/edit#gid=0"
+# form_url: ""
+    form_param: {
+      name: "Dispatch_ID"
+      type: string
+      label: "Enter Dispatch ID"
+      default: "{{ }}"
+      description: "Enter Dispatch"
+      required: yes
+    }
   }
-
+}
   measure: avg_measure {
     type: average
     sql: ${user_id} ;;

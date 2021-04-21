@@ -1,12 +1,23 @@
+# explore: snow_pdt_users {}
 view: snow_pdt_users {
   derived_table: {
     sql:
     SELECT *
-    FROM "PUBLIC"."USERS"
-    sql_trigger_value: SELECT current_date() ;;
+    FROM (
+    SELECT *
+    FROM (
+    SELECT *
+    FROM "PUBLIC"."USERS"))
+    WHERE "AGE" = {% parameter age_select %} ;;
+    # sql_trigger_value: SELECT current_date() ;;
   }
 
     drill_fields: [id]
+
+    parameter: age_select {
+      type: number
+      default_value: "1"
+    }
 
     dimension: id {
       primary_key: yes
@@ -94,5 +105,9 @@ view: snow_pdt_users {
       drill_fields: [id, first_name, last_name, events.count, order_items.count]
     }
 
+    measure: sum_lat {
+      type: sum
+      sql: ${latitude} ;;
+    }
 
   }
