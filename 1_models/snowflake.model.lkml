@@ -55,8 +55,11 @@ explore: +languages {
   }
 }
 
-explore: users {}
-
+explore: users {
+  always_filter: {
+    filters: [users.created_date: "2 months"]
+}
+}
 
 explore: sets {
   view_name: events

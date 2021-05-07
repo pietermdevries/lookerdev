@@ -3,7 +3,9 @@ derived_table: {
   sql:
   select *,
   MAX(CASE WHEN "AGE" = 21 THEN 'Success' ELSE 'Fail' END) OVER (PARTITION BY "FIRST_NAME") as condition,
-  LAG("AGE", 1) OVER(PARTITION BY "FIRST_NAME" ORDER BY "FIRST_NAME","AGE" DESC) AS lag
+  LAG("AGE", 1) OVER(PARTITION BY "FIRST_NAME" ORDER BY "FIRST_NAME","AGE" DESC) AS lag,
+  "AGE"/LAG("AGE", 1) OVER(PARTITION BY "FIRST_NAME" ORDER BY "FIRST_NAME","AGE" DESC) as row_over_row
+
   FROM "PUBLIC"."USERS";;
 }
   drill_fields: [id]
@@ -47,7 +49,12 @@ derived_table: {
         {% endif%};;
   }
 
-
+dimension: split_liquid {
+  sql: 'This, is, the, way' ;;
+  html:
+  {% assign words = value | split: ',' %}
+  {{ words[1] }} ;;
+}
 
 dimension: condition {
   type: string
@@ -71,10 +78,24 @@ dimension: lag {
     sql: ${TABLE}."AGE" ;;
   }
 
+  measure: count_date_test {
+    type: count_distinct
+    sql:
+    (SELECT ${age}
+    WHERE ${created_date} BETWEEN '2017-04-01' AND ${created_date}
+    )
+    ;;
+  }
+
   dimension: number {
     type: number
     sql: ${age} ;;
     value_format: "$#.00;($#.00)"
+  }
+
+  dimension: number_row_over_row {
+    type: number
+    sql: ${TABLE}."ROW_OVER_ROW";;
   }
 
   dimension: city {
