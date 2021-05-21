@@ -4,10 +4,27 @@ extends: [field_extend]
   sql_table_name: "PUBLIC"."EVENTS"
     ;;
 
-dimension: suggested_dimensio {
-  sql: ${user_id} ;;
-  suggest_explore: users
-  suggest_dimension: users.first_name
+dimension: suggested_dimension {
+  sql: ${browser} ;;
+  suggest_dimension: events.browser
+}
+
+
+parameter: param_test {
+  label: "test1_param"
+  type: number
+}
+
+  filter: filter_test {
+    label: "test1_filter"
+    type: number
+    sql: {% condition filter_test %} ${dim_test} {% endcondition %} ;;
+}
+
+dimension: dim_test {
+  label: "test1_dim"
+  type: number
+  sql: 100 ;;
 }
 
 dimension: chosen_field {
@@ -255,6 +272,12 @@ dimension: language {
     drill_fields: [country]
   }
 
+  dimension: formatted_time {
+    type: string
+    sql: ${created_time} ;;
+    html: {{ rendered_value | date: "%F %T %P" }} PST;;
+  }
+
   dimension: date{
     label_from_parameter: date_granularity
     type: date
@@ -413,6 +436,11 @@ url: "https://docs.google.com/spreadsheets/d/1bMnpB59leX9Vx1d9_8VEA23NVEMU8yaH4M
     #   label: "Explore Top 20 Results by count"
     #   url: "{{ link }}&sorts=order_items.sale_price+desc&limit=20"
     # }
+  }
+
+  dimension: values {
+    sql: 1 ;;
+    html: {{ count._value }} ;;
   }
 
   measure: chrome_users {

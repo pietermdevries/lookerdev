@@ -148,6 +148,11 @@ dimension: lag {
     sql: ${TABLE}."LATITUDE" ;;
   }
 
+  measure: generic_measure {
+    type: sum
+    sql: ${latitude} ;;
+  }
+
   dimension: longitude {
     type: number
     sql: ${TABLE}."LONGITUDE" ;;
@@ -170,7 +175,7 @@ dimension: lag {
 
   measure: count {
     type: count
-    drill_fields: [id, first_name, last_name, events.count, order_items.count]
+    drill_fields: [id, first_name, last_name, count, generic_measure]
   }
 
   measure: rendered_count {
