@@ -1,23 +1,42 @@
 explore: user_dt {}
 view: user_dt {
+
  derived_table: {
+  increment_key: "created_time"
+  increment_offset: 1
+  distribution_style: all
+
    sql:
   SELECT
   age,
   city,
   country
   FROM "PUBLIC"."USERS"
-  WHERE id IN (
-                SELECT ID
-                FROM "PUBLIC"."USERS"
-                WHERE {% condition age_filter%} age {% endcondition %}
-              );;
+  WHERE {% incrementcondition %} "CREATED_AT" {%  endincrementcondition %}
+
+;;
+sql_trigger_value: select CURRENT_DATE ;;
+
  }
 
 filter: age_filter {
   type: number
   default_value: "10"
 }
+
+  dimension_group: created {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."CREATED_AT" ;;
+  }
 
 dimension: age {
   type: number

@@ -478,24 +478,11 @@ url: "https://docs.google.com/spreadsheets/d/1bMnpB59leX9Vx1d9_8VEA23NVEMU8yaH4M
           )
           ;;
   }
-
-  # dimension: foo {
-  #   type: string
-  #   sql: case
-  #     when ${user_id} in
-  #       (
-  #       TO_NUMBER(SPLIT_PART({% parameter number_list %}, ',', 0),
-  #       TO_NUMBER(IF(SPLIT_PART({% parameter number_list %}, ',', 1) = '', 0))
-  #       ) then 'bob'
-  #     else 'jack'
-  #     end ;;
-  # }
-
-  dimension: foo2 {
+  dimension: change_value {
     type: string
     sql: case
-      when ARRAY_CONTAINS(${user_id},${secondary_dimension}) then 'bob'
-      else 'jack'
+      when ARRAY_CONTAINS(${user_id},${secondary_dimension}) then 'changed value'
+      else 'previous value'
       end ;;
   }
 
