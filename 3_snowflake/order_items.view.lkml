@@ -37,6 +37,31 @@ view: order_items {
     sql: ${TABLE}."DELIVERED_AT" ;;
   }
 
+  parameter: months_back {
+    type: number
+    default_value: "1"
+  }
+
+  dimension: date_range_test {
+    type: yesno
+    sql:
+    (date_part(day,${delivered_date}::date) >= 25 AND
+    {% if months_back._parameter_value == 1 %}
+    date_part(month,${delivered_date}::date) = date_part(month,add_months(current_timestamp,-1))
+    {% else %}
+    date_part(month,${delivered_date}::date) BETWEEN date_part(month,add_months(current_timestamp,-1)) AND date_part(month,add_months(current_timestamp,-{{ months_back._parameter_value }}))
+    {% endif %}
+    )
+    OR
+    (date_part(day,${delivered_date}::date)<25 AND date_part(month,${delivered_date}::date) = date_part(month,current_timestamp))
+    ;;
+  # (extract_days(${products.service_datetime_date}) >= 25
+  #   AND extract_months(${products.service_datetime_date}) = extract_months(add_months(-1, now())))
+  # OR
+  # (extract_days(${products.service_datetime_date}) < 25
+  #   AND extract_months(${products.service_datetime_date}) = extract_months(now()))
+  }
+
   dimension: inventory_item_id {
     type: number
     # hidden: yes
