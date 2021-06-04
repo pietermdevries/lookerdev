@@ -15,6 +15,15 @@ explore: pieter_events {
     filters: [events.created_date: "1 quarters"]
     pivots: [created_month_name]
   }
+  aggregate_table: browser_count {
+    query: {
+      dimensions: [events.browser]
+      measures: [events.count]
+    }
+    materialization: {
+      sql_trigger_value: 1 ;;
+    }
+  }
 
 }
 

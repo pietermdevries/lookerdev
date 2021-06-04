@@ -9,6 +9,21 @@ dimension: suggested_dimension {
   suggest_dimension: events.browser
 }
 
+dimension: test1 {
+sql: {{ created timeframes}} ;;
+}
+
+dimension: link_test {
+  type: string
+  sql: ${id} ;;
+  link: {
+    label: "Testing"
+    url: "{{ link }}&fields=events.browser"
+  }
+
+  # drill_fields: [browser]
+}
+
 
 parameter: param_test {
   label: "test1_param"
@@ -392,12 +407,6 @@ dimension: language {
     sql: ${TABLE}."URI" ;;
   }
 
-  dimension: user_id {
-    type: number
-    # hidden: yes
-    sql: ${TABLE}."USER_ID" ;;
-  }
-
   ########
 
   measure: sum_measure {
@@ -459,14 +468,8 @@ url: "https://docs.google.com/spreadsheets/d/1bMnpB59leX9Vx1d9_8VEA23NVEMU8yaH4M
   }
 
   parameter: number_list {
-    suggest_dimension: zip
+    suggest_dimension: user_id
     type: string
-  }
-
-  dimension: assigned {
-    sql:
-    {% assign array = number_list._parameter_value | split: "," %}
-    array;;
   }
 
   dimension: secondary_dimension {
@@ -474,7 +477,8 @@ url: "https://docs.google.com/spreadsheets/d/1bMnpB59leX9Vx1d9_8VEA23NVEMU8yaH4M
     sql: array_construct(
           TO_NUMBER(SPLIT_PART({% parameter number_list %}, ',', 1)),
           TO_NUMBER(
-          IFF(SPLIT_PART({% parameter number_list %}, ',', 2) = '', 0, SPLIT_PART({% parameter number_list %}, ',', 2)))
+                   IFF(
+                    SPLIT_PART({% parameter number_list %}, ',', 2) = '', 0, SPLIT_PART({% parameter number_list %}, ',', 2)))
           )
           ;;
   }
@@ -485,7 +489,19 @@ url: "https://docs.google.com/spreadsheets/d/1bMnpB59leX9Vx1d9_8VEA23NVEMU8yaH4M
       else 'previous value'
       end ;;
   }
+  dimension: user_id {
+    type: number
+    sql: ${TABLE}."USER_ID" ;;
+  }
 
+
+
+
+  dimension: assigned {
+    sql:
+    {% assign array = number_list._parameter_value | split: "," %}
+    array;;
+  }
 
   dimension: test_number {
     type: number

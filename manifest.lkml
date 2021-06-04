@@ -11,3 +11,7 @@ constant: override_me {
   value: "previous_value"
   export: override_required
   }
+
+constant: timeframes {
+  value: "raw,month,year"
+}
