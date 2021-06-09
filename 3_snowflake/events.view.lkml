@@ -24,6 +24,15 @@ dimension: link_test {
   # drill_fields: [browser]
 }
 
+measure: browser_count {
+  type: number
+  required_fields: [browser]
+  sql:
+  case when ${browser} = 'Chrome' then ${sum_measure}
+  else 0
+  end ;;
+}
+
 
 parameter: param_test {
   label: "test1_param"
@@ -440,7 +449,7 @@ url: "https://docs.google.com/spreadsheets/d/1bMnpB59leX9Vx1d9_8VEA23NVEMU8yaH4M
 
   measure: count {
     type: count
-    drill_fields: [detail*, count]
+    drill_fields: [date,browser, count]
     # link: {
     #   label: "Explore Top 20 Results by count"
     #   url: "{{ link }}&sorts=order_items.sale_price+desc&limit=20"
