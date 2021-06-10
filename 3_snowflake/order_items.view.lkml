@@ -83,6 +83,7 @@ view: order_items {
 
   dimension: status {
     type: string
+
     sql: ${TABLE}."STATUS" ;;
   }
 
@@ -135,6 +136,8 @@ view: order_sales {
 
   dimension: status {
     type: string
+    suggest_explore: users
+    suggest_dimension: users.gender
     sql: ${TABLE}."STATUS" ;;
   }
 
