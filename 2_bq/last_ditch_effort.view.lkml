@@ -6,10 +6,9 @@ view: last_ditch_effort {
           created_date,
           complaint_type,
           status,
-          sum(*) as total
+          count(*) as total
           FROM `bigquery-public-data.austin_311.311_service_requests`
-          WHERE date > '2021-05-01'
-          GROUP BY 1,2,3,4
+          GROUP BY 1,2,3
           ;;
     }
 

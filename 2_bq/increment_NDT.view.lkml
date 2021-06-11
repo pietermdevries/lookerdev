@@ -32,7 +32,12 @@ view: increment_NDT {
       column: complaint_type {}
       column: status {}
       column: count {}
+    # bind_filters: {
+    #   to_field: base_view.created_date
+    #   from_field: increment_NDT.created_date
+    # }
     }
+
   }
 
   dimension: created_date {

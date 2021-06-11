@@ -17,12 +17,15 @@ explore: transactions {
   }
 }
 
-explore: mat_test_fail {
-  view_name: daily_views
-}
-explore: mat_test_success {
-  view_name: daily_views2
-}
+# explore: mat_test_fail {
+#   view_name: daily_views
+# }
+# explore: mat_test_success {
+#   view_name: daily_views2
+# }
+# explore: mat_test_for_real_this_time {
+#   view_name: last_ditch_effort
+# }
 
 explore: base_view {
   hidden: yes
