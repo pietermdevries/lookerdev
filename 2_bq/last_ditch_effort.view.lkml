@@ -28,15 +28,11 @@ view: last_ditch_effort {
       sql: ${TABLE}.status ;;
     }
 
-    }
     measure: count {
       type: count
 
     }
 
 
-
-
-  }
 
 }
