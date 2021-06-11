@@ -16,3 +16,10 @@ explore: transactions {
     relationship: one_to_many
   }
 }
+
+explore: mat_test_fail {
+  view_name: daily_views
+}
+explore: mat_test_success {
+  view_name: daily_views2
+}
