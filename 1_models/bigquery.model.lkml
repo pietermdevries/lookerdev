@@ -23,3 +23,11 @@ explore: mat_test_fail {
 explore: mat_test_success {
   view_name: daily_views2
 }
+
+explore: base_view {
+  hidden: yes
+}
+
+explore: increment_NDT {}
+
+explore: increment_SQL {}

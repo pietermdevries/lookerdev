@@ -11,6 +11,8 @@ view: daily_views2 {
           subscribed_status,
           country_code,
           views,
+          --lead(country_code)
+          --  OVER (PARTITION BY subscribed_status ORDER BY date ASC) as test_boy,
           --generate_uuid() as primary_key,
           sum(views) as total_views
           FROM `thesis-project-252601.YoutubeData.p_channel_basic_a2_daily_first`
