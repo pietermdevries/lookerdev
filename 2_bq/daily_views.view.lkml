@@ -4,7 +4,7 @@
 
 view: daily_views {
   derived_table: {
-    materialized_view: yes
+    # materialized_view: yes
     sql:
     SELECT
     date,
