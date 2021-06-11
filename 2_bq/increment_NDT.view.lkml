@@ -1,26 +1,21 @@
 view: base_view {
-  sql_table_name: `thesis-project-252601.YoutubeData.p_channel_basic_a2_daily_first` ;;
-  dimension: date {
-    datatype: date
-    type: date
-    sql: ${TABLE}.date ;;
+  sql_table_name: `bigquery-public-data.austin_311.311_service_requests` ;;
+  dimension: created_date {
+    datatype: timestamp
+    type: date_time
+    sql: ${TABLE}.created_date ;;
   }
 
-  dimension: subscribed_status {
+  dimension: complaint_type {
     type: string
-    sql: ${TABLE}.subscribed_status ;;
+    sql: ${TABLE}.complaint_type ;;
   }
-  dimension: country_code {
+  dimension: status {
     type: string
-    sql: ${TABLE}.country_code ;;
+    sql: ${TABLE}.status ;;
   }
-  dimension: views {
-    type: number
-    sql: ${TABLE}.views ;;
-  }
-  measure: total_views {
-    type: sum
-    sql: ${views} ;;
+  measure: count {
+    type: count
   }
 
 }
@@ -28,24 +23,55 @@ view: base_view {
 
 view: increment_NDT {
   derived_table: {
-    increment_key: "date"
+    increment_key: "created_date"
     increment_offset: 3
     sql_trigger_value: CURRENT_DATE() ;;
     distribution_style: all
     explore_source: base_view {
-      column: date {}
-      column: country_code {}
-      column: total_views {}
+      column: created_date {}
+      column: complaint_type {}
+      column: status {}
+      column: count {}
     }
   }
 
-  dimension: date {
+  dimension: created_date {
     type: date
   }
-  dimension: country_code {
+  dimension: complaint_type {
     type: string
   }
-  dimension: total_views {
+  dimension: status {
+    type: string
+  }
+  dimension: count {
+    type: number
+  }
+}
+
+view: increment_SQL {
+  derived_table: {
+    sql:
+    SELECT *
+    FROM `bigquery-public-data.austin_311.311_service_requests`
+    WHERE {% incrementcondition %} created_date {%  endincrementcondition %}
+;;
+    increment_key: "created_date"
+    increment_offset: 3
+    sql_trigger_value: CURRENT_DATE() ;;
+    distribution_style: all
+    }
+
+  dimension: created_date {
+    type: date
+  }
+  dimension: complaint_type {
+    type: string
+  }
+  dimension: status {
+    type: string
+  }
+  dimension: count {
     type: number
   }
 }
