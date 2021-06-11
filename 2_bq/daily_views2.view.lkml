@@ -14,7 +14,7 @@ view: daily_views2 {
           --generate_uuid() as primary_key,
           sum(views) as total_views
           FROM `thesis-project-252601.YoutubeData.p_channel_basic_a2_daily_first`
-          WHERE date > '2021-01-01'
+          WHERE date > '2021-05-01'
           GROUP BY 1,2,3,4
           ;;
           }
