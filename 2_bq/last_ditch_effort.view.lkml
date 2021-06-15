@@ -1,6 +1,6 @@
 view: last_ditch_effort {
     derived_table: {
-      materialized_view: yes
+      # materialized_view: yes
       sql:
           SELECT
           created_date,

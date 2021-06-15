@@ -3,8 +3,8 @@
   layout: newspaper
   preferred_viewer: dashboards-next
   elements:
-  - name: New Tile
-    title: New Tile
+  - name: local_name
+    title: Should_Be_Name
     merged_queries:
     - model: testpieter
       explore: user_data

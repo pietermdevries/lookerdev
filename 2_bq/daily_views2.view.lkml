@@ -4,7 +4,7 @@ view: daily_views2 {
 #derived_table daily_views2 creation failed: SQL Error in CREATE MATERIALIZED VIEW as SELECT: Query execution failed: - Non-deterministic functions are not supported in materialized view.
 #-> https://cloud.google.com/bigquery/docs/materialized-views-faq
     derived_table: {
-      materialized_view: yes
+      # materialized_view: yes
       sql:
           SELECT
           date,
