@@ -24,6 +24,26 @@ dimension: link_test {
   # drill_fields: [browser]
 }
 
+measure: date_list {
+  type: list
+  list_field: created_date
+}
+
+measure: browser_list {
+  type: list
+  list_field: browser
+}
+
+measure: max_date {
+  type: date
+  sql: max(${created_date}) ;;
+}
+
+measure: is_max_date {
+  type: yesno
+  sql: ${created_date} = ${max_date} ;;
+}
+
 measure: browser_count {
   type: number
   required_fields: [browser]
