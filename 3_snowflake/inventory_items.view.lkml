@@ -14,7 +14,12 @@ view: inventory_items {
     sql: ${TABLE}."COST" ;;
   }
 
+  filter: date_filter {
+    type: date
+  }
+
   dimension_group: created {
+    datatype: date
     type: time
     timeframes: [
       raw,
@@ -25,7 +30,7 @@ view: inventory_items {
       quarter,
       year
     ]
-    sql: ${TABLE}."CREATED_AT" ;;
+    sql: {% condition date_filter %} ${TABLE}."CREATED_AT" {% endcondition %};;
   }
 
   dimension: product_brand {

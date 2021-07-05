@@ -1,4 +1,4 @@
-explore: products {}
+
 view: products {
   sql_table_name: "PUBLIC"."PRODUCTS"
     ;;

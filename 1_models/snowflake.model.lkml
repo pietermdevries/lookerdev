@@ -26,6 +26,9 @@ explore: pieter_events {
   }
 
 }
+explore: inventory_items {
+
+}
 
 explore: extended_events {
   extends: [pieter_events]
@@ -42,10 +45,10 @@ explore: parameter_sql_always_where {
 }
 
 
-explore: test_events {
+explore: testevents {
   from: events
   join: products {
-    sql_on: ${test_events.browser} = ${test_events.language} ;;
+    sql_on: ${testevents.browser} = ${testevents.language} ;;
   }
 }
 

@@ -197,6 +197,12 @@ dimension: language {
   }
 
   dimension: browser {
+    view_label:"
+    {% if _explore._name == 'jackson5'%}
+    Thriller
+    {% else %}
+    Testevents
+    {% endif %}"
     type: string
     sql: ${TABLE}."BROWSER" ;;
   }
@@ -294,6 +300,17 @@ dimension: language {
     ]
     sql: ${TABLE}."CREATED_AT" ;;
     drill_fields: [country]
+  }
+
+  dimension: half_year {
+    group_label: "Created Date"
+    type: string
+    sql:
+    CASE WHEN
+    ${created_quarter} LIKE '%Q1' OR
+    ${created_quarter} LIKE '%Q2' THEN '1H'
+    ELSE '2H'
+    END;;
   }
 
   dimension: formatted_time {
