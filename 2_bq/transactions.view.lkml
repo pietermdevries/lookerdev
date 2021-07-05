@@ -76,7 +76,8 @@ dimension: size {
       date,
       week,
       month,
-      year
+      year,
+      hour_of_day
     ]
     sql: ${TABLE}.block_timestamp ;;
     description: "Timestamp of the block which contains this transaction"
