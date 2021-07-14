@@ -30,6 +30,13 @@ explore: inventory_items {
 
 }
 
+explore: event_ndt {
+  view_name: events
+  join: events_ndt1 {
+    sql: ${events.created_date} = ${events_ndt1.created_date} ;;
+  }
+}
+
 explore: extended_events {
   extends: [pieter_events]
   view_name: events
