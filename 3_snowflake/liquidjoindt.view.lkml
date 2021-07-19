@@ -8,11 +8,15 @@ view: liquidjoindt {
         city,
         country
         FROM "PUBLIC"."USERS"
-        {% if liquidjoindt.age._in_query  %}
+        {% if choose_dimension._parameter_value == "age"  %}
         WHERE age > 10
+        {% elsif choose_dimension._parameter_value == "city"  %}
+        where age = 10
+        {% else %}
+        where age < 10
         {% endif %}
       ;;
-      sql_trigger_value: select CURRENT_DATE ;;
+      # sql_trigger_value: select CURRENT_DATE ;;
 
     }
 

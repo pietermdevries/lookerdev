@@ -15,3 +15,9 @@ constant: override_me {
 constant: timeframes {
   value: "raw,month,year"
 }
+
+localization_settings: {
+  default_locale: ja_JP
+  localization_level: permissive
+
+}

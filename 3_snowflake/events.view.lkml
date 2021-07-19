@@ -4,14 +4,6 @@ extends: [field_extend]
   sql_table_name: "PUBLIC"."EVENTS"
     ;;
 
-dimension: suggested_dimension {
-  sql: ${browser} ;;
-  suggest_dimension: events.browser
-}
-
-dimension: test1 {
-sql: {{ created timeframes}} ;;
-}
 
 dimension: link_test {
   type: string
@@ -24,15 +16,52 @@ dimension: link_test {
   # drill_fields: [browser]
 }
 
-measure: browser_count {
-  type: number
-  required_fields: [browser]
-  sql:
-  case when ${browser} = 'Chrome' then ${sum_measure}
-  else 0
-  end ;;
+parameter: choose_filter {
+  type: string
+  default_value: "Chrome"
+  allowed_value: {
+    value: "Chrome"
+  }
+  allowed_value: {
+    value: "etc."
+  }
 }
 
+dimension: dynamic_filter {
+  type: string
+  suggest_persist_for: "10 seconds"
+  sql: ${TABLE}."BROWSER" IN (
+  SELECT "BROWSER"
+  FROM "PUBLIC"."EVENTS"
+  WHERE "BROWSER" = {% parameter choose_filter %}) ;;
+}
+
+
+
+measure: date_list {
+  type: list
+  list_field: created_date
+}
+
+measure: browser_list {
+  type: list
+  list_field: browser
+}
+
+measure: max_date {
+  type: date
+  sql: max(${created_raw}) ;;
+}
+measure: max_browser {
+  type: string
+  sql: max(${browser}) ;;
+}
+
+measure: is_max_date {
+  type: yesno
+  required_fields: [created_date]
+  sql: ${created_date} = ${max_date} ;;
+}
 
 parameter: param_test {
   label: "test1_param"
@@ -209,6 +238,12 @@ dimension: language {
   }
 
   dimension: browser {
+    view_label:"
+    {% if _explore._name == 'jackson5'%}
+    Thriller
+    {% else %}
+    Testevents
+    {% endif %}"
     type: string
     sql: ${TABLE}."BROWSER" ;;
   }
@@ -317,6 +352,28 @@ dimension: language {
     ]
     sql: ${TABLE}."CREATED_AT" ;;
     drill_fields: [country]
+  }
+
+  dimension: year_sentaku {
+    group_label: "Created Date"
+    type: string
+    sql:
+    CASE WHEN EXTRACT(year from ${created_time}::timestamp) = 2021 THEN '2021'
+         WHEN EXTRACT(year from ${created_time}::timestamp) = 2020 THEN '2020'
+         WHEN EXTRACT(year from ${created_time}::timestamp) = 2019 THEN '2019'
+    ELSE null END ;;
+  }
+
+
+  dimension: half_year {
+    group_label: "Created Date"
+    type: string
+    sql:
+    CASE WHEN
+    ${created_quarter} LIKE '%Q1' OR
+    ${created_quarter} LIKE '%Q2' THEN '1H'
+    ELSE '2H'
+    END;;
   }
 
   dimension: formatted_time {
@@ -441,23 +498,23 @@ dimension: language {
 
   ########
 
-  measure: sum_measure {
-    type: sum
-    sql: ${user_id} ;;
-    action: {
-label: "Update Transfer Form"
-url: "https://docs.google.com/spreadsheets/d/1bMnpB59leX9Vx1d9_8VEA23NVEMU8yaH4MVHoiYtDZQ/edit#gid=0"
-# form_url: ""
-    form_param: {
-      name: "Dispatch_ID"
-      type: string
-      label: "Enter Dispatch ID"
-      default: "{{ }}"
-      description: "Enter Dispatch"
-      required: yes
-    }
-  }
-}
+#   measure: sum_measure {
+#     type: sum
+#     sql: ${user_id} ;;
+#     action: {
+# label: "Update Transfer Form"
+# url: "https://docs.google.com/spreadsheets/d/1bMnpB59leX9Vx1d9_8VEA23NVEMU8yaH4MVHoiYtDZQ/edit#gid=0"
+# # form_url: ""
+#     form_param: {
+#       name: "Dispatch_ID"
+#       type: string
+#       label: "Enter Dispatch ID"
+#       default: "{{ }}"
+#       description: "Enter Dispatch"
+#       required: yes
+#     }
+#   }
+# }
   measure: avg_measure {
     type: average
     sql: ${user_id} ;;
@@ -482,6 +539,12 @@ url: "https://docs.google.com/spreadsheets/d/1bMnpB59leX9Vx1d9_8VEA23NVEMU8yaH4M
   dimension: values {
     sql: 1 ;;
     html: {{ count._value }} ;;
+  }
+
+  measure: pop {
+    type: percent_of_previous
+    sql: ${count} ;;
+    # html: {{ rendered_value | plus: 100 }}% ;;
   }
 
   measure: chrome_users {
@@ -545,6 +608,11 @@ url: "https://docs.google.com/spreadsheets/d/1bMnpB59leX9Vx1d9_8VEA23NVEMU8yaH4M
   measure: html_count {
     type: count
     html: {{events.zip._value}} {{value}} ;;
+  }
+
+  measure: count_with_text {
+    type: count
+    html: I have {{value}} cow's ;;
   }
 
   dimension: rule_info {

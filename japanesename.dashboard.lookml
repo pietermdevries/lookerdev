@@ -3,8 +3,9 @@
   layout: newspaper
   preferred_viewer: dashboards-next
   elements:
-  - title: New Tile
-    name: New Tile
+  -
+    title: this_is_the_name_of_the_thing
+    name: This is the name in English
     model: flex_look
     explore: orders
     type: looker_grid
