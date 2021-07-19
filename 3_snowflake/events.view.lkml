@@ -196,6 +196,18 @@ dimension: language {
     sql: ${TABLE}."ID" ;;
   }
 
+  measure: count_distinct_id {
+    type: count_distinct
+    sql: ${id} ;;
+    drill_fields: [created_date, id]
+  }
+
+  measure: count_id {
+    type: number
+    sql: count(${id}) ;;
+    drill_fields: [created_time, id]
+  }
+
   dimension: browser {
     type: string
     sql: ${TABLE}."BROWSER" ;;
@@ -266,6 +278,17 @@ dimension: language {
     map_layer_name: countries
     sql: ${TABLE}."COUNTRY" ;;
 #    html: {{value}} and {{ count._value}} ;;
+  }
+
+  filter: date_filter {
+    type: date
+  }
+
+  measure: count_last_day {
+    type: number
+    sql:
+    CASE WHEN ${created_date} = {% date_end date_filter%} THEN COUNT(${id})
+    ELSE 0 END    ;;
   }
 
   filter: US {
