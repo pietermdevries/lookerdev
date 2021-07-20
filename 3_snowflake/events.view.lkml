@@ -331,6 +331,11 @@ dimension: language {
     drill_fields: [country]
   }
 
+  dimension: created_week_example {
+    sql: ${created_week} ;;
+    type: date
+  }
+
   dimension: year_sentaku {
     group_label: "Created Date"
     type: string
