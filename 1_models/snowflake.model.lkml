@@ -27,6 +27,12 @@ explore: pieter_events {
   join: event_dt {
     sql_on: ${event_dt.browser} = ${events.browser} ;;
   }
+  join: events_ndt1 {
+    sql_on: ${events.created_date} = ${events_ndt1.created_date} ;;
+  }
+  join: extend_events {
+    sql_on: ${events_ndt1.created_date} = ${extend_events.created_date} ;;
+  }
 
 }
 explore: inventory_items {
