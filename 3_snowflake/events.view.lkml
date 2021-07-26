@@ -4,6 +4,20 @@ extends: [field_extend]
   sql_table_name: "PUBLIC"."EVENTS"
     ;;
 
+dimension: return_sql_param {
+  sql: {% parameter test_param %} ;;
+}
+
+dimension: return_user_att {
+  sql:
+  '{{_user_attributes['google_user_id']}}' ;;
+}
+
+parameter: test_param2 {
+  label: "sql param"
+  type: string
+  default_value: "{% parameter choose_filter %}"
+}
 
 dimension: link_test {
   type: string
@@ -17,7 +31,7 @@ dimension: link_test {
 }
 
 parameter: choose_filter {
-  type: string
+  type: unquoted
   default_value: "Chrome"
   allowed_value: {
     value: "Chrome"

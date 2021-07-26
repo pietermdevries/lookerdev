@@ -24,6 +24,9 @@ explore: pieter_events {
       sql_trigger_value: 1 ;;
     }
   }
+  join: event_dt {
+    sql_on: ${event_dt.browser} = ${events.browser} ;;
+  }
 
 }
 explore: inventory_items {
