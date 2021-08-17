@@ -5,11 +5,27 @@ extends: [parameter_view]
     derived_table: {
     sql:
     SELECT *
-    FROM {% parameter table_name %}."EVENTS"
-    ORDER BY browser desc
+    FROM "PUBLIC"."EVENTS"
       ;;
     }
     drill_fields: [id]
+
+  dimension: month_formatted {
+    group_label: "Created" label: "Month"
+    sql: ${created_month} ;;
+    html: {{ rendered_value | append: "-01" | date: "%B %Y" }};;
+  }
+
+  filter: start_month {
+    type: date
+    suggest_dimension: month_formatted
+  }
+
+  filter: end_month {
+    type: date
+    suggest_dimension: month_formatted
+  }
+
 
     dimension: id {
       primary_key: yes

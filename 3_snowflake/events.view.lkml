@@ -1,3 +1,8 @@
+explore: test_events {
+  view_name: events
+  sql_always_where:
+  ${events.created_raw} > CONCAT({% parameter events.start_month %},'-01') AND ${events.created_raw}  < CONCAT({% parameter events.end_month %},'-01') ;;
+}
 include: "/field_extend.view"
 view: events {
 extends: [field_extend]
@@ -13,6 +18,55 @@ dimension: return_user_att {
   '{{_user_attributes['google_user_id']}}' ;;
 }
 
+dimension: is_last_day_of_month {
+  type: yesno
+  sql: EXTRACT( day from DATEADD(day,1,${created_raw}) ) = 1 ;;
+}
+
+dimension: month_formatted {
+  group_label: "Created" label: "Month"
+  sql: ${created_month} ;;
+  html: {{ rendered_value | append: "-01" | date: "%B %Y" }};;
+}
+
+parameter: start_month {
+  default_value: "2020-01"
+  type: string
+  suggest_dimension: month_formatted
+}
+
+parameter: end_month {
+  default_value: "2021-12"
+  type: string
+  suggest_dimension: month_formatted
+  }
+
+  dimension_group: filtered {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year,
+      day_of_month,
+      month_name,
+      month_num,
+      day_of_week_index,
+      day_of_week,
+      hour_of_day,
+      hour
+    ]
+    sql:
+    CASE WHEN ${TABLE}."CREATED_AT" > CONCAT({% parameter start_month %},'-01') AND ${TABLE}."CREATED_AT" < CONCAT({% parameter end_month %},'-01') THEN ${TABLE}."CREATED_AT"
+    ELSE null
+    END
+    ;;
+    drill_fields: [country]
+  }
+
 parameter: test_param2 {
   label: "sql param"
   type: string
@@ -20,6 +74,7 @@ parameter: test_param2 {
 }
 
 dimension: link_test {
+  label: "1_house"
   type: string
   sql: ${id} ;;
   link: {
@@ -42,6 +97,7 @@ parameter: choose_filter {
 }
 
 dimension: dynamic_filter {
+  label: "2_house"
   type: string
   suggest_persist_for: "10 seconds"
   sql: ${TABLE}."BROWSER" IN (
@@ -366,6 +422,7 @@ dimension: language {
     ]
     sql: ${TABLE}."CREATED_AT" ;;
     drill_fields: [country]
+    convert_tz: no
   }
 
   dimension: created_week_example {
