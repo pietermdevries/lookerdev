@@ -6,12 +6,12 @@ derived_table: {
   sql:
   SELECT *
   FROM
-  {% assign date_start date_filter = date %}
+  {% assign date_param = date_start date_filter%}
   {% assign current_date = 'today' %}
-  {% if date | date: "%Y-%m-%d" != current_date | date: "%Y-%m-%d"%}
+  {% if date_param | date: "%Y-%m-%d" == current_date | date: "%Y-%m-%d"%}
     "PUBLIC"."EVENTS"
   {% else %}
-    {{date | date: "%Y-%m-%d"}} and {{current_date | date: "%Y-%m-%d"}}
+    {{date_param | date: "%Y-%m-%d"}} and {{current_date | date: "%Y-%m-%d"}}
   {% endif %}
   ;;
 }
