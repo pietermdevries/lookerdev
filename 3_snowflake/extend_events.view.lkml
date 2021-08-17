@@ -5,7 +5,29 @@ extends: [events]
 derived_table: {
   sql:
   SELECT *
-  FROM "PUBLIC"."EVENTS";;
+  FROM
+  {% assign date_start date_filter = date %}
+  {% assign current_date = 'today' %}
+  {% if date | date: "%Y-%m-%d" != current_date | date: "%Y-%m-%d"%}
+    "PUBLIC"."EVENTS"
+  {% else %}
+    {{date | date: "%Y-%m-%d"}} and {{current_date | date: "%Y-%m-%d"}}
+  {% endif %}
+  ;;
+}
+
+filter: date_filter {
+  type: date
+}
+
+dimension: display_filter {
+  type: date
+  sql: {% date_start date_filter | date: "%Y-%m-%d"  %} ;;
+}
+
+dimension: display_current_date {
+  type: date
+  sql: {{ 'now' | date: "%Y-%m-%d" }} ;;
 }
 
 }

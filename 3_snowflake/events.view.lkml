@@ -553,6 +553,48 @@ dimension: language {
     #   label: "Explore Top 20 Results by count"
     #   url: "{{ link }}&sorts=order_items.sale_price+desc&limit=20"
     # }
+    html:
+    {% if value > 1000000000 %}
+    ${{value | divided_by: 1000000000 | round:2 }}B
+    {% elsif value >= 1000000 and value < 1000000000 %}
+    ${{value | divided_by: 1000000 | round:2 }}M
+    {% elsif value >= 1000 and value < 1000000 %}
+    ${{value | divided_by: 1000 | round:2 }}K
+    {% elsif value >= 0 and value < 1000 %}
+    ${{value | round:2 }}
+    {% elsif value > -1000 and value < 0 %}
+    ${{value | round:2 }}
+    {% elsif value > -1000000 and value <= -1000 %}
+    ${{value | divided_by: 1000 | round:2 }}k
+    {% elsif value > -1000000000 and value <= -1000000 %}
+    ${{value | divided_by: 1000000 | round:2 }}M
+    {% elsif value <= -1000000000 %}
+    ${{value | divided_by: 1000000000 | round:2 }}B
+    {% else %}
+    'fail'
+    {% endif %} ;;
+  }
+
+  parameter: choose_formatting {
+    type: unquoted
+    allowed_value: {
+      value: "dollars"
+    }
+    allowed_value: {
+      value: "else"
+    }
+  }
+
+
+  measure: count_test_total {
+    type: count
+    value_format_name: decimal_0
+    html:
+    {% if choose_formatting._parameter_value == 'dollars'  %}
+    $ {{rendered_value}}
+    {% else %}
+     {{rendered_value}}
+    {%endif%};;
   }
 
   dimension: values {
