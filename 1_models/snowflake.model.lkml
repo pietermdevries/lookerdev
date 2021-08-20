@@ -5,7 +5,7 @@ include: "/japanesename.dashboard.lookml"
 include: "/radial_gauge.dashboard.lookml"
 include: "/3_snowflake/*.view.lkml"                # include all views in the views/ folder in this project
 
-
+fiscal_month_offset: 4
 explore: pieter_events {
   view_name: events
   group_label: "pieter"

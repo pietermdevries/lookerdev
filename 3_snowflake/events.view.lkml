@@ -3,6 +3,13 @@ explore: test_events {
   sql_always_where:
   ${events.created_raw} > CONCAT({% parameter events.start_month %},'-01') AND ${events.created_raw}  < CONCAT({% parameter events.end_month %},'-01') ;;
 }
+
+explore: filter_events {
+  view_name: events
+  always_filter: {
+    filters: [events.created_date: "2 months"]
+  }
+}
 include: "/field_extend.view"
 view: events {
 extends: [field_extend]
@@ -20,7 +27,20 @@ dimension: return_user_att {
 
 dimension: is_last_day_of_month {
   type: yesno
-  sql: EXTRACT( day from DATEADD(day,1,${created_raw}) ) = 1 ;;
+  sql:
+  EXTRACT( day from DATEADD(day,1,${created_raw}) ) = 1
+  OR ${created_date} = DATE_TRUNC('DAY',DATEADD(day,-1,CURRENT_DATE()));;
+}
+measure: sum_stuff {
+  type: sum
+  filters: [is_last_day_of_month: "yes"]
+  sql: ${id} ;;
+}
+
+dimension: yesterday {
+  type: date
+  sql: DATE_TRUNC('DAY',DATEADD(day,-1,CURRENT_DATE()))
+  ;;
 }
 
 dimension: month_formatted {
@@ -387,6 +407,7 @@ dimension: language {
 
   filter: date_filter {
     type: date
+    default_value: "2 months"
   }
 
   measure: count_last_day {
@@ -418,7 +439,9 @@ dimension: language {
       day_of_week_index,
       day_of_week,
       hour_of_day,
-      hour
+      hour,
+      fiscal_year,
+      fiscal_month_num
     ]
     sql: ${TABLE}."CREATED_AT" ;;
     drill_fields: [country]
