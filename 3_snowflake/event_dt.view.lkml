@@ -153,4 +153,7 @@ extends: [parameter_view]
       type: count
       html: <img src="https://logo-core.clearbit.com/looker.com"{{value}} /> ;;
     }
-  }
+
+
+
+}
