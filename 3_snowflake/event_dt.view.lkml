@@ -4,11 +4,26 @@ view: event_dt {
 extends: [parameter_view]
     derived_table: {
     sql:
-    SELECT *
+    SELECT *,
+    CASE WHEN "ID" < 1000 THEN 1
+    ELSE 2 END AS "SALES"
     FROM "PUBLIC"."EVENTS"
+    WHERE
+      TIMESTAMP(timestamp_add("CREATED_DATE", interval 9 hour),'Japan') >= {% date_start date_filter %} and TIMESTAMP("CREATED_DATE",'Japan') <= {% date_end date_filter %}
+
+
       ;;
     }
     drill_fields: [id]
+
+  dimension: condition {
+    type: string
+    sql: {% condition created_date %} "CREATED_AT" {% endcondition %} ;;
+  }
+
+  filter: date_filter {
+    type: date_time
+  }
 
   dimension: month_formatted {
     group_label: "Created" label: "Month"
@@ -25,8 +40,14 @@ extends: [parameter_view]
     type: date
     suggest_dimension: month_formatted
   }
-
-
+  dimension: sales {
+    type: number
+    sql: ${TABLE}."SALES" ;;
+  }
+  measure: total_sales {
+    type: sum
+    sql: ${sales} ;;
+  }
     dimension: id {
       primary_key: yes
       type: number

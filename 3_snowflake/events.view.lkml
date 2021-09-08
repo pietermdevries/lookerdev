@@ -167,7 +167,7 @@ parameter: param_test {
 dimension: dim_test {
   label: "test1_dim"
   type: number
-  sql: 100 ;;
+  sql: {% parameter param_test %} ;;
 }
 
 dimension: chosen_field {
@@ -328,12 +328,13 @@ dimension: language {
   }
 
   dimension: browser {
-    view_label:"
-    {% if _explore._name == 'jackson5'%}
-    Thriller
-    {% else %}
-    Testevents
-    {% endif %}"
+    description: "These are browsers"
+    # view_label:"
+    # {% if _explore._name == 'jackson5'%}
+    # Thriller
+    # {% else %}
+    # Testevents
+    # {% endif %}"
     type: string
     sql: ${TABLE}."BROWSER" ;;
   }
@@ -424,6 +425,7 @@ dimension: language {
   }
 
   dimension_group: created {
+    description: "Date stuff"
     type: time
     timeframes: [
       raw,
@@ -627,12 +629,22 @@ dimension: language {
   }
 
   measure: count {
+    description: "This is my count."
     type: count
     drill_fields: [date,browser, count]
     # link: {
     #   label: "Explore Top 20 Results by count"
     #   url: "{{ link }}&sorts=order_items.sale_price+desc&limit=20"
     # }
+    link: {
+      label: "Link"
+      url: "
+      {% if _filters['events.browser'] == 'Chrome'%}
+      Chrome Link
+      {% else %}
+      Not Chrome Link
+      {% endif%}"
+    }
     html:
     {% if value > 1000000000 %}
     ${{value | divided_by: 1000000000 | round:2 }}B
