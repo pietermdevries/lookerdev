@@ -25,6 +25,12 @@ dimension: return_user_att {
   '{{_user_attributes['google_user_id']}}' ;;
 }
 
+  parameter: today {
+    type: date
+    convert_tz: no
+    default_value: "today"
+  }
+
 dimension: is_last_day_of_month {
   type: yesno
   sql:

@@ -9,8 +9,8 @@ extends: [parameter_view]
     ELSE 2 END AS "SALES"
     FROM "PUBLIC"."EVENTS"
     WHERE
-      TIMESTAMP(timestamp_add("CREATED_DATE", interval 9 hour),'Japan') >= {% date_start date_filter %} and TIMESTAMP("CREATED_DATE",'Japan') <= {% date_end date_filter %}
-
+      --TIMESTAMP(timestamp_add("CREATED_DATE", interval 9 hour),'Japan') >= {% date_start date_filter %} and TIMESTAMP("CREATED_DATE",'Japan') <= {% date_end date_filter %}
+    {% condition country_filter %} "COUNTRY" {% endcondition %}
 
       ;;
     }
@@ -18,7 +18,12 @@ extends: [parameter_view]
 
   dimension: condition {
     type: string
-    sql: {% condition created_date %} "CREATED_AT" {% endcondition %} ;;
+    sql:
+      IF(
+        (TO_VARCHAR({% condition country_filter %} "COUNTRY" {% endcondition %}) = "1=1"),
+        null,
+        {% condition country_filter %} "COUNTRY" {% endcondition %})
+    ;;
   }
 
   filter: date_filter {
@@ -69,6 +74,11 @@ extends: [parameter_view]
         label: "bob"
         value: "bob"
       }
+    }
+
+    filter: country_filter {
+      suggest_dimension: country
+
     }
 
     dimension: country {
