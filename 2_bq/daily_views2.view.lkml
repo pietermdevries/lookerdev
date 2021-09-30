@@ -21,6 +21,8 @@ view: daily_views2 {
           ;;
           }
 
+          #Getting out of date!
+
     dimension: date {
       datatype: date
       type: date
