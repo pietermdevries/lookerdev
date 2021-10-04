@@ -20,6 +20,11 @@ dimension: return_sql_param {
   sql: {% parameter test_param %} ;;
 }
 
+dimension: goku {
+  sql: 1 ;;
+  html: <img src="https://estaticos.megainteresting.com/media/cache/760x570_thumb/uploads/images/pyr/5da497065bafe835033c98af/funimation-1.jpg" /> ;;
+}
+
 dimension: return_user_att {
   sql:
   '{{_user_attributes['google_user_id']}}' ;;
