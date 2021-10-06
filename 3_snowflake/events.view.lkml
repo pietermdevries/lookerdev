@@ -25,6 +25,13 @@ dimension: goku {
   html: <img src="https://estaticos.megainteresting.com/media/cache/760x570_thumb/uploads/images/pyr/5da497065bafe835033c98af/funimation-1.jpg" /> ;;
 }
 
+dimension: blue_tile {
+  sql: 1 ;;
+  html:  <p style="color: black; background-color: lightgreen; font-size:100%; text-align:center">{{ rendered_value }}</p>
+ ;;
+}
+
+
 dimension: return_user_att {
   sql:
   '{{_user_attributes['google_user_id']}}' ;;

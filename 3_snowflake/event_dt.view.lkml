@@ -4,7 +4,7 @@ view: event_dt {
 extends: [parameter_view]
     derived_table: {
     sql:
-    SELECT *
+    SELECT {% parameter choose_field %} as "FIELD"
     FROM "PUBLIC"."EVENTS"
       ;;
     }
@@ -25,6 +25,14 @@ extends: [parameter_view]
     type: date
     suggest_dimension: month_formatted
   }
+
+parameter: choose_field {
+  type: unquoted
+}
+
+dimension: field {
+  sql: ${TABLE}."FIELD" ;;
+}
 
 
     dimension: id {
