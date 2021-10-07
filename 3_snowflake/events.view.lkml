@@ -22,7 +22,7 @@ dimension: return_sql_param {
 
 dimension: goku {
   sql: 1 ;;
-  html: <img src="https://estaticos.megainteresting.com/media/cache/760x570_thumb/uploads/images/pyr/5da497065bafe835033c98af/funimation-1.jpg" /> ;;
+  html: <img style="max-width:100%" src="https://estaticos.megainteresting.com/media/cache/760x570_thumb/uploads/images/pyr/5da497065bafe835033c98af/funimation-1.jpg" /> ;;
 }
 
 dimension: blue_tile {
