@@ -630,6 +630,10 @@ dimension: language {
     type: average
     sql: ${user_id} ;;
   }
+  measure: max_measure {
+    type: max
+    sql: ${user_id} ;;
+  }
 
   #######
 
@@ -665,6 +669,11 @@ dimension: language {
     {% else %}
     'fail'
     {% endif %} ;;
+  }
+
+  measure: count_string {
+    type: string
+    sql: to_varchar(${max_measure},'$999,999,999') ;;
   }
 
   parameter: choose_formatting {
