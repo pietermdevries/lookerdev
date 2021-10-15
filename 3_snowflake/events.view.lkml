@@ -671,6 +671,11 @@ dimension: language {
     {% endif %} ;;
   }
 
+  measure: running_total {
+    type: running_total
+    sql: ${count} ;;
+  }
+
   measure: count_string {
     type: string
     sql: to_varchar(${max_measure},'$999,999,999') ;;
