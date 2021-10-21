@@ -4,7 +4,8 @@ view: event_dt {
 extends: [parameter_view]
     derived_table: {
     sql:
-    SELECT {% parameter choose_field %} as "FIELD"
+    --SELECT {% parameter choose_field %} as "FIELD"
+    SELECT *
     FROM "PUBLIC"."EVENTS"
       ;;
     }
@@ -150,6 +151,10 @@ dimension: field {
     measure: count {
       type: count
       drill_fields: [id, users.first_name, users.last_name, users.id]
+      link: {
+        label: "{% if browser._value == 'Chrome' %} Click Me {% endif %}"
+        url: "{% if browser._value == 'Chrome' %} {{link}} {% endif %}"
+      }
     }
 
     measure: html_count {

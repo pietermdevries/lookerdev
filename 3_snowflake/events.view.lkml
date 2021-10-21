@@ -327,10 +327,26 @@ dimension: language {
     sql: ${TABLE}."ID" ;;
   }
 
+  parameter: display_value {
+    type: yesno
+  }
+
+  dimension: display_value_show {
+    sql: {% parameter display_value %} ;;
+  }
+
   measure: count_distinct_id {
     type: count_distinct
     sql: ${id} ;;
     drill_fields: [created_date, id]
+    html:
+    {% if events.display_value._parameter_value == 'true' and count_distinct_id._value != 400875 %}
+    {{value}}
+    {% else %}
+    N/A
+    {% endif %}
+    ;;
+
   }
 
   measure: count_id {
@@ -435,7 +451,12 @@ dimension: language {
     default_value: "No"
   }
 
+  filter: time_filter {
+    type: date_time
+  }
+
   dimension_group: created {
+    datatype: datetime
     type: time
     timeframes: [
       raw,
