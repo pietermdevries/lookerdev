@@ -663,6 +663,12 @@ dimension: language {
     sql: ${TABLE}."ZIP" ;;
   }
 
+  measure: formatted_string_count {
+
+    sql: concat('$',${count}) ;;
+
+  }
+
   measure: count {
     type: count
     drill_fields: [date,browser, count]

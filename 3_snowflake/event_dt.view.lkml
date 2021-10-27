@@ -150,10 +150,10 @@ dimension: field {
 
     measure: count {
       type: count
-      drill_fields: [id, users.first_name, users.last_name, users.id]
+      # drill_fields: [id, users.first_name, users.last_name, users.id]
       link: {
-        label: "{% if browser._value == 'Chrome' %} Click Me {% endif %}"
-        url: "{% if browser._value == 'Chrome' %} {{link}} {% endif %}"
+        label: "{% if browser._value == 'Chrome' %} Click Me {% else %} {% endif %}"
+        url: "{% if browser._value == 'Chrome' %} {{link}}?fields=event_dt.id {% else %} {% endif %}"
       }
     }
 
