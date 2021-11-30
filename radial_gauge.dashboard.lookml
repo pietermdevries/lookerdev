@@ -1,7 +1,7 @@
 - dashboard: vis_check
   title: vis_check
   layout: newspaper
-  preferred_viewer: dashboards-next
+  # preferred_viewer: dashboards-next
   elements:
   - title: New Tile
     name: New Tile

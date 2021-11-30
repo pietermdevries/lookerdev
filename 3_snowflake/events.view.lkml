@@ -356,14 +356,16 @@ dimension: language {
   }
 
   dimension: browser {
-    view_label:"
-    {% if _explore._name == 'jackson5'%}
-    Thriller
-    {% else %}
-    Testevents
-    {% endif %}"
     type: string
     sql: ${TABLE}."BROWSER" ;;
+  }
+
+  dimension: browser_group {
+    sql:
+    CASE WHEN ${browser} IN ('Chrome','Firefox') THEN 'Group1'
+    WHEN ${browser} IN ('Firefox','IE') THEN 'Group2'
+    ELSE 'Group3' END
+    ;;
   }
 
   dimension: city {
