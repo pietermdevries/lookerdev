@@ -3,6 +3,9 @@ view: etl_jobs {
     ;;
   drill_fields: [id]
 
+measure: house {
+  type: count
+}
   dimension: id {
     primary_key: yes
     type: number
