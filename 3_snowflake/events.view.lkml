@@ -312,6 +312,11 @@ dimension: language {
     default_value: "7 days ago"
   }
 
+  parameter: today {
+    type: date
+    default_value: "today"
+  }
+
   filter: date_end {
     type: date
   }
