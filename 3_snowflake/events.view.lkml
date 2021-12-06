@@ -481,7 +481,8 @@ dimension: language {
       hour_of_day,
       hour,
       fiscal_year,
-      fiscal_month_num
+      fiscal_month_num,
+      week_of_year
     ]
     sql: ${TABLE}."CREATED_AT" ;;
     drill_fields: [country]
