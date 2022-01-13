@@ -18,7 +18,9 @@ view: order_items {
       week,
       month,
       quarter,
-      year
+      year,
+      month_num,
+      week_of_year
     ]
     sql: TO_TIMESTAMP_TZ(CONCAT(RTRIM(${TABLE}."CREATED_AT", 'Z'), ' -100')) ;;
   }
